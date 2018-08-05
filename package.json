@@ -1,0 +1,17 @@
+{
+  "name": "CastIron_CLI",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "CastIron": "git+ssh://git@github.com/elevenbuckets/CastIron.git",
+    "accMgr": "git+ssh://git@github.com/elevenbuckets/accmgr.git",
+    "ipfs_base": "git+ssh://git@github.com/elevenbuckets/Ipfs_go.git"
+  }
+}

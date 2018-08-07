@@ -20,13 +20,28 @@ class ipfsREPL extends ipfsBase {
 				return true;
 			})
 		}
+
+		this.reload = () => {
+			this.ready = false;
+  			return this.stop().then(() => {
+	  			console.log("Reset IPFS ...");
+	  			const IPFS = require('ipfs');
+	  			this.ipfs = new IPFS(ipfs.options);
+
+	  			return ipfs.start().then(() => { this.ready = true; return true; });
+  			})
+		}
+
+		this.ping = (nodehash) => {
+			return this.ipfs.ping(nodehash, {count: 3})
+		}
 	}
 }
 
 
 // Class instances
-const ipfs  = new ipfsREPL('./.local/config.json');
 const ciapi = new castIron('./.local/config.json');
+const ipfs  = new ipfsREPL('./.local/config.json');
 
 // Handling promises in REPL (for node < 10.x)
 const replEvalPromise = (cmd,ctx,filename,cb) => {
@@ -37,19 +52,24 @@ const replEvalPromise = (cmd,ctx,filename,cb) => {
   return cb(null, result);
 } 
 
-// Main
-ipfs.start()
-  .then(() => {
-	  let r = repl.start({ prompt: '[CastIron]$ ', eval: replEvalPromise });
-	  r.context = {ipfs, ciapi};
-	  r.on('exit', () => {
-		  console.log('Thank you for using CastIron CLI...');
-		  ipfs.stop();
+// REPL main function
+const terminal = (ipfs) => {
+  return ipfs.start().then(() => {
+  	  let r = repl.start({ prompt: '[CastIron]$ ', eval: replEvalPromise });
+  	  r.context = {ipfs, ciapi};
+
+  	  r.on('exit', () => {
+  		  console.log('Thank you for using CastIron CLI...');
+  		  if (ipfs.ipfs.isOnline()) ipfs.stop();
 		  process.exit(0);
-	  })
-  })
-  .catch((err) => {
-	console.log(err);
-	process.exit(12);
-  })
+  	  })
+    })
+    .catch((err) => {
+  	console.log(err);
+  	process.exit(12);
+    })
+}
+
+// Main
+terminal(ipfs);
 

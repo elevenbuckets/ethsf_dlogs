@@ -32,8 +32,12 @@ class ipfsREPL extends ipfsBase {
   			})
 		}
 
-		this.ping = (nodehash) => {
-			return this.ipfs.ping(nodehash, {count: 3})
+		this.ping = (nodehash) => { return this.ipfs.ping(nodehash, {count: 3}) }
+		this.getConfigs = () => { return this.ipfs.config.get(); }
+		this.setConfigs = (entry, value) => { 
+			return this.ipfs.config.set(entry, value).then( () => { 
+				return this.ipfs.config.get(entry).then((r) => { return { [entry]: r } });
+			}); 
 		}
 	}
 }

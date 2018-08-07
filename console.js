@@ -25,18 +25,18 @@ class ipfsREPL extends ipfsBase {
 			this.ready = false;
   			return this.stop().then(() => {
 	  			console.log("Reset IPFS ...");
-	  			const IPFS = require('ipfs');
-	  			this.ipfs = new IPFS(this.options);
+	  			//const IPFS = require('ipfs');
+	  			//this.ipfs = new IPFS(this.options);
 
 	  			return ipfs.start().then(() => { this.ready = true; return true; });
   			})
 		}
 
-		this.ping = (nodehash) => { return this.ipfs.ping(nodehash, {count: 3}) }
-		this.getConfigs = () => { return this.ipfs.config.get(); }
+		this.ping = (nodehash) => { return this.ipfsAPI.ping(nodehash, {count: 3}) }
+		this.getConfigs = () => { return this.ipfsAPI.config.get().then((b) => { return JSON.parse(b.toString())}); }
 		this.setConfigs = (entry, value) => { 
-			return this.ipfs.config.set(entry, value).then( () => { 
-				return this.ipfs.config.get(entry).then((r) => { return { [entry]: r } });
+			return this.ipfsAPI.config.set(entry, value).then( () => { 
+				return this.ipfsAPI.config.get(entry).then((r) => { return { [entry]: r } });
 			}); 
 		}
 	}
@@ -64,8 +64,11 @@ const terminal = (ipfs) => {
 
   	  r.on('exit', () => {
   		  console.log('Thank you for using CastIron CLI...');
-  		  if (ipfs.ipfs.isOnline()) ipfs.stop();
-		  process.exit(0);
+  		  if (ipfs.controller.started) {
+			  ipfs.stop().then(() => {
+		  		process.exit(0);
+		  	  });
+		  }
   	  })
     })
     .catch((err) => {

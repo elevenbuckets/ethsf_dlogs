@@ -26,7 +26,7 @@ class ipfsREPL extends ipfsBase {
   			return this.stop().then(() => {
 	  			console.log("Reset IPFS ...");
 	  			const IPFS = require('ipfs');
-	  			this.ipfs = new IPFS(ipfs.options);
+	  			this.ipfs = new IPFS(this.options);
 
 	  			return ipfs.start().then(() => { this.ready = true; return true; });
   			})

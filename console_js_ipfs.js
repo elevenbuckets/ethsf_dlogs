@@ -6,7 +6,7 @@ const fs   = require('fs');
 
 // ElevenBuckets SDK modules
 const castIron = require('CastIron/core/CastIron.js');
-const ipfsBase = require('ipfs_base/IPFS_Base.js');
+const ipfsBase = require('ipfs_base/IPFS_JS.js');
 
 // extending classes for REPL
 class ipfsREPL extends ipfsBase {

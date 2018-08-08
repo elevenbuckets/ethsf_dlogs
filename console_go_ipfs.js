@@ -25,20 +25,21 @@ class ipfsREPL extends ipfsBase {
 			this.ready = false;
   			return this.stop().then(() => {
 	  			console.log("Reset IPFS ...");
-	  			//const IPFS = require('ipfs');
-	  			//this.ipfs = new IPFS(this.options);
 
 	  			return ipfs.start().then(() => { this.ready = true; return true; });
   			})
 		}
 
-		this.ping = (nodehash) => { return this.ipfsAPI.ping(nodehash, {count: 3}) }
+		this.ping = (nodehash) => { return this.ipfsAPI.ping(nodehash, {count: 3}).then((r) => { return {cmd: r[0].text, count: 3, results: r[4]}}) }
 		this.getConfigs = () => { return this.ipfsAPI.config.get().then((b) => { return JSON.parse(b.toString())}); }
 		this.setConfigs = (entry, value) => { 
 			return this.ipfsAPI.config.set(entry, value).then( () => { 
 				return this.ipfsAPI.config.get(entry).then((r) => { return { [entry]: r } });
 			}); 
 		}
+
+		this.bootnodes = () => { return this.ipfsAPI.bootstrap.list(); }
+
 	}
 }
 

@@ -8,7 +8,7 @@ const figlet = require('figlet');
 const variables = new WeakMap();
 
 // ElevenBuckets SDK modules
-const LimeCasks = require('LimeCasks/core/Wrap3.js');
+
 const IPFS_Base = require('ipfs_base/IPFS_GO.js');
 
 // ASCII Art!!!
@@ -90,87 +90,7 @@ class IPFS_REPL extends IPFS_Base {
 	}
 }
 
-class DLogsREPL extends LimeCasks {
-	constructor(cfpath) {
-		super(cfpath);
-
-		variables.set(this, {address: null, password: null});
-
-		this.AppName = 'DLogs';
-		this.artifactPath = path.join(this.configs.artifactPath, this.AppName + '.json');
-
-		this.Artifact = JSON.parse(fs.readFileSync(this.artifactPath).toString()); // truffle artifact
-		this.ABI = this.Artifact.abi;
-		this.contractAddress = this.Artifact.networks[this.networkID].address;
-
-		this.init = (ipfs) => {
-			if(!this.connected) return false; // connect first
-			this.dapp = this.web3.eth.contract(this.ABI).at(this.contractAddress);
-			this.ipfs = ipfs.ipfsAPI;
-
-			return true;
-		}
-
-		this.getAccount = () => { let addr = variables.get(this).address; return addr; }
-		this.validPass  = () => { 
-			let addr = variables.get(this).address;
-			let pass = variables.get(this).password; 
-
-			const _vp = (resolve, reject) => {
-				this.ipc3.personal.unlockAccount(addr, pass, (err, result) => {
-					if (err) return reject(err);
-					resolve(result);
-				})
-			}
-
-			return new Promise(_vp);
-		}
-
-		this.linkAccount = (address, password) => { 
-			variables.get(this).address = address;
-			variables.get(this).password = password;
-			return this.validPass();
-		}
-
-		// smart contract function bindings
-		this.register = (ipnsHash) => {
-			let address = this.getAccount();
-
-			if (address === null) return false;
-
-			let passwd  = variables.get(this).password;
-
-			return this.unlockViaIPC(passwd)(address).then((r) => {
-				console.log(`Registering address ${address} using IPNS ${ipnsHash}`);
-				return this.dapp.register(address, ipnsHash, {from: address});	
-			})
-		}
-
-		this.unregister = () => {
-			let address = this.getAccount();
-
-			if (address === null) return false;
-
-			let passwd  = variables.get(this).password;
-
-			return this.unlockViaIPC(passwd)(address).then((r) => {
-				console.log(`Unregistering address ${address}`);
-				return this.dapp.unregister(address, {from: address});	
-			})
-		}
-
-		this.lookUpByAddr = (address) => {
-			return this.dapp.addr2ipns(address);
-		}
-
-		this.lookUpByIPNS = (ipnsHash) => {
-			return this.dapp.ipns2addr(ipnsHash);
-		}
-	}
-}
-
 // Class instances
-const dlogs = new DLogsREPL('../.local/config.json');
 const ipfs  = new IPFS_REPL('../.local/ipfsserv.json');
 
 // electron window global object
@@ -188,7 +108,7 @@ if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
   			if (error) throw error;
   			console.log(stdout);
 		});
-	} else {
+	} else if (path.basename(process.argv[0]) === 'electron') {
 		// electron main.js 
 		const {app, BrowserWindow, ipcMain} = require('electron');
 		const url = require('url');
@@ -247,6 +167,9 @@ if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
 		})
 	}
 } else if (process.argv[2] === '--cli') {
+	const DLogsAPI = require('./DLogsAPI.js');
+	const dlogs = new DLogsAPI('../.local/config.json');
+
 	// Handling promises in REPL (for node < 10.x)
 	const replEvalPromise = (cmd,ctx,filename,cb) => {
 	  let result=eval(cmd);

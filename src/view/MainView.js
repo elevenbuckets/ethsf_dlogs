@@ -16,7 +16,7 @@ class MainView extends Reflux.Component {
         super(props);
         this.state = {
             view: "List",
-            currentBlog : ""
+            currentBlog: ""
         }
 
         this.store = DlogsStore;
@@ -24,34 +24,36 @@ class MainView extends Reflux.Component {
 
     getBlogList = () => {
         return this.state.blogs.map(blog => {
-            return <div onClick={this.goToBlog.bind(this,blog)}>{renderHTML(marked(blog))}
+            return <div onClick={this.goToBlog.bind(this, blog)}>
+                <div>{blog.title}</div>
+                {renderHTML(marked(blog.content))}
             </div>
         })
     }
 
-    goToBlog = (blog) =>{
-        this.setState({view: "Content",currentBlog : blog})
+    goToBlog = (blog) => {
+        this.setState({ view: "Content", currentBlog: blog })
     }
 
-    goToNewBlog = () =>{
-        this.setState({view: "New"})
-    }    
-
-    goBackToList = () =>{
-        this.setState({view: "List",currentBlog : ""})
+    goToNewBlog = () => {
+        this.setState({ view: "New" })
     }
 
-    saveNewBlog = (blog) =>{
-        DlogsActions.saveNewBlog(blog);
+    goBackToList = () => {
+        this.setState({ view: "List", currentBlog: "" })
+    }
+
+    saveNewBlog = (blogTitle, blogContent) => {
+        DlogsActions.saveNewBlog(blogTitle, blogContent);
         this.goBackToList()
     }
 
     render() {
         return (<div>
-            {this.state.view==="List"? this.getBlogList() : 
-            this.state.view==="Content"? <BlogView blog={this.state.currentBlog} goBack={this.goBackToList} />
-            :<NewBlog saveNewBlog={this.saveNewBlog} /> }
-            {this.state.view === "List"?<button onClick={this.goToNewBlog}> New </button>:""}
+            {this.state.view === "List" ? this.getBlogList() :
+                this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goBack={this.goBackToList} />
+                    : <NewBlog saveNewBlog={this.saveNewBlog} />}
+            {this.state.view === "List" ? <button onClick={this.goToNewBlog}> New </button> : ""}
         </div>);
 
     }

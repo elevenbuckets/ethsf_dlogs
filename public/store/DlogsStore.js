@@ -30,14 +30,25 @@ var DlogsStore = function (_Reflux$Store) {
 
         var _this = _possibleConstructorReturn(this, (DlogsStore.__proto__ || Object.getPrototypeOf(DlogsStore)).call(this));
 
-        _this.onSaveNewBlog = function (blog) {
+        _this.onSaveNewBlog = function (title, content) {
+            var blog = { title: title, content: content };
             _this.setState({ blogs: [].concat(_toConsumableArray(_this.state.blogs), [blog]) });
         };
 
         _this.listenables = _DlogsActions2.default;
 
         _this.state = {
-            blogs: ["# This is Blog 1\n" + "This is the content 1", "# This is Blog 2\n" + "This is the content 2"]
+            blogs: [{
+                title: "Blog 1",
+                author: "0x...1",
+                timeStamp: "123123",
+                content: "# This is Blog 1\n" + "This is the content 1"
+            }, {
+                title: "Blog 1",
+                author: "0x...1",
+                timeStamp: "123123",
+                content: "# This is Blog 1\n" + "This is the content 1"
+            }]
         };
         return _this;
     }

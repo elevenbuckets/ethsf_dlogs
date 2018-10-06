@@ -50,25 +50,46 @@ var NewBlog = function (_Reflux$Component) {
             return _react2.default.createElement(
                 "form",
                 null,
-                _react2.default.createElement("textarea", { onChange: _this.udpateBlog, value: _this.state.blog })
+                _react2.default.createElement(
+                    "label",
+                    null,
+                    "Title"
+                ),
+                _react2.default.createElement("textarea", { onChange: _this.udpateBlogTitle, value: _this.state.blogTitle }),
+                _react2.default.createElement("textarea", { onChange: _this.udpateBlogContent, value: _this.state.blogContent })
             );
         };
 
-        _this.udpateBlog = function (event) {
-            _this.setState({ blog: event.target.value });
+        _this.udpateBlogContent = function (event) {
+            _this.setState({ blogContent: event.target.value });
+        };
+
+        _this.udpateBlogTitle = function (event) {
+            _this.setState({ blogTitle: event.target.value });
         };
 
         _this.saveNewBlog = function () {
-            _this.props.saveNewBlog(_this.state.blog);
+            _this.props.saveNewBlog(_this.state.blogTitle, _this.state.blogContent);
         };
 
         _this.changeEditable = function () {
             _this.setState({ isEditable: !_this.state.isEditable });
         };
 
+        _this.getBlogPreview = function () {
+            return _react2.default.createElement(
+                "div",
+                null,
+                " ",
+                _this.state.blogTitle,
+                (0, _reactRenderHtml2.default)((0, _marked2.default)(_this.state.blogContent))
+            );
+        };
+
         _this.state = {
             isEditable: true,
-            blog: ""
+            blogContent: "",
+            blogTitle: ""
         };
 
         _this.store = _DlogsStore2.default;
@@ -81,7 +102,7 @@ var NewBlog = function (_Reflux$Component) {
             return _react2.default.createElement(
                 "div",
                 null,
-                this.state.isEditable ? this.getEditView() : (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.blog)),
+                this.state.isEditable ? this.getEditView() : this.getBlogPreview(),
                 _react2.default.createElement(
                     "button",
                     { onClick: this.changeEditable },

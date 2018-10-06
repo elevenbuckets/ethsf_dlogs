@@ -14,7 +14,8 @@ class NewBlog extends Reflux.Component {
         super(props);
         this.state = {
             isEditable: true,
-            blog: ""
+            blogContent: "",
+            blogTitle:""
         }
 
         this.store = DlogsStore;
@@ -22,28 +23,40 @@ class NewBlog extends Reflux.Component {
 
     getEditView = () => {
         return <form>
-        <textarea onChange={this.udpateBlog} value={this.state.blog}></textarea>
+        <label >Title</label>
+        <textarea onChange={this.udpateBlogTitle} value={this.state.blogTitle}></textarea>
+        <textarea onChange={this.udpateBlogContent} value={this.state.blogContent}></textarea>
       </form>
       
     }
 
-    udpateBlog = (event) => {
-        this.setState({ blog: event.target.value })
+    udpateBlogContent = (event) => {
+        this.setState({ blogContent: event.target.value })
     }
 
+    udpateBlogTitle = (event) => {
+        this.setState({ blogTitle: event.target.value })
+    }
+
+
     saveNewBlog = () => {
-        this.props.saveNewBlog(this.state.blog);
+        this.props.saveNewBlog(this.state.blogTitle, this.state.blogContent);
     }
 
     changeEditable = () => {
         this.setState({ isEditable: !this.state.isEditable })
     }
 
+    getBlogPreview = () =>{
+        return <div> {this.state.blogTitle}
+        {renderHTML(marked(this.state.blogContent))}
+        </div>
+    }
 
 
     render() {
         return (<div>
-            {this.state.isEditable ? this.getEditView() : renderHTML(marked(this.state.blog))}
+            {this.state.isEditable ? this.getEditView() : this.getBlogPreview()}
             <button onClick={this.changeEditable}>{this.state.isEditable ? "Preview" : "Edit"}</button>
             <button onClick={this.saveNewBlog}>Save</button>
         </div>);

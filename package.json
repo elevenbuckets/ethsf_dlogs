@@ -10,9 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "CastIron": "git+ssh://git@github.com/elevenbuckets/CastIron.git",
-    "accMgr": "git+ssh://git@github.com/elevenbuckets/accmgr.git",
-    "async": "^2.6.1",
+    "LimeCasks": "git+https://github.com/elevenbuckets/LimeCasks.git",
     "ipfs_base": "git+ssh://git@github.com/elevenbuckets/Ipfs_go.git"
   }
 }

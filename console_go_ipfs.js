@@ -5,7 +5,7 @@ const repl = require('repl');
 const fs   = require('fs');
 
 // ElevenBuckets SDK modules
-const castIron = require('CastIron/core/CastIron.js');
+const limeCask = require('LimeCask/core/LimeCask.js');
 const ipfsBase = require('ipfs_base/IPFS_GO.js');
 
 // extending classes for REPL
@@ -45,7 +45,7 @@ class ipfsREPL extends ipfsBase {
 
 
 // Class instances
-const ciapi = new castIron('./.local/config.json');
+const ciapi = new limeCask('./.local/config.json');
 const ipfs  = new ipfsREPL('./.local/config.json');
 
 // Handling promises in REPL (for node < 10.x)

@@ -5,14 +5,14 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/babel  src --out-dir public"
-    "gui": "node ./dlogs.js --gui",
-    "cli": "node ./dlogs.js --cli"
+    "build": "./node_modules/.bin/babel  src --out-dir public",
+    "gui": "node ./main.js --gui",
+    "cli": "node ./main.js --cli"
   },
   "babel": {
-    "plugins":[
-        "transform-class-properties"
-    ],  
+    "plugins": [
+      "transform-class-properties"
+    ],
     "presets": [
       "es2015",
       "react"
@@ -33,7 +33,7 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-render-html": "^0.6.0",
-    "reflux": "^6.4.1"
+    "reflux": "^6.4.1",
     "LimeCasks": "git+https://github.com/elevenbuckets/LimeCasks.git",
     "figlet": "^1.2.0",
     "ipfs_base": "git+ssh://git@github.com/elevenbuckets/Ipfs_go.git"

@@ -10,6 +10,6 @@ var _reflux2 = _interopRequireDefault(_reflux);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var DlogsActions = _reflux2.default.createActions([]);
+var DlogsActions = _reflux2.default.createActions(["saveNewBlog"]);
 
 exports.default = DlogsActions;

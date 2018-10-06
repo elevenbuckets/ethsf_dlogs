@@ -22,14 +22,6 @@ var _DlogsActions = require("../action/DlogsActions");
 
 var _DlogsActions2 = _interopRequireDefault(_DlogsActions);
 
-var _BlogView = require("./BlogView");
-
-var _BlogView2 = _interopRequireDefault(_BlogView);
-
-var _NewBlog = require("./NewBlog");
-
-var _NewBlog2 = _interopRequireDefault(_NewBlog);
-
 var _reactRenderHtml = require("react-render-html");
 
 var _reactRenderHtml2 = _interopRequireDefault(_reactRenderHtml);
@@ -46,67 +38,65 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MainView = function (_Reflux$Component) {
-    _inherits(MainView, _Reflux$Component);
+var NewBlog = function (_Reflux$Component) {
+    _inherits(NewBlog, _Reflux$Component);
 
-    function MainView(props) {
-        _classCallCheck(this, MainView);
+    function NewBlog(props) {
+        _classCallCheck(this, NewBlog);
 
-        var _this = _possibleConstructorReturn(this, (MainView.__proto__ || Object.getPrototypeOf(MainView)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (NewBlog.__proto__ || Object.getPrototypeOf(NewBlog)).call(this, props));
 
-        _this.getBlogList = function () {
-            return _this.state.blogs.map(function (blog) {
-                return _react2.default.createElement(
-                    "div",
-                    { onClick: _this.goToBlog.bind(_this, blog) },
-                    (0, _reactRenderHtml2.default)((0, _marked2.default)(blog))
-                );
-            });
+        _this.getEditView = function () {
+            return _react2.default.createElement(
+                "form",
+                null,
+                _react2.default.createElement("textarea", { onChange: _this.udpateBlog, value: _this.state.blog })
+            );
         };
 
-        _this.goToBlog = function (blog) {
-            _this.setState({ view: "Content", currentBlog: blog });
+        _this.udpateBlog = function (event) {
+            _this.setState({ blog: event.target.value });
         };
 
-        _this.goToNewBlog = function () {
-            _this.setState({ view: "New" });
+        _this.saveNewBlog = function () {
+            _this.props.saveNewBlog(_this.state.blog);
         };
 
-        _this.goBackToList = function () {
-            _this.setState({ view: "List", currentBlog: "" });
-        };
-
-        _this.saveNewBlog = function (blog) {
-            _DlogsActions2.default.saveNewBlog(blog);
-            _this.goBackToList();
+        _this.changeEditable = function () {
+            _this.setState({ isEditable: !_this.state.isEditable });
         };
 
         _this.state = {
-            view: "List",
-            currentBlog: ""
+            isEditable: true,
+            blog: ""
         };
 
         _this.store = _DlogsStore2.default;
         return _this;
     }
 
-    _createClass(MainView, [{
+    _createClass(NewBlog, [{
         key: "render",
         value: function render() {
             return _react2.default.createElement(
                 "div",
                 null,
-                this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog }),
-                this.state.view === "List" ? _react2.default.createElement(
+                this.state.isEditable ? this.getEditView() : (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.blog)),
+                _react2.default.createElement(
                     "button",
-                    { onClick: this.goToNewBlog },
-                    " New "
-                ) : ""
+                    { onClick: this.changeEditable },
+                    this.state.isEditable ? "Preview" : "Edit"
+                ),
+                _react2.default.createElement(
+                    "button",
+                    { onClick: this.saveNewBlog },
+                    "Save"
+                )
             );
         }
     }]);
 
-    return MainView;
+    return NewBlog;
 }(_reflux2.default.Component);
 
-exports.default = MainView;
+exports.default = NewBlog;

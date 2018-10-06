@@ -22,14 +22,6 @@ var _DlogsActions = require("../action/DlogsActions");
 
 var _DlogsActions2 = _interopRequireDefault(_DlogsActions);
 
-var _BlogView = require("./BlogView");
-
-var _BlogView2 = _interopRequireDefault(_BlogView);
-
-var _NewBlog = require("./NewBlog");
-
-var _NewBlog2 = _interopRequireDefault(_NewBlog);
-
 var _reactRenderHtml = require("react-render-html");
 
 var _reactRenderHtml2 = _interopRequireDefault(_reactRenderHtml);
@@ -46,40 +38,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MainView = function (_Reflux$Component) {
-    _inherits(MainView, _Reflux$Component);
+var BlogView = function (_Reflux$Component) {
+    _inherits(BlogView, _Reflux$Component);
 
-    function MainView(props) {
-        _classCallCheck(this, MainView);
+    function BlogView(props) {
+        _classCallCheck(this, BlogView);
 
-        var _this = _possibleConstructorReturn(this, (MainView.__proto__ || Object.getPrototypeOf(MainView)).call(this, props));
-
-        _this.getBlogList = function () {
-            return _this.state.blogs.map(function (blog) {
-                return _react2.default.createElement(
-                    "div",
-                    { onClick: _this.goToBlog.bind(_this, blog) },
-                    (0, _reactRenderHtml2.default)((0, _marked2.default)(blog))
-                );
-            });
-        };
-
-        _this.goToBlog = function (blog) {
-            _this.setState({ view: "Content", currentBlog: blog });
-        };
-
-        _this.goToNewBlog = function () {
-            _this.setState({ view: "New" });
-        };
-
-        _this.goBackToList = function () {
-            _this.setState({ view: "List", currentBlog: "" });
-        };
-
-        _this.saveNewBlog = function (blog) {
-            _DlogsActions2.default.saveNewBlog(blog);
-            _this.goBackToList();
-        };
+        var _this = _possibleConstructorReturn(this, (BlogView.__proto__ || Object.getPrototypeOf(BlogView)).call(this, props));
 
         _this.state = {
             view: "List",
@@ -90,23 +55,23 @@ var MainView = function (_Reflux$Component) {
         return _this;
     }
 
-    _createClass(MainView, [{
+    _createClass(BlogView, [{
         key: "render",
         value: function render() {
             return _react2.default.createElement(
                 "div",
                 null,
-                this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog }),
-                this.state.view === "List" ? _react2.default.createElement(
+                (0, _reactRenderHtml2.default)((0, _marked2.default)(this.props.blog)),
+                _react2.default.createElement(
                     "button",
-                    { onClick: this.goToNewBlog },
-                    " New "
-                ) : ""
+                    { onClick: this.props.goBack },
+                    "Back"
+                )
             );
         }
     }]);
 
-    return MainView;
+    return BlogView;
 }(_reflux2.default.Component);
 
-exports.default = MainView;
+exports.default = BlogView;

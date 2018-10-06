@@ -7,16 +7,25 @@ class DlogsStore extends Reflux.Store {
         this.listenables = DlogsActions
 
         this.state = {
-            blogs: ["# This is Blog 1\n" + "This is the content 1"
-
-                ,
-            "# This is Blog 2\n" + "This is the content 2"
+            blogs: [{
+                title: "Blog 1",
+                author: "0x...1",
+                timeStamp: "123123",
+                content: "# This is Blog 1\n" + "This is the content 1"
+            },
+            {
+                title: "Blog 1",
+                author: "0x...1",
+                timeStamp: "123123",
+                content: "# This is Blog 1\n" + "This is the content 1"
+            }
             ]
         }
     }
 
-    onSaveNewBlog = (blog) => {
-        this.setState({blogs : [...this.state.blogs, blog]})
+    onSaveNewBlog = (title, content) => {
+        let blog = {title, content}
+        this.setState({ blogs: [...this.state.blogs, blog] })
     }
 
 

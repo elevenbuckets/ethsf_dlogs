@@ -59,7 +59,12 @@ var MainView = function (_Reflux$Component) {
                 return _react2.default.createElement(
                     "div",
                     { onClick: _this.goToBlog.bind(_this, blog) },
-                    (0, _reactRenderHtml2.default)((0, _marked2.default)(blog))
+                    _react2.default.createElement(
+                        "div",
+                        null,
+                        blog.title
+                    ),
+                    (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.content))
                 );
             });
         };
@@ -76,8 +81,8 @@ var MainView = function (_Reflux$Component) {
             _this.setState({ view: "List", currentBlog: "" });
         };
 
-        _this.saveNewBlog = function (blog) {
-            _DlogsActions2.default.saveNewBlog(blog);
+        _this.saveNewBlog = function (blogTitle, blogContent) {
+            _DlogsActions2.default.saveNewBlog(blogTitle, blogContent);
             _this.goBackToList();
         };
 

@@ -14,6 +14,14 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _DlogsStore = require("../store/DlogsStore");
+
+var _DlogsStore2 = _interopRequireDefault(_DlogsStore);
+
+var _DlogsActions = require("../action/DlogsActions");
+
+var _DlogsActions2 = _interopRequireDefault(_DlogsActions);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28,7 +36,10 @@ var MainView = function (_Reflux$Component) {
     function MainView(props) {
         _classCallCheck(this, MainView);
 
-        return _possibleConstructorReturn(this, (MainView.__proto__ || Object.getPrototypeOf(MainView)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (MainView.__proto__ || Object.getPrototypeOf(MainView)).call(this, props));
+
+        _this.store = _DlogsStore2.default;
+        return _this;
     }
 
     _createClass(MainView, [{
@@ -37,7 +48,7 @@ var MainView = function (_Reflux$Component) {
             return _react2.default.createElement(
                 "div",
                 null,
-                "This is the main view"
+                this.state.blogs
             );
         }
     }]);

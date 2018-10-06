@@ -117,7 +117,7 @@ class DLogsREPL extends LimeCasks {
 			})
 		}
 
-		this.deregister = () => {
+		this.unregister = () => {
 			let address = this.getAccount();
 
 			if (address === null) return false;
@@ -125,11 +125,18 @@ class DLogsREPL extends LimeCasks {
 			let passwd  = variables.get(this).password;
 
 			return this.unlockViaIPC(passwd)(address).then((r) => {
-				console.log(`Deregistering address ${address}`);
-				return this.dapp.deregister(address, {from: address});	
+				console.log(`Unregistering address ${address}`);
+				return this.dapp.unregister(address, {from: address});	
 			})
 		}
 
+		this.lookUpByAddr = (address) => {
+			return this.dapp.addr2ipns(address);
+		}
+
+		this.lookUpByIPNS = (ipnsHash) => {
+			return this.dapp.ipns2addr(ipnsHash);
+		}
 	}
 }
 

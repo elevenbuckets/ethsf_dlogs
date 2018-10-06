@@ -103,6 +103,33 @@ class DLogsREPL extends LimeCasks {
 			return this.validPass();
 		}
 
+		// smart contract function bindings
+		this.register = (ipnsHash) => {
+			let address = this.getAccount();
+
+			if (address === null) return false;
+
+			let passwd  = variables.get(this).password;
+
+			return this.unlockViaIPC(passwd)(address).then((r) => {
+				console.log(`Registering address ${address} using IPNS ${ipnsHash}`);
+				return this.dapp.register(address, ipnsHash, {from: address});	
+			})
+		}
+
+		this.deregister = () => {
+			let address = this.getAccount();
+
+			if (address === null) return false;
+
+			let passwd  = variables.get(this).password;
+
+			return this.unlockViaIPC(passwd)(address).then((r) => {
+				console.log(`Deregistering address ${address}`);
+				return this.dapp.deregister(address, {from: address});	
+			})
+		}
+
 	}
 }
 

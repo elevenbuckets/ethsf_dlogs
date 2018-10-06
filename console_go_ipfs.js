@@ -5,7 +5,7 @@ const repl = require('repl');
 const fs   = require('fs');
 
 // ElevenBuckets SDK modules
-const limeCask = require('LimeCask/core/LimeCask.js');
+const limeCask = require('LimeCasks/core/Wrap3.js');
 const ipfsBase = require('ipfs_base/IPFS_GO.js');
 
 // extending classes for REPL
@@ -46,7 +46,7 @@ class ipfsREPL extends ipfsBase {
 
 // Class instances
 const ciapi = new limeCask('./.local/config.json');
-const ipfs  = new ipfsREPL('./.local/config.json');
+const ipfs  = new ipfsREPL('./.local/ipfsserv.json');
 
 // Handling promises in REPL (for node < 10.x)
 const replEvalPromise = (cmd,ctx,filename,cb) => {

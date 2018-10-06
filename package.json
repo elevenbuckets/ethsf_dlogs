@@ -2,7 +2,7 @@
   "name": "CastIron_CLI",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dlogs.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "LimeCasks": "git+https://github.com/elevenbuckets/LimeCasks.git",
+    "electron": "^3.0.2",
     "figlet": "^1.2.0",
     "ipfs_base": "git+ssh://git@github.com/elevenbuckets/Ipfs_go.git"
   }

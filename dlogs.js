@@ -173,41 +173,115 @@ class DLogsREPL extends LimeCasks {
 const dlogs = new DLogsREPL('../.local/config.json');
 const ipfs  = new IPFS_REPL('../.local/ipfsserv.json');
 
-// Handling promises in REPL (for node < 10.x)
-const replEvalPromise = (cmd,ctx,filename,cb) => {
-  let result=eval(cmd);
-  if (result instanceof Promise) {
-    return result.then(response=>cb(null,response));
-  }
-  return cb(null, result);
-} 
+// electron window global object
+let win;
 
-// REPL main function
-const terminal = (ipfs) => {
-  return ipfs.start()
-	.then(() => { return dlogs.connect() })
-	.then((rc) => { if (rc && dlogs.init(ipfs) ) return ASCII_Art('DLogs  By  ElevenBuckets') })
-	.then((art) => {
-	  console.log(art + "\n");
+// Parsing argv to see if we're running CLI or GUI
+if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
+	const { execFile } = require('child_process');
 
-  	  let r = repl.start({ prompt: '[-= ElevenBuckets@ETHSF =-]$ ', eval: replEvalPromise });
-  	  r.context = {ipfs, dlogs};
+	console.log('HERE ' + process.argv[0]);
 
-  	  r.on('exit', () => {
-  		  console.log("\n" + 'Stopping CLI...');
-  		  if (ipfs.controller.started) {
-			  ipfs.stop().then(() => {
-		  		process.exit(0);
-		  	  });
+	if (path.basename(process.argv[0]) === 'node') {
+		console.log('node --gui');
+		execFile('./node_modules/.bin/electron', ['.'], {env: {'__GUI__': true, ...process.env}}, (error, stdout, stderr) => {
+  			if (error) throw error;
+  			console.log(stdout);
+		});
+	} else {
+		// electron main.js 
+		const {app, BrowserWindow, ipcMain} = require('electron');
+		const url = require('url');
+
+		function createWindow () {
+		  // Create the browser window.
+		  ipfs.start().then((API) => {
+		    win = new BrowserWindow({minWidth: 1280, minHeight: 960, resizable: true, icon: path.join(__dirname, 'public', 'assets', 'icon', '11be_logo.png')});
+		    win.setMenu(null);
+		
+		    // and load the index.html of the app.
+		    win.loadURL(url.format({
+		      pathname: path.join(__dirname, '/public/index.html'),
+		      protocol: 'file:',
+		      slashes: true
+		    }))
+		
+		    global.ipfs  = ipfs;
+		
+		    // Open the DevTools.
+		    win.webContents.openDevTools()
+		
+		    // Emitted when the window is closed.
+		    win.on('closed', () => {
+		      // Dereference the window object, usually you would store windows
+		      // in an array if your app supports multi windows, this is the time
+		      // when you should delete the corresponding element.
+		      win = null
+		    })
+		  })
+		}
+	
+		app.on('ready', createWindow)
+	
+		// Whole process reloader via ipcRenderer for config reload
+		ipcMain.on('reload', (e, args) => {
+		        app.relaunch();
+		        app.exit();
+		});
+		
+		// Quit when all windows are closed.
+		app.on('window-all-closed', () => {
+		  // On macOS it is common for applications and their menu bar
+		  // to stay active until the user quits explicitly with Cmd + Q
+		  if (process.platform !== 'darwin') {
+		    app.quit()
 		  }
-  	  })
-    })
-    .catch((err) => {
-  	console.log(err);
-  	process.exit(12);
-    })
+		})
+		
+		app.on('activate', () => {
+		  // On macOS it's common to re-create a window in the app when the
+		  // dock icon is clicked and there are no other windows open.
+		  if (win === null) {
+		    createWindow()
+		  }
+		})
+	}
+} else if (process.argv[2] === '--cli') {
+	// Handling promises in REPL (for node < 10.x)
+	const replEvalPromise = (cmd,ctx,filename,cb) => {
+	  let result=eval(cmd);
+	  if (result instanceof Promise) {
+	    return result.then(response=>cb(null,response));
+	  }
+	  return cb(null, result);
+	} 
+	
+	// REPL main function
+	const terminal = (ipfs) => {
+	  return ipfs.start()
+		.then(() => { return dlogs.connect() })
+		.then((rc) => { if (rc && dlogs.init(ipfs) ) return ASCII_Art('DLogs  By  ElevenBuckets') })
+		.then((art) => {
+		  console.log(art + "\n");
+	
+	  	  let r = repl.start({ prompt: '[-= ElevenBuckets@ETHSF =-]$ ', eval: replEvalPromise });
+	  	  r.context = {ipfs, dlogs};
+	
+	  	  r.on('exit', () => {
+	  		  console.log("\n" + 'Stopping CLI...');
+	  		  if (ipfs.controller.started) {
+				  ipfs.stop().then(() => {
+			  		process.exit(0);
+			  	  });
+			  }
+	  	  })
+	    })
+	    .catch((err) => {
+	  	console.log(err);
+	  	process.exit(12);
+	    })
+	}
+	
+	// Main
+	terminal(ipfs);
 }
-
-// Main
-terminal(ipfs);
-

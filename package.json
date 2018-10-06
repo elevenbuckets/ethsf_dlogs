@@ -4,7 +4,8 @@
   "description": "",
   "main": "dlogs.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  	"gui": "node ./dlogs.js --gui",
+	"cli": "node ./dlogs.js --cli"
   },
   "keywords": [],
   "author": "",

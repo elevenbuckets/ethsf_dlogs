@@ -180,10 +180,10 @@ let win;
 if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
 	const { execFile } = require('child_process');
 
-	console.log('HERE ' + process.argv[0]);
+	//console.log('HERE ' + process.argv[0]);
 
 	if (path.basename(process.argv[0]) === 'node') {
-		console.log('node --gui');
+		//console.log('node --gui');
 		execFile('./node_modules/.bin/electron', ['.'], {env: {'__GUI__': true, ...process.env}}, (error, stdout, stderr) => {
   			if (error) throw error;
   			console.log(stdout);

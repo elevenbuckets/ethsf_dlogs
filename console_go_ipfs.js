@@ -45,8 +45,8 @@ class ipfsREPL extends ipfsBase {
 
 
 // Class instances
-const ciapi = new limeCask('./.local/config.json');
-const ipfs  = new ipfsREPL('./.local/ipfsserv.json');
+const ciapi = new limeCask('../.local/config.json');
+const ipfs  = new ipfsREPL('../.local/ipfsserv.json');
 
 // Handling promises in REPL (for node < 10.x)
 const replEvalPromise = (cmd,ctx,filename,cb) => {

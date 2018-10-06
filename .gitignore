@@ -39,6 +39,7 @@ src/playground/
 public/bundle.js
 .local/
 public/bundle.js
+data/
 
 # Typescript v1 declaration files
 typings/

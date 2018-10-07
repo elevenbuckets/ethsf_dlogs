@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _reflux = require("reflux");
 
 var _reflux2 = _interopRequireDefault(_reflux);
@@ -30,26 +32,63 @@ var DlogsStore = function (_Reflux$Store) {
 
         var _this = _possibleConstructorReturn(this, (DlogsStore.__proto__ || Object.getPrototypeOf(DlogsStore)).call(this));
 
+        _this.initializeState = function () {
+            console.log(_this.dlogs);
+            var ipns = _this.dlogs.lookUpByAddr(_this.state.onlyShowForBlogger);
+            _this.ipfs.resolve(ipns).then(function (r) {
+                return _this.ipfs.readPath(r);
+            }).then(function (r) {
+                var metaJSON = JSON.parse(r.toString());
+                var blogs = Object.keys(metaJSON.Articles).map(function (hash) {
+                    return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
+                });
+                _this.setState({ blogs: blogs });
+            });
+        };
+
+        _this.refreshBlogs = function () {};
+
         _this.onSaveNewBlog = function (title, content) {
             var blog = { title: title, content: content };
             _this.setState({ blogs: [].concat(_toConsumableArray(_this.state.blogs), [blog]) });
         };
 
         _this.listenables = _DlogsActions2.default;
+        var remote = require('electron').remote;
+        _this.ipfs = remote.getGlobal('ipfs');
+        var DLogsAPI = require('../../DLogsAPI.js');
+
+        _this.dlogs = new DLogsAPI('../.local/config.json');
+
+        _this.ipfs.ipfsAPI.id().then(function (o) {
+            console.log(JSON.stringify(o, 0, 2));
+        }).then(function () {
+            return _this.dlogs.connect();
+        }).then(function () {
+            return _this.dlogs.init(_this.ipfs);
+        }).then(function (r) {
+            if (r) console.log(_this.dlogs.web3.eth.blockNumber);
+            _this.initializeState();
+        });
 
         _this.state = {
             blogs: [{
                 title: "Blog 1",
                 author: "0x...1",
                 timeStamp: "123123",
-                content: "# This is Blog 1\n" + "This is the content 1"
+                TLDR: "# This is Blog 1\n" + "This is the content 1"
             }, {
                 title: "Blog 1",
                 author: "0x...1",
                 timeStamp: "123123",
-                content: "# This is Blog 1\n" + "This is the content 1"
-            }]
+                TLDR: "# This is Blog 1\n" + "This is the content 1"
+            }],
+            following: [],
+            displayBlogs: [],
+            onlyShowForBlogger: "0x89dc07a2f750cf62e757f909a4985a94a07d6359"
+
         };
+
         return _this;
     }
 

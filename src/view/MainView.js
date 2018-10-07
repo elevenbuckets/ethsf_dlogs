@@ -25,14 +25,15 @@ class MainView extends Reflux.Component {
     getBlogList = () => {
         return this.state.blogs.map(blog => {
             return <div onClick={this.goToBlog.bind(this, blog)}>
-                <div>{blog.title}</div>
+                <div>{"Title:" + blog.title}</div>
                 {renderHTML(marked(blog.TLDR))}
             </div>
         })
     }
 
     goToBlog = (blog) => {
-        this.setState({ view: "Content", currentBlog: blog })
+        DlogsActions.fetchBlogContent(blog.ipfsHash);
+        this.setState({ view: "Content", currentBlog: blog });
     }
 
     goToNewBlog = () => {

@@ -48,6 +48,13 @@ var DlogsStore = function (_Reflux$Store) {
 
         _this.refreshBlogs = function () {};
 
+        _this.onFetchBlogContent = function (ipfsHash) {
+            _this.setState({ currentBlogContent: "" });
+            _this.ipfs.read(ipfsHash).then(function (r) {
+                _this.setState({ currentBlogContent: JSON.parse(r.toString()).content });
+            });
+        };
+
         _this.onSaveNewBlog = function (title, content) {
             var blog = { title: title, content: content };
             _this.setState({ blogs: [].concat(_toConsumableArray(_this.state.blogs), [blog]) });
@@ -72,20 +79,11 @@ var DlogsStore = function (_Reflux$Store) {
         });
 
         _this.state = {
-            blogs: [{
-                title: "Blog 1",
-                author: "0x...1",
-                timeStamp: "123123",
-                TLDR: "# This is Blog 1\n" + "This is the content 1"
-            }, {
-                title: "Blog 1",
-                author: "0x...1",
-                timeStamp: "123123",
-                TLDR: "# This is Blog 1\n" + "This is the content 1"
-            }],
+            blogs: [],
             following: [],
             displayBlogs: [],
-            onlyShowForBlogger: "0x89dc07a2f750cf62e757f909a4985a94a07d6359"
+            onlyShowForBlogger: "0x89dc07a2f750cf62e757f909a4985a94a07d6359",
+            currentBlogContent: ""
 
         };
 

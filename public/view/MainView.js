@@ -62,7 +62,7 @@ var MainView = function (_Reflux$Component) {
                     _react2.default.createElement(
                         "div",
                         null,
-                        blog.title
+                        "Title:" + blog.title
                     ),
                     (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.TLDR))
                 );
@@ -70,6 +70,7 @@ var MainView = function (_Reflux$Component) {
         };
 
         _this.goToBlog = function (blog) {
+            _DlogsActions2.default.fetchBlogContent(blog.ipfsHash);
             _this.setState({ view: "Content", currentBlog: blog });
         };
 

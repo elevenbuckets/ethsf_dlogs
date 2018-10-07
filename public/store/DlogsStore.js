@@ -24,6 +24,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var path = require('path');
+
 var DlogsStore = function (_Reflux$Store) {
     _inherits(DlogsStore, _Reflux$Store);
 
@@ -33,10 +35,9 @@ var DlogsStore = function (_Reflux$Store) {
         var _this = _possibleConstructorReturn(this, (DlogsStore.__proto__ || Object.getPrototypeOf(DlogsStore)).call(this));
 
         _this.initializeState = function () {
-            console.log(_this.dlogs);
             var ipns = _this.dlogs.lookUpByAddr(_this.state.onlyShowForBlogger);
             _this.ipfs.resolve(ipns).then(function (r) {
-                return _this.ipfs.readPath(r);
+                return _this.ipfs.read(path.basename(r));
             }).then(function (r) {
                 var metaJSON = JSON.parse(r.toString());
                 var blogs = Object.keys(metaJSON.Articles).map(function (hash) {

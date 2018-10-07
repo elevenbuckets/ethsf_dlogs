@@ -32,7 +32,7 @@ class DlogsStore extends Reflux.Store {
             displayBlogs: [],
             onlyShowForBlogger: "",
             currentBlogContent: "",
-            login: ture
+            login: true
 
         }
 

@@ -98,8 +98,7 @@ var MainView = function (_Reflux$Component) {
 
         _this.state = {
             view: "List",
-            currentBlog: "",
-            login: false
+            currentBlog: ""
         };
 
         _this.store = _DlogsStore2.default;
@@ -112,7 +111,7 @@ var MainView = function (_Reflux$Component) {
             return this.state.login ? _react2.default.createElement(
                 "div",
                 { className: "contentxt" },
-                this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog }),
+                this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, goBack: this.goBackToList }),
                 this.state.view === "List" ? _react2.default.createElement(
                     "button",
                     { onClick: this.goToNewBlog },

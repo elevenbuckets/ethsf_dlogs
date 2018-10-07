@@ -25,7 +25,7 @@ class DlogsStore extends Reflux.Store {
             ],
             following : [],
             displayBlogs:[],
-            onlyShowForBlogger : "0xb440ea2780614b3c6a00e512f432785e7dfafa3e",
+            onlyShowForBlogger : "",
             currentBlogContent:""
 
         }
@@ -33,6 +33,27 @@ class DlogsStore extends Reflux.Store {
     }
 
     initializeState = () =>{
+        let Max = 10;
+        let helper =  this.dlogs.dapp.browse(0,Max);
+        let blogs = [];
+        helper.reduce((acc, vaule, index) =>{
+            let ipns = this.dlogs.parseEntry(this.dlogs.dapp.browse(0,Max), index).ipnsHash;
+            this.ipfs.pullIPNS(ipns).then(metaJSON=>{
+                let tempBlogs = Object.keys(metaJSON.Articles).map(hash =>{
+                    return {...metaJSON.Articles[hash], ipfsHash : hash}
+                })
+                blogs = [...blogs, ...tempBlogs];
+                if(index == helper.length-1){
+                    this.setState({blogs: blogs});
+                }
+            })
+            
+        }, blogs);
+
+        
+    }
+
+    getBlogOnlyShowForBloger = () =>{
         let ipns = this.dlogs.lookUpByAddr(this.state.onlyShowForBlogger);
         this.ipfs.pullIPNS(ipns).then(metaJSON=>{
             let blogs = Object.keys(metaJSON.Articles).map(hash =>{

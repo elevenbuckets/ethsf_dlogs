@@ -294,188 +294,102 @@ body {
     background: linear-gradient(180deg, #b1676707, #412d6e57);
 }
 
-@media (max-width: 1280px) {
-    body {
-        max-height: calc(100vh - 20px);
-        grid-template-columns: 1fr;
-        grid-template-rows: 200px 8fr 56px;
-        grid-template-areas: 
-        "topbar"
-        "content"
-        "footer";
-        background-repeat: repeat-y;
-    }
-
-    .content {
-        text-align: left;
-        max-height: 95%;
-        margin: 0px;
-        padding: 0 6px 0 6px;
-        grid-template-columns: 1fr;
-        grid-template-rows: 10px 1fr 2%;
-        grid-template-areas:
-        "." 
-        "centercontent"
-        ".";
-    }
-
-    .structurepic img {
-        height: auto;
-    }
-
-    .content p {
-        text-align: left;
-    }
-
-    .contactinfo {
-        margin: 20px;
-    }
-
-    .contactinfo li {
-        font-size: 4.5vw;
-    }
-
-    .mediaContainer {
-        grid-template-areas: 
-      "vidtitle"
-      "videos"
-      "pictitle"
-      "pictures"
-      "pmtitle"
-      "pminfo";
-    }
-
-    .logopic {
-        justify-self: center;
-        width: 96px;
-        height: 96px;
-        margin: 6px;
-    }
-
-    .mylogo {
-        justify-self: center;
-    }
-
-    .logotext { 
-        align-self: center;
-        font-size: 36px;
-        padding-top: 20px;
-    }
-
-    .topside {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 2fr;
-        grid-template-areas: 
-        "logo" 
-        "navigation";
-    }
-
-    .item {
-        font-size: 16px;
-    }
-
-    .navibar {
-        grid-gap: 2px;
-        justify-items: center;
-        margin: 0 10px 0 10px;
-        grid-template-rows: repeat(auto-fit, 1fr);
-        font-size: 45px;
-    }
-
-    .navibar div { 
-        width: 100%;
-        font-size: 25px;
-    }
-
-    /* .navibar div:hover {
-        border: 1px solid white;
-        background-color: rgba(0, 0, 0, 0.37);
-    } */
-
-    .structurepic img {
-        width: 80vw;
-    }
+/* React Dropdown */
+.Dropdown-root {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+  font-family: Arial;
+  font-size: 16px;
 }
 
-@media(max-width: 640px) {
-    body {
-        grid-template-rows: 150px 1fr 56px;
-    }
-
-    .content {
-        grid-template-rows: 4px 1fr 2%;
-        margin: 0px;
-        padding: 0 6px 0 6px;
-    }
-
-    #contentxt {
-        text-align: left;
-    }
-
-    
-    .structurepic img {
-        width: 95vw;
-    }
-
-    .mylogo {
-        grid-template-columns: 1fr;
-    }
-
-    .logotext {
-        display: none;
-    }
-
-    .navibar {
-        grid-gap: 2px;
-        justify-items: center;
-        margin: 15px 10px 0 10px;
-        grid-template-columns: repeat(auto-fill, 1fr);
-        grid-template-rows: repeat(auto-fit, 1fr);
-        font-size: 35px;
-    }
-
-    .navibar div { 
-        width: 100%;
-        font-size: 16px;
-    }
+.Dropdown-control {
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  box-sizing: border-box;
+  color: #333;
+  cursor: default;
+  outline: none;
+  padding: 8px 52px 8px 10px;
+  transition: all 200ms ease;
 }
 
-@media(max-height: 480px) {
-    body {
-        grid-template-rows: 72px 1fr 56px;
-    }
+.Dropdown-control:hover {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
 
-    .content {
-        grid-template-rows: 4px 1fr 2%;
-        margin: 0px;
-        padding: 0 6px 0 6px;
-    }
+.Dropdown-arrow {
+  border-color: #999 transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  content: ' ';
+  display: block;
+  height: 0;
+  margin-top: -ceil(2.5);
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  width: 0
+}
 
-    .mylogo {
-        grid-template-columns: 1fr;
-    }
+.is-open .Dropdown-arrow {
+  border-color: transparent transparent #999;
+  border-width: 0 5px 5px;
+}
 
-    .logopic {
-        width: 64px;
-        height: 64px;
-    }
+.Dropdown-menu {
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  margin-top: -1px;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 1000;
+  -webkit-overflow-scrolling: touch;
+}
 
-    .logotext {
-        display: none;
-    }
+.Dropdown-menu .Dropdown-group > .Dropdown-title{
+  padding: 8px 10px;
+  color: rgba(51, 51, 51, 1);
+  font-weight: bold;
+  text-transform: capitalize;
+}
 
-    .navibar {
-        grid-gap: 2px;
-        justify-items: center;
-        margin: 0 10px 0 10px;
-        grid-template-rows: repeat(auto-fit, 1fr);
-        font-size: 35px;
-    }
+.Dropdown-option {
+  box-sizing: border-box;
+  color: rgba(51, 51, 51, 0.8);
+  cursor: pointer;
+  display: block;
+  padding: 8px 10px;
+}
 
-    .topside {
-        grid-template-columns: auto 1fr;
-        grid-template-rows: 1fr;
-        grid-template-areas: 
-        "logo navigation";
-    }
+.Dropdown-option:last-child {
+  border-bottom-right-radius: 2px;
+   border-bottom-left-radius: 2px;
+}
+
+.Dropdown-option:hover {
+  background-color: #f2f9fc;
+  color: #333;
+}
+
+.Dropdown-option.is-selected {
+  background-color: #f2f9fc;
+  color: #333;
+}
+
+.Dropdown-noresults {
+  box-sizing: border-box;
+  color: #ccc;
+  cursor: default;
+  display: block;
+  padding: 8px 10px;
 }

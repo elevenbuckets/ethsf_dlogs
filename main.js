@@ -84,8 +84,9 @@ class IPFS_REPL extends IPFS_Base {
 
 		this.bootnodes = () => { return this.ipfsAPI.bootstrap.list(); }
 		this.pullIPNS = (ipnsHash) => {
-			let ipfshash = this.resolve(ipnsHash);
-			return this.readPath(ipfshash).then((r) => { return JSON.parse(r.toString()); });
+			return this.resolve(ipnsHash)
+				.then((ipfshash) => { return this.readPath(ipfshash) })
+				.then((r) => { return JSON.parse(r.toString()); });
 		}
 	}
 }

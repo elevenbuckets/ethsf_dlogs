@@ -63,7 +63,7 @@ var BlogView = function (_Reflux$Component) {
                 { className: "item reader", style: { color: 'white', padding: "50px" } },
                 _react2.default.createElement(
                     "div",
-                    { style: { textAlign: 'center', fontSize: '25px', padding: "35px" } },
+                    { style: { textAlign: 'center', fontSize: '25px', padding: "35px", textDecoration: 'underline' } },
                     this.props.blog.title
                 ),
                 (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.currentBlogContent)),

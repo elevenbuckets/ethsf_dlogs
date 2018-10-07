@@ -14,7 +14,7 @@ const IPFS_Base = require('ipfs_base/IPFS_GO.js');
 // ASCII Art!!!
 const ASCII_Art = (word) => {
 	const _aa = (resolve, reject) => {
-		figlet(word, (err, data) => {
+		figlet(word, {font: 'Big'}, (err, data) => {
 			if (err) return reject(err);
 			resolve(data);
 		})
@@ -63,7 +63,7 @@ class IPFS_REPL extends IPFS_Base {
 					this.localCache[ipnsHash] = {seen: Date.now(), result};
 					resolve();
 				} catch (err) {
-					reject();
+					reject(err);
 				}
 			}
 
@@ -88,6 +88,7 @@ class IPFS_REPL extends IPFS_Base {
 				.then((ipfshash) => { return this.readPath(ipfshash) })
 				.then((r) => { return JSON.parse(r.toString()); });
 		}
+		this.myid = () => { return this.ipfsAPI.id() }
 	}
 }
 

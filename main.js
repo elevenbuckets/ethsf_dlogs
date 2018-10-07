@@ -69,7 +69,7 @@ class IPFS_REPL extends IPFS_Base {
 
 			if (ipnsHash in this.localCache) {
 				console.log(`DEBUG: using cache`);
-				if (Date.now() - this.localCache[ipnsHash].seen >= 150000) {
+				if (Date.now() - this.localCache[ipnsHash].seen >= 30000) {
 					console.log(`DEBUG: cache will be refreshed`);
 					new Promise(__resolve_background);
 				}

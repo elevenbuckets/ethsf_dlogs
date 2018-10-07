@@ -23,7 +23,7 @@ class DlogsStore extends Reflux.Store {
                 this.initializeState();
             });
 
-       
+
 
         this.state = {
             blogs: [
@@ -32,7 +32,8 @@ class DlogsStore extends Reflux.Store {
             displayBlogs: [],
             onlyShowForBlogger: "",
             currentBlogContent: "",
-            login: false
+            login: false,
+            account: ""
 
         }
 
@@ -51,7 +52,7 @@ class DlogsStore extends Reflux.Store {
                 })
                 blogs = [...blogs, ...tempBlogs];
                 count = count + 1;
-                if (count == helper.length ) {
+                if (count == helper.length) {
                     this.setState({ blogs: blogs });
                 }
             })
@@ -83,16 +84,16 @@ class DlogsStore extends Reflux.Store {
     onSaveNewBlog = (title, TLDR, content) => {
         let tempFile = ".tempBlog";
         let tempIPNSFile = ".ipns.json";
-       
+
         fs.writeFileSync(tempFile, content, 'utf8');
         this.ipfs.put(tempFile).then(r => {
             let ipns = this.dlogs.lookUpByAddr(this.dlogs.getAccount());
             this.ipfs.pullIPNS(ipns).then(metaJSON => {
-                let newArticle = {title, author : this.dlogs.getAccount(), timestamp : Date.now(), TLDR,};
-                let newJSON = {...metaJSON};
-                newJSON.Articles = {...newJSON.Articles, [r[0].hash] : newArticle };
+                let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
+                let newJSON = { ...metaJSON };
+                newJSON.Articles = { ...newJSON.Articles, [r[0].hash]: newArticle };
                 fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
-                this.ipfs.put(tempIPNSFile).then( r =>{
+                this.ipfs.put(tempIPNSFile).then(r => {
                     this.ipfs.publish(r[0].hash);
                     fs.unlinkSync(tempFile);
                     fs.unlinkSync(tempIPNSFile);
@@ -102,23 +103,40 @@ class DlogsStore extends Reflux.Store {
         })
     }
 
-    onUnlock = ps =>{
-        this.dlogs.linkAccount(this.dlogs.allAccounts()[0], ps).then(r=>{
-            if(r){
-                this.setState({login : true})
-            }
+    onDeleteBlog = (ipfsHash) => {
+        let tempIPNSFile = ".ipns.json";
+        let ipns = this.dlogs.lookUpByAddr(this.dlogs.getAccount());
+        this.ipfs.pullIPNS(ipns).then(metaJSON => {
+            let newJSON = { ...metaJSON };
+            let articles = newJSON.Articles;
+            articles[ipfsHash] = undefined;
+            newJSON.Articles = articles;
+            fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+            this.ipfs.put(tempIPNSFile).then(r => {
+                this.ipfs.publish(r[0].hash);
+                fs.unlinkSync(tempIPNSFile);
+            })
+
         })
     }
 
-    onRefresh = ()=>{
-        this.setState({blogs : []});
-        this.initializeState();
+        onUnlock = ps => {
+            this.dlogs.linkAccount(this.dlogs.allAccounts()[0], ps).then(r => {
+                if (r) {
+                    this.setState({ login: true, account: this.dlogs.getAccount() })
+                }
+            })
+        }
+
+        onRefresh = () => {
+            this.setState({ blogs: [] });
+            this.initializeState();
+        }
+
+
     }
 
 
-}
+    DlogsStore.id = "DlogsStore"
 
-
-DlogsStore.id = "DlogsStore"
-
-export default DlogsStore;
+    export default DlogsStore;

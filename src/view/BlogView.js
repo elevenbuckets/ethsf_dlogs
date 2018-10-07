@@ -12,11 +12,6 @@ class BlogView extends Reflux.Component {
 
     constructor(props) {
         super(props);
-        this.state ={
-            view: "List",
-            currentBlog : ""
-        }
-
         this.store = DlogsStore;
     }
 

@@ -46,11 +46,6 @@ var BlogView = function (_Reflux$Component) {
 
         var _this = _possibleConstructorReturn(this, (BlogView.__proto__ || Object.getPrototypeOf(BlogView)).call(this, props));
 
-        _this.state = {
-            view: "List",
-            currentBlog: ""
-        };
-
         _this.store = _DlogsStore2.default;
         return _this;
     }

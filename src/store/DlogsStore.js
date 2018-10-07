@@ -51,7 +51,7 @@ class DlogsStore extends Reflux.Store {
     onFetchBlogContent = (ipfsHash) =>{
         this.setState({currentBlogContent : ""});
         this.ipfs.read(ipfsHash).then(r =>{
-            this.setState({currentBlogContent : JSON.parse(r.toString()).content});
+            this.setState({currentBlogContent : r.toString()});
         })
     }
 

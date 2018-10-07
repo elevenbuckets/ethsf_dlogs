@@ -52,7 +52,7 @@ var DlogsStore = function (_Reflux$Store) {
         _this.onFetchBlogContent = function (ipfsHash) {
             _this.setState({ currentBlogContent: "" });
             _this.ipfs.read(ipfsHash).then(function (r) {
-                _this.setState({ currentBlogContent: JSON.parse(r.toString()).content });
+                _this.setState({ currentBlogContent: r.toString() });
             });
         };
 

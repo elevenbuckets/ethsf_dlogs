@@ -104,6 +104,13 @@ class DLogsAPI extends LimeCasks {
 
 			return {address, ipnsHash};
 		}
+
+		this.browse = (start, end) => {
+			let entry = this.dapp.browse(start, end);
+			let len = entry.length;
+			
+			return entry.map((e) => { return this.parseEntry([e], 0) });
+		}
 	}
 }
 

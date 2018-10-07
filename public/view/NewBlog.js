@@ -76,7 +76,7 @@ var NewBlog = function (_Reflux$Component) {
         _this.getBlogPreview = function () {
             return _react2.default.createElement(
                 "div",
-                null,
+                { style: { width: '100vw', textAlign: 'center' } },
                 " ",
                 _this.state.blogTitle,
                 (0, _reactRenderHtml2.default)((0, _marked2.default)(_this.state.blogContent))
@@ -99,7 +99,7 @@ var NewBlog = function (_Reflux$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                { className: "item newDiv", style: { textAlign: 'center' } },
+                { className: "item newDiv", style: { textAlign: 'justify' } },
                 this.state.isEditable ? this.getEditView() : this.getBlogPreview(),
                 _react2.default.createElement("input", { type: "button", className: "button pbutton", defaultValue: this.state.isEditable ? "Preview" : "Edit", onClick: this.changeEditable }),
                 _react2.default.createElement("input", { type: "button", className: "button sbutton", defaultValue: "Save", onClick: this.saveNewBlog }),

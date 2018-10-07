@@ -42,6 +42,7 @@ var DlogsStore = function (_Reflux$Store) {
             var Max = 10;
             var helper = _this.dlogs.dapp.browse(0, Max);
             var blogs = [];
+            var count = 0;
             helper.reduce(function (acc, vaule, index) {
                 var ipns = _this.dlogs.parseEntry(_this.dlogs.dapp.browse(0, Max), index).ipnsHash;
                 _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
@@ -49,7 +50,8 @@ var DlogsStore = function (_Reflux$Store) {
                         return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
                     });
                     blogs = [].concat(_toConsumableArray(blogs), _toConsumableArray(tempBlogs));
-                    if (index == helper.length - 1) {
+                    count = count + 1;
+                    if (count == helper.length) {
                         _this.setState({ blogs: blogs });
                     }
                 });

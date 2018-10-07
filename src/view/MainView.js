@@ -70,13 +70,13 @@ class MainView extends Reflux.Component {
     }
 
     render() {
-        return (this.state.login ? <div className="contentxt">
+        return (this.state.login ? <div className="item contentxt">
             {this.state.view === "List" ? this.state.blogs.length == 0 ? <div className="item" style={{width: '100vw', height: '80vh'}}><div className='item loader'></div></div>: this.getBlogList() :
                 this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goBack={this.goBackToList} />
                     : <NewBlog saveNewBlog={this.saveNewBlog} goBack={this.goBackToList} />}
             {this.state.view === "List" ? <div className="item mainctr"><input type="button" className="button" defaultValue="New" onClick={this.goToNewBlog} />
                 <input type="button" className="button" defaultValue="Refresh" onClick={this.refresh} /></div> : ""}
-        </div> : <div className="contentxt">
+        </div> : <div className="item contentxt">
             <div className="item login"> <label style={{margin: '10px', alignSelf: "flex-end"}}>Password: </label>
                 <input autoFocus style={{alignSelf: 'flex-start'}} type="password" ref="ps" onKeyUp={this.unlock} />
             </div></div>);

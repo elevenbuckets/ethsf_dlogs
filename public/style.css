@@ -89,12 +89,15 @@ body {
 }
 
 .rpicDiv {
+   cursor: pointer;
    width: 100vw;
    display: grid;
    grid-template-columns: 1fr 200px;
    grid-template-rows: 150px;
    grid-template-areas: "rtitle rpic";
 }
+
+.rtitle:hover { background-color: rgba(255,255,255,0.31)}
 
 .rtitle {
    color: white;
@@ -113,10 +116,13 @@ body {
 
 .lpicDiv {
    display: grid;
+   cursor: pointer;
    grid-template-columns: 200px 1fr;
    grid-template-rows: 150px;
    grid-template-areas: "lpic ltitle";
 }
+
+.ltitle:hover { background-color: rgba(255,255,255,0.31)}
 
 .ltitle {
    color: white;
@@ -140,7 +146,8 @@ body {
     background-color: rgba(0,0,0,0);
     border: 2px solid white;
     color: white;
-    margin: 30px; 
+    margin: 30px;
+    cursor: pointer; 
 }
 
 .reader {

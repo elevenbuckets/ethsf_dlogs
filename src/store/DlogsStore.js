@@ -34,9 +34,7 @@ class DlogsStore extends Reflux.Store {
 
     initializeState = () =>{
         let ipns = this.dlogs.lookUpByAddr(this.state.onlyShowForBlogger);
-        this.ipfs.resolve(ipns).then(r =>{return this.ipfs.read(path.basename(r))})
-        .then(r=>{
-            let metaJSON = JSON.parse(r.toString());
+        this.ipfs.pullIPNS(ipns).then(metaJSON=>{
             let blogs = Object.keys(metaJSON.Articles).map(hash =>{
                 return {...metaJSON.Articles[hash], ipfsHash : hash}
             })
@@ -51,7 +49,7 @@ class DlogsStore extends Reflux.Store {
     onFetchBlogContent = (ipfsHash) =>{
         this.setState({currentBlogContent : ""});
         this.ipfs.read(ipfsHash).then(r =>{
-            this.setState({currentBlogContent : JSON.parse(r.toString()).content});
+            this.setState({currentBlogContent : r.toString()});
         })
     }
 

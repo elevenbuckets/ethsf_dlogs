@@ -32,7 +32,7 @@ class DlogsStore extends Reflux.Store {
             displayBlogs: [],
             onlyShowForBlogger: "",
             currentBlogContent: "",
-            login: true
+            login: false
 
         }
 
@@ -58,6 +58,7 @@ class DlogsStore extends Reflux.Store {
 
 
     }
+
 
     getBlogOnlyShowForBloger = () => {
         let ipns = this.dlogs.lookUpByAddr(this.state.onlyShowForBlogger);
@@ -97,6 +98,18 @@ class DlogsStore extends Reflux.Store {
 
             })
         })
+    }
+
+    onUnlock = ps =>{
+        this.dlogs.linkAccount(this.dlogs.allAccounts()[0], ps).then(r=>{
+            if(r){
+                this.setState({login : true})
+            }
+        })
+    }
+
+    onRefresh = ()=>{
+        this.initializeState();
     }
 
 

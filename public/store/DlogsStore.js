@@ -94,6 +94,18 @@ var DlogsStore = function (_Reflux$Store) {
             });
         };
 
+        _this.onUnlock = function (ps) {
+            _this.dlogs.linkAccount(_this.dlogs.allAccounts()[0], ps).then(function (r) {
+                if (r) {
+                    _this.setState({ login: true });
+                }
+            });
+        };
+
+        _this.onRefresh = function () {
+            _this.initializeState();
+        };
+
         _this.listenables = _DlogsActions2.default;
         var remote = require('electron').remote;
         _this.ipfs = remote.getGlobal('ipfs');
@@ -118,7 +130,7 @@ var DlogsStore = function (_Reflux$Store) {
             displayBlogs: [],
             onlyShowForBlogger: "",
             currentBlogContent: "",
-            login: true
+            login: false
 
         };
 

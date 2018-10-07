@@ -96,6 +96,18 @@ var MainView = function (_Reflux$Component) {
             _this.goBackToList();
         };
 
+        _this.unlock = function (event) {
+            if (event.keyCode == 13) {
+                var variable = _this.refs.ps.value;
+                _this.refs.ps.value = "";
+                _DlogsActions2.default.unlock(variable);
+            }
+        };
+
+        _this.refresh = function () {
+            _DlogsActions2.default.refresh();
+        };
+
         _this.state = {
             view: "List",
             currentBlog: ""
@@ -113,9 +125,18 @@ var MainView = function (_Reflux$Component) {
                 { className: "contentxt" },
                 this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, goBack: this.goBackToList }),
                 this.state.view === "List" ? _react2.default.createElement(
-                    "button",
-                    { onClick: this.goToNewBlog },
-                    " New "
+                    "div",
+                    null,
+                    _react2.default.createElement(
+                        "button",
+                        { onClick: this.goToNewBlog },
+                        " New "
+                    ),
+                    _react2.default.createElement(
+                        "button",
+                        { onClick: this.refresh },
+                        " Refresh "
+                    )
                 ) : ""
             ) : _react2.default.createElement(
                 "div",
@@ -126,7 +147,7 @@ var MainView = function (_Reflux$Component) {
                     null,
                     "Password: "
                 ),
-                _react2.default.createElement("input", { type: "password", onKeyUp: this.unlock })
+                _react2.default.createElement("input", { type: "password", ref: "ps", onKeyUp: this.unlock })
             );
         }
     }]);

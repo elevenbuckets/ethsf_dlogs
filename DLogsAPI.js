@@ -91,6 +91,19 @@ class DLogsAPI extends LimeCasks {
 		this.lookUpByIPNS = (ipnsHash) => {
 			return this.dapp.ipns2addr(ipnsHash);
 		}
+
+		this.bytes32ToAscii = (b) => {
+			return this.web3.toAscii(this.web3.toHex(this.web3.toBigNumber(String(b))))
+		}
+
+		this.parseEntry = (entry, idx) => {  // entry is one element returned from this.dapp.browse() smart contract call
+			let firstPart = this.bytes32ToAscii(entry[idx][0]);
+			let secondPart = this.bytes32ToAscii(entry[idx][1].substr(0,30));
+			let ipnsHash = firstPart + secondPart;
+			let address = this.byte32ToAddress(entry[idx][2]);
+
+			return {address, ipnsHash};
+		}
 	}
 }
 

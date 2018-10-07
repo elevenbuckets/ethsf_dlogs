@@ -31,7 +31,8 @@ class DlogsStore extends Reflux.Store {
             following: [],
             displayBlogs: [],
             onlyShowForBlogger: "",
-            currentBlogContent: ""
+            currentBlogContent: "",
+            login: ture
 
         }
 

@@ -123,31 +123,31 @@ var MainView = function (_Reflux$Component) {
             return this.state.login ? _react2.default.createElement(
                 "div",
                 { className: "contentxt" },
-                this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, goBack: this.goBackToList }),
+                this.state.view === "List" ? this.state.blogs.length == 0 ? _react2.default.createElement(
+                    "div",
+                    { style: { width: '100vw', height: '80vh' } },
+                    _react2.default.createElement("div", { className: "item loader" })
+                ) : this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, goBack: this.goBackToList }),
                 this.state.view === "List" ? _react2.default.createElement(
                     "div",
-                    null,
-                    _react2.default.createElement(
-                        "button",
-                        { onClick: this.goToNewBlog },
-                        " New "
-                    ),
-                    _react2.default.createElement(
-                        "button",
-                        { onClick: this.refresh },
-                        " Refresh "
-                    )
+                    { className: "item mainctr" },
+                    _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "New", onClick: this.goToNewBlog }),
+                    _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Refresh", onClick: this.refresh })
                 ) : ""
             ) : _react2.default.createElement(
                 "div",
-                null,
-                " ",
+                { className: "contentxt" },
                 _react2.default.createElement(
-                    "label",
-                    null,
-                    "Password: "
-                ),
-                _react2.default.createElement("input", { type: "password", ref: "ps", onKeyUp: this.unlock })
+                    "div",
+                    { className: "item login" },
+                    " ",
+                    _react2.default.createElement(
+                        "label",
+                        { style: { margin: '10px', alignSelf: "flex-end" } },
+                        "Password: "
+                    ),
+                    _react2.default.createElement("input", { style: { alignSelf: 'flex-start' }, type: "password", ref: "ps", onKeyUp: this.unlock })
+                )
             );
         }
     }]);

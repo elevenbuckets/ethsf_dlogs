@@ -17,11 +17,11 @@ class BlogView extends Reflux.Component {
 
 
     render() {
-        return (<div style={{color: 'white'}}>
-            <div>{this.props.blog.title}</div>
+        return (<div className="item reader" style={{color: 'white', padding: "50px"}}>
+            <div style={{textAlign: 'center', fontSize: '25px', padding: "35px"}}>{this.props.blog.title}</div>
             {renderHTML(marked(this.state.currentBlogContent))}
 
-            <button onClick = {this.props.goBack}>Back</button>
+            <input type="button" className="button" defaultValue="Back" onClick={this.props.goBack} />
         </div>);
 
     }

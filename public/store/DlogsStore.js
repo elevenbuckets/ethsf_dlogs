@@ -36,10 +36,7 @@ var DlogsStore = function (_Reflux$Store) {
 
         _this.initializeState = function () {
             var ipns = _this.dlogs.lookUpByAddr(_this.state.onlyShowForBlogger);
-            _this.ipfs.resolve(ipns).then(function (r) {
-                return _this.ipfs.read(path.basename(r));
-            }).then(function (r) {
-                var metaJSON = JSON.parse(r.toString());
+            _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
                 var blogs = Object.keys(metaJSON.Articles).map(function (hash) {
                     return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
                 });

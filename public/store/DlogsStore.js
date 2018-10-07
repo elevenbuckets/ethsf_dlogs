@@ -80,7 +80,7 @@ var DlogsStore = function (_Reflux$Store) {
             blogs: [],
             following: [],
             displayBlogs: [],
-            onlyShowForBlogger: "0x89dc07a2f750cf62e757f909a4985a94a07d6359",
+            onlyShowForBlogger: "0xb440ea2780614b3c6a00e512f432785e7dfafa3e",
             currentBlogContent: ""
 
         };

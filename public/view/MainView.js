@@ -65,12 +65,16 @@ var MainView = function (_Reflux$Component) {
                     { className: layout, onClick: _this.goToBlog.bind(_this, blog) },
                     _react2.default.createElement(
                         "div",
-                        { className: prefix + 'titleDiv' },
-                        blog.title,
-                        _react2.default.createElement("br", null),
+                        { className: "item " + prefix + 'title' },
+                        _react2.default.createElement(
+                            "p",
+                            null,
+                            blog.title
+                        ),
                         (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.TLDR))
                     ),
-                    _react2.default.createElement("div", { className: prefix + 'picDiv', style: { backgroundColor: colors[magic] } })
+                    _react2.default.createElement("div", { className: prefix + 'pic',
+                        style: { backgroundColor: colors[magic], width: '150px', height: '150px' } })
                 );
             });
         };
@@ -107,7 +111,7 @@ var MainView = function (_Reflux$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                null,
+                { className: "contentxt" },
                 this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog }),
                 this.state.view === "List" ? _react2.default.createElement(
                     "button",

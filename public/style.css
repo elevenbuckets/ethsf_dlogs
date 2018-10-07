@@ -23,19 +23,12 @@ html {
 }
   
 body {
-   /*background: url(/assets/Background.jpg);*/
-   background: url(/assets/golden_blockchain.png), linear-gradient(11deg, #9100009a, #0558d4);
+   background: url(assets/golden_blockchain.png), linear-gradient(11deg, #9100009a, #0558d4);
    background-repeat: repeat-y;
    display: grid;
    overflow: hidden;
    min-height: 100vh;
    margin: 0px;
-   grid-template-rows: 110px auto 100px;
-   grid-template-columns: 110px 1fr 110px;
-   grid-template-areas: 
-    "topbar topbar topbar"
-    "content content content"
-    "footer footer footer";
 }
 
 /* Each item in our grid will contain numbers */
@@ -56,16 +49,6 @@ body {
     margin: 0 0 5px 0;
 }
   
-.topside {
-    display: grid;
-    grid-template-columns: 1fr 5fr;
-    grid-template-rows: 8vh;
-    grid-template-areas: 
-    "logo navigation";
-    grid-area: topbar;
-    background: linear-gradient(180deg, #05040485, #2f08990e);
-}
-
 .content {
     display: grid;
     overflow-y: auto;
@@ -97,7 +80,7 @@ body {
     display: inline;
 }
 
-#contentxt {
+.contentxt {
     height: 100%; 
     width: 98%; 
     font-size: 20px;
@@ -107,6 +90,41 @@ body {
     align-items: center;
     margin: 0px;
 }
+
+.rpicDiv {
+   display: grid;
+   grid-template-columns: 1fr 150px;
+   grid-template-rows: 150px;
+   grid-template-areas: "rtitle rpic";
+}
+
+.rtitle {
+   grid-area: rtitle;
+   width: calc(100vw - 150px);
+}
+
+.rpic {
+   grid-area: rpic;
+}
+
+.lpicDiv {
+   display: grid;
+   grid-template-columns: 150px 1fr;
+   grid-template-rows: 150px;
+   grid-template-areas: "lpic ltitle";
+}
+
+.ltitle {
+   grid-area: ltitle;
+   width: calc(100vw - 150px);
+}
+
+.lpic {
+   grid-area: lpic;
+}
+
+
+
 
 .structurepic {
     justify-items: center;

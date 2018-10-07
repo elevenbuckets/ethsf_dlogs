@@ -29,11 +29,13 @@ class MainView extends Reflux.Component {
                 let layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
                 let prefix = magic == 0 ? 'r' : 'l';
             return <div className={layout} onClick={this.goToBlog.bind(this, blog)}>
-                <div className={prefix + 'titleDiv'}>
-			{blog.title}<br/>
+                <div className={"item " + prefix + 'title'}>
+			<p>{blog.title}</p>
                 	{renderHTML(marked(blog.TLDR))}
 		</div>
-		<div className={prefix + 'picDiv'} style={{ backgroundColor: colors[magic] }}></div>
+		<div className={prefix + 'pic'} 
+		     style={{ backgroundColor: colors[magic], width: '150px', height: '150px' }}>
+		</div>
             </div>
         })
     }
@@ -57,7 +59,7 @@ class MainView extends Reflux.Component {
     }
 
     render() {
-        return (<div>
+        return (<div className="contentxt">
             {this.state.view === "List" ? this.getBlogList() :
                 this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goBack={this.goBackToList} />
                     : <NewBlog saveNewBlog={this.saveNewBlog} />}

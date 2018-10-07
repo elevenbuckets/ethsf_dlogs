@@ -55,7 +55,6 @@ var MainView = function (_Reflux$Component) {
         var _this = _possibleConstructorReturn(this, (MainView.__proto__ || Object.getPrototypeOf(MainView)).call(this, props));
 
         _this.getBlogList = function () {
-            var colors = ['purple', 'yellow'];
             return _this.state.blogs.map(function (blog, idx) {
                 var magic = (idx + 1) % 2;
                 var layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
@@ -65,12 +64,16 @@ var MainView = function (_Reflux$Component) {
                     { className: layout, onClick: _this.goToBlog.bind(_this, blog) },
                     _react2.default.createElement(
                         "div",
-                        { className: prefix + 'titleDiv' },
-                        blog.title,
-                        _react2.default.createElement("br", null),
+                        { className: prefix + 'title', style: { color: 'rgb(155,155,155,0.85)' } },
+                        _react2.default.createElement(
+                            "p",
+                            { style: { fontSize: "28px", color: 'white' } },
+                            blog.title
+                        ),
                         (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.TLDR))
                     ),
-                    _react2.default.createElement("div", { className: prefix + 'picDiv', style: { backgroundColor: colors[magic] } })
+                    _react2.default.createElement("div", { className: prefix + 'pic',
+                        style: { backgroundColor: 'white', width: '15px', height: '15px' } })
                 );
             });
         };
@@ -107,7 +110,7 @@ var MainView = function (_Reflux$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                null,
+                { className: "contentxt" },
                 this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog }),
                 this.state.view === "List" ? _react2.default.createElement(
                     "button",

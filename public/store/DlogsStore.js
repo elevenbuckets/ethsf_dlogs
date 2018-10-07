@@ -110,7 +110,6 @@ var DlogsStore = function (_Reflux$Store) {
         }).then(function (r) {
             if (r) console.log(_this.dlogs.web3.eth.blockNumber);
             _this.initializeState();
-            _this.dlogs.linkAccount(_this.dlogs.allAccounts()[0], "test");
         });
 
         _this.state = {

@@ -120,23 +120,48 @@ class DlogsStore extends Reflux.Store {
         })
     }
 
-        onUnlock = ps => {
-            this.dlogs.linkAccount(this.dlogs.allAccounts()[0], ps).then(r => {
-                if (r) {
-                    this.setState({ login: true, account: this.dlogs.getAccount() })
-                }
+
+    onEditBlog = (title, TLDR, content, ipfsHash) => {
+        let tempFile = ".tempBlog";
+        let tempIPNSFile = ".ipns.json";
+
+        fs.writeFileSync(tempFile, content, 'utf8');
+        this.ipfs.put(tempFile).then(r => {
+            let ipns = this.dlogs.lookUpByAddr(this.dlogs.getAccount());
+            this.ipfs.pullIPNS(ipns).then(metaJSON => {
+                let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
+                let newJSON = { ...metaJSON };
+                let articles = newJSON.Articles;
+                articles[ipfsHash] = undefined;
+                newJSON.Articles = articles;
+                newJSON.Articles = { ...newJSON.Articles, [r[0].hash]: newArticle };
+                fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                this.ipfs.put(tempIPNSFile).then(r => {
+                    this.ipfs.publish(r[0].hash);
+                    fs.unlinkSync(tempFile);
+                    fs.unlinkSync(tempIPNSFile);
+                })
+
             })
-        }
+        })
+    }
+    onUnlock = ps => {
+        this.dlogs.linkAccount(this.dlogs.allAccounts()[0], ps).then(r => {
+            if (r) {
+                this.setState({ login: true, account: this.dlogs.getAccount() })
+            }
+        })
+    }
 
-        onRefresh = () => {
-            this.setState({ blogs: [] });
-            this.initializeState();
-        }
-
-
+    onRefresh = () => {
+        this.setState({ blogs: [] });
+        this.initializeState();
     }
 
 
-    DlogsStore.id = "DlogsStore"
+}
 
-    export default DlogsStore;
+
+DlogsStore.id = "DlogsStore"
+
+export default DlogsStore;

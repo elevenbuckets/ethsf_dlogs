@@ -72,6 +72,7 @@ var BlogView = function (_Reflux$Component) {
                     { className: "item mainctr" },
                     " ",
                     _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Back", onClick: this.props.goBack }),
+                    _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Edit", onClick: this.props.goEdit }),
                     _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Delete", onClick: this.delete })
                 ) : _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Back", onClick: this.props.goBack })
             );

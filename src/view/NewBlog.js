@@ -12,11 +12,16 @@ class NewBlog extends Reflux.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = props.currentBlog ==="" ?{
             isEditable: true,
             blogContent: "",
             blogTitle:"",
             blogTLDR : ""
+        }:{
+            isEditable: true,
+            blogContent: props.currentBlogContent,
+            blogTitle:props.currentBlog.title,
+            blogTLDR : props.currentBlog.TLDR
         }
 
         this.store = DlogsStore;

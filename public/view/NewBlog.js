@@ -83,11 +83,16 @@ var NewBlog = function (_Reflux$Component) {
             );
         };
 
-        _this.state = {
+        _this.state = props.currentBlog === "" ? {
             isEditable: true,
             blogContent: "",
             blogTitle: "",
             blogTLDR: ""
+        } : {
+            isEditable: true,
+            blogContent: props.currentBlogContent,
+            blogTitle: props.currentBlog.title,
+            blogTLDR: props.currentBlog.TLDR
         };
 
         _this.store = _DlogsStore2.default;

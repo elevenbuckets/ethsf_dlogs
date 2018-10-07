@@ -28,7 +28,8 @@ class BlogView extends Reflux.Component {
             {renderHTML(marked(this.state.currentBlogContent))}
 
             {this.props.blog.author == this.state.account? <div className="item mainctr"> <input type="button" className="button" defaultValue="Back" onClick={this.props.goBack} />
-                <input type="button" className="button" defaultValue="Delete" onClick={this.delete} /></div> :  <input type="button" className="button" defaultValue="Back" onClick={this.props.goBack} />
+            <input type="button" className="button" defaultValue="Edit" onClick={this.props.goEdit} /> 
+            <input type="button" className="button" defaultValue="Delete" onClick={this.delete} /></div> :  <input type="button" className="button" defaultValue="Back" onClick={this.props.goBack} />
     }
 
            

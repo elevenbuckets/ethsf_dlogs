@@ -84,7 +84,11 @@ var MainView = function (_Reflux$Component) {
         };
 
         _this.goToNewBlog = function () {
-            _this.setState({ view: "New" });
+            _this.setState({ view: "New", currentBlog: "" });
+        };
+
+        _this.goToEditBlog = function () {
+            _this.setState({ view: "Edit" });
         };
 
         _this.goBackToList = function () {
@@ -127,7 +131,8 @@ var MainView = function (_Reflux$Component) {
                     "div",
                     { className: "item", style: { width: '100vw', height: '80vh' } },
                     _react2.default.createElement("div", { className: "item loader" })
-                ) : this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, goBack: this.goBackToList }),
+                ) : this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goEdit: this.goToEditBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, currentBlog: this.state.currentBlog,
+                    currentBlogContent: this.state.currentBlogContent, goBack: this.goBackToList }),
                 this.state.view === "List" ? _react2.default.createElement(
                     "div",
                     { className: "item mainctr" },

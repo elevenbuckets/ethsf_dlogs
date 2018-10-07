@@ -55,16 +55,22 @@ var MainView = function (_Reflux$Component) {
         var _this = _possibleConstructorReturn(this, (MainView.__proto__ || Object.getPrototypeOf(MainView)).call(this, props));
 
         _this.getBlogList = function () {
-            return _this.state.blogs.map(function (blog) {
+            var colors = ['purple', 'yellow'];
+            return _this.state.blogs.map(function (blog, idx) {
+                var magic = (idx + 1) % 2;
+                var layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
+                var prefix = magic == 0 ? 'r' : 'l';
                 return _react2.default.createElement(
                     "div",
-                    { onClick: _this.goToBlog.bind(_this, blog) },
+                    { className: layout, onClick: _this.goToBlog.bind(_this, blog) },
                     _react2.default.createElement(
                         "div",
-                        null,
-                        blog.title
+                        { className: prefix + 'titleDiv' },
+                        blog.title,
+                        _react2.default.createElement("br", null),
+                        (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.TLDR))
                     ),
-                    (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.TLDR))
+                    _react2.default.createElement("div", { className: prefix + 'picDiv', style: { backgroundColor: colors[magic] } })
                 );
             });
         };

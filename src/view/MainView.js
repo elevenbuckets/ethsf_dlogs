@@ -23,17 +23,18 @@ class MainView extends Reflux.Component {
     }
 
     getBlogList = () => {
-	let colors = ['purple', 'yellow'];
         return this.state.blogs.map((blog, idx) => {
 		let magic = (idx + 1) % 2;
                 let layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
                 let prefix = magic == 0 ? 'r' : 'l';
             return <div className={layout} onClick={this.goToBlog.bind(this, blog)}>
-                <div className={prefix + 'titleDiv'}>
-			{blog.title}<br/>
+                <div className={prefix + 'title'} style={{color: 'rgb(155,155,155,0.85)'}}>
+			<p style={{fontSize: "28px", color: 'white'}}>{blog.title}</p>
                 	{renderHTML(marked(blog.TLDR))}
 		</div>
-		<div className={prefix + 'picDiv'} style={{ backgroundColor: colors[magic] }}></div>
+		<div className={prefix + 'pic'} 
+		     style={{ backgroundColor: 'white', width: '15px', height: '15px' }}>
+		</div>
             </div>
         })
     }
@@ -57,10 +58,10 @@ class MainView extends Reflux.Component {
     }
 
     render() {
-        return (this.state.login? <div>
+        return (this.state.login? <div className="contentxt">
             {this.state.view === "List" ? this.getBlogList() :
                 this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goBack={this.goBackToList} />
-                    : <NewBlog saveNewBlog={this.saveNewBlog} />}
+                    : <NewBlog saveNewBlog={this.saveNewBlog} goBack={this.goBackToList}/>}
             {this.state.view === "List" ? <button onClick={this.goToNewBlog}> New </button> : ""}
         </div> :
         <div> <label >Password: </label>

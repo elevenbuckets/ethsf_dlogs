@@ -55,7 +55,7 @@ var BlogView = function (_Reflux$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                null,
+                { style: { color: 'white' } },
                 _react2.default.createElement(
                     "div",
                     null,

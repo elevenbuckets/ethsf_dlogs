@@ -17,7 +17,7 @@ class BlogView extends Reflux.Component {
 
 
     render() {
-        return (<div>
+        return (<div style={{color: 'white'}}>
             <div>{this.props.blog.title}</div>
             {renderHTML(marked(this.state.currentBlogContent))}
 

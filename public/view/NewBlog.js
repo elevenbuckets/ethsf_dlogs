@@ -32,6 +32,8 @@ var _marked2 = _interopRequireDefault(_marked);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -55,21 +57,28 @@ var NewBlog = function (_Reflux$Component) {
                     null,
                     "Title"
                 ),
-                _react2.default.createElement("textarea", { onChange: _this.udpateBlogTitle, value: _this.state.blogTitle }),
-                _react2.default.createElement("textarea", { onChange: _this.udpateBlogContent, value: _this.state.blogContent })
+                _react2.default.createElement("textarea", { onChange: _this.udpateBlog.bind(_this, "blogTitle"), value: _this.state.blogTitle }),
+                _react2.default.createElement(
+                    "label",
+                    null,
+                    "TLDR"
+                ),
+                _react2.default.createElement("textarea", { onChange: _this.udpateBlog.bind(_this, "blogTLDR"), value: _this.state.blogTLDR }),
+                _react2.default.createElement(
+                    "label",
+                    null,
+                    "Content"
+                ),
+                _react2.default.createElement("textarea", { onChange: _this.udpateBlog.bind(_this, "blogContent"), value: _this.state.blogContent })
             );
         };
 
-        _this.udpateBlogContent = function (event) {
-            _this.setState({ blogContent: event.target.value });
-        };
-
-        _this.udpateBlogTitle = function (event) {
-            _this.setState({ blogTitle: event.target.value });
+        _this.udpateBlog = function (field, event) {
+            _this.setState(_defineProperty({}, field, event.target.value));
         };
 
         _this.saveNewBlog = function () {
-            _this.props.saveNewBlog(_this.state.blogTitle, _this.state.blogContent);
+            _this.props.saveNewBlog(_this.state.blogTitle, _this.state.blogTLDR, _this.state.blogContent);
         };
 
         _this.changeEditable = function () {
@@ -89,7 +98,8 @@ var NewBlog = function (_Reflux$Component) {
         _this.state = {
             isEditable: true,
             blogContent: "",
-            blogTitle: ""
+            blogTitle: "",
+            blogTLDR: ""
         };
 
         _this.store = _DlogsStore2.default;

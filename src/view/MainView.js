@@ -45,7 +45,11 @@ class MainView extends Reflux.Component {
     }
 
     goToNewBlog = () => {
-        this.setState({ view: "New" })
+        this.setState({ view: "New", currentBlog: "" })
+    }
+
+    goToEditBlog = () => {
+        this.setState({ view: "Edit" })
     }
 
     goBackToList = () => {
@@ -53,7 +57,9 @@ class MainView extends Reflux.Component {
     }
 
     saveNewBlog = (blogTitle, blogTLDR, blogContent) => {
-        DlogsActions.saveNewBlog(blogTitle, blogTLDR, blogContent);
+    
+        this.state.view == "New"? DlogsActions.saveNewBlog(blogTitle, blogTLDR, blogContent):
+        DlogsActions.editBlog(blogTitle, blogTLDR, blogContent,this.state.currentBlog.ipfsHash);
         this.goBackToList()
     }
 
@@ -72,8 +78,9 @@ class MainView extends Reflux.Component {
     render() {
         return (this.state.login ? <div className="item contentxt">
             {this.state.view === "List" ? this.state.blogs.length == 0 ? <div className="item" style={{width: '100vw', height: '80vh'}}><div className='item loader'></div></div>: this.getBlogList() :
-                this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goBack={this.goBackToList} />
-                    : <NewBlog saveNewBlog={this.saveNewBlog} goBack={this.goBackToList} />}
+                this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goEdit={this.goToEditBlog} goBack={this.goBackToList} />
+                    : <NewBlog saveNewBlog={this.saveNewBlog} currentBlog={this.state.currentBlog}
+                    currentBlogContent={this.state.currentBlogContent} goBack={this.goBackToList} />}
             {this.state.view === "List" ? <div className="item mainctr"><input type="button" className="button" defaultValue="New" onClick={this.goToNewBlog} />
                 <input type="button" className="button" defaultValue="Refresh" onClick={this.refresh} /></div> : ""}
         </div> : <div className="item contentxt">

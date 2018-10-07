@@ -112,6 +112,30 @@ var DlogsStore = function (_Reflux$Store) {
             });
         };
 
+        _this.onEditBlog = function (title, TLDR, content, ipfsHash) {
+            var tempFile = ".tempBlog";
+            var tempIPNSFile = ".ipns.json";
+
+            fs.writeFileSync(tempFile, content, 'utf8');
+            _this.ipfs.put(tempFile).then(function (r) {
+                var ipns = _this.dlogs.lookUpByAddr(_this.dlogs.getAccount());
+                _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
+                    var newArticle = { title: title, author: _this.dlogs.getAccount(), timestamp: Date.now(), TLDR: TLDR };
+                    var newJSON = _extends({}, metaJSON);
+                    var articles = newJSON.Articles;
+                    articles[ipfsHash] = undefined;
+                    newJSON.Articles = articles;
+                    newJSON.Articles = _extends({}, newJSON.Articles, _defineProperty({}, r[0].hash, newArticle));
+                    fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                    _this.ipfs.put(tempIPNSFile).then(function (r) {
+                        _this.ipfs.publish(r[0].hash);
+                        fs.unlinkSync(tempFile);
+                        fs.unlinkSync(tempIPNSFile);
+                    });
+                });
+            });
+        };
+
         _this.onUnlock = function (ps) {
             _this.dlogs.linkAccount(_this.dlogs.allAccounts()[0], ps).then(function (r) {
                 if (r) {

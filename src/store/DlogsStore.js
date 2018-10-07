@@ -1,6 +1,8 @@
 import Reflux from "reflux";
 import DlogsActions from "../action/DlogsActions";
 
+const path = require('path');
+
 class DlogsStore extends Reflux.Store {
     constructor() {
         super();
@@ -31,9 +33,8 @@ class DlogsStore extends Reflux.Store {
     }
 
     initializeState = () =>{
-        console.log(this.dlogs)
         let ipns = this.dlogs.lookUpByAddr(this.state.onlyShowForBlogger);
-        this.ipfs.resolve(ipns).then(r =>{return this.ipfs.readPath(r)})
+        this.ipfs.resolve(ipns).then(r =>{return this.ipfs.read(path.basename(r))})
         .then(r=>{
             let metaJSON = JSON.parse(r.toString());
             let blogs = Object.keys(metaJSON.Articles).map(hash =>{

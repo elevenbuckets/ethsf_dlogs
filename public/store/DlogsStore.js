@@ -96,10 +96,26 @@ var DlogsStore = function (_Reflux$Store) {
             });
         };
 
+        _this.onDeleteBlog = function (ipfsHash) {
+            var tempIPNSFile = ".ipns.json";
+            var ipns = _this.dlogs.lookUpByAddr(_this.dlogs.getAccount());
+            _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
+                var newJSON = _extends({}, metaJSON);
+                var articles = newJSON.Articles;
+                articles[ipfsHash] = undefined;
+                newJSON.Articles = articles;
+                fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                _this.ipfs.put(tempIPNSFile).then(function (r) {
+                    _this.ipfs.publish(r[0].hash);
+                    fs.unlinkSync(tempIPNSFile);
+                });
+            });
+        };
+
         _this.onUnlock = function (ps) {
             _this.dlogs.linkAccount(_this.dlogs.allAccounts()[0], ps).then(function (r) {
                 if (r) {
-                    _this.setState({ login: true });
+                    _this.setState({ login: true, account: _this.dlogs.getAccount() });
                 }
             });
         };
@@ -133,7 +149,8 @@ var DlogsStore = function (_Reflux$Store) {
             displayBlogs: [],
             onlyShowForBlogger: "",
             currentBlogContent: "",
-            login: false
+            login: false,
+            account: ""
 
         };
 

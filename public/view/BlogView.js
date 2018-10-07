@@ -46,6 +46,11 @@ var BlogView = function (_Reflux$Component) {
 
         var _this = _possibleConstructorReturn(this, (BlogView.__proto__ || Object.getPrototypeOf(BlogView)).call(this, props));
 
+        _this.delete = function () {
+            _DlogsActions2.default.deleteBlog(_this.props.blog.ipfsHash);
+            _this.props.goBack();
+        };
+
         _this.store = _DlogsStore2.default;
         return _this;
     }
@@ -62,7 +67,13 @@ var BlogView = function (_Reflux$Component) {
                     this.props.blog.title
                 ),
                 (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.currentBlogContent)),
-                _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Back", onClick: this.props.goBack })
+                this.props.blog.author == this.state.account ? _react2.default.createElement(
+                    "div",
+                    { className: "item mainctr" },
+                    " ",
+                    _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Back", onClick: this.props.goBack }),
+                    _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Delete", onClick: this.delete })
+                ) : _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Back", onClick: this.props.goBack })
             );
         }
     }]);

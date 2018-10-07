@@ -42,6 +42,7 @@ class DlogsStore extends Reflux.Store {
         let Max = 10;
         let helper = this.dlogs.dapp.browse(0, Max);
         let blogs = [];
+        let count = 0;
         helper.reduce((acc, vaule, index) => {
             let ipns = this.dlogs.parseEntry(this.dlogs.dapp.browse(0, Max), index).ipnsHash;
             this.ipfs.pullIPNS(ipns).then(metaJSON => {
@@ -49,7 +50,8 @@ class DlogsStore extends Reflux.Store {
                     return { ...metaJSON.Articles[hash], ipfsHash: hash }
                 })
                 blogs = [...blogs, ...tempBlogs];
-                if (index == helper.length - 1) {
+                count = count + 1;
+                if (count == helper.length ) {
                     this.setState({ blogs: blogs });
                 }
             })

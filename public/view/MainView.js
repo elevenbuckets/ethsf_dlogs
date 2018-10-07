@@ -146,7 +146,7 @@ var MainView = function (_Reflux$Component) {
                         { style: { margin: '10px', alignSelf: "flex-end" } },
                         "Password: "
                     ),
-                    _react2.default.createElement("input", { style: { alignSelf: 'flex-start' }, type: "password", ref: "ps", onKeyUp: this.unlock })
+                    _react2.default.createElement("input", { autoFocus: true, style: { alignSelf: 'flex-start' }, type: "password", ref: "ps", onKeyUp: this.unlock })
                 )
             );
         }

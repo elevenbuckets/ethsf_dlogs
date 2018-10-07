@@ -111,6 +111,7 @@ class DlogsStore extends Reflux.Store {
     }
 
     onRefresh = ()=>{
+        this.setState({blogs : []});
         this.initializeState();
     }
 

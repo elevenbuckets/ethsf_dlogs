@@ -122,7 +122,7 @@ var MainView = function (_Reflux$Component) {
         value: function render() {
             return this.state.login ? _react2.default.createElement(
                 "div",
-                { className: "contentxt" },
+                { className: "item contentxt" },
                 this.state.view === "List" ? this.state.blogs.length == 0 ? _react2.default.createElement(
                     "div",
                     { className: "item", style: { width: '100vw', height: '80vh' } },
@@ -136,7 +136,7 @@ var MainView = function (_Reflux$Component) {
                 ) : ""
             ) : _react2.default.createElement(
                 "div",
-                { className: "contentxt" },
+                { className: "item contentxt" },
                 _react2.default.createElement(
                     "div",
                     { className: "item login" },

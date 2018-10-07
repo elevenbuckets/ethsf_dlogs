@@ -51,25 +51,13 @@ var NewBlog = function (_Reflux$Component) {
         _this.getEditView = function () {
             return _react2.default.createElement(
                 "form",
-                null,
-                _react2.default.createElement(
-                    "label",
-                    null,
-                    "Title"
-                ),
-                _react2.default.createElement("textarea", { onChange: _this.udpateBlog.bind(_this, "blogTitle"), value: _this.state.blogTitle }),
-                _react2.default.createElement(
-                    "label",
-                    null,
-                    "TLDR"
-                ),
-                _react2.default.createElement("textarea", { onChange: _this.udpateBlog.bind(_this, "blogTLDR"), value: _this.state.blogTLDR }),
-                _react2.default.createElement(
-                    "label",
-                    null,
-                    "Content"
-                ),
-                _react2.default.createElement("textarea", { onChange: _this.udpateBlog.bind(_this, "blogContent"), value: _this.state.blogContent })
+                { className: "newForm", style: { width: '100vw', textAlign: 'center' } },
+                _react2.default.createElement("textarea", { placeholder: "Title", style: { width: '80vw', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
+                        border: '2px solid white', color: 'white' }, onChange: _this.udpateBlog.bind(_this, "blogTitle"), value: _this.state.blogTitle }),
+                _react2.default.createElement("textarea", { placeholder: "TL;DR", style: { width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
+                        border: '2px solid white', color: 'white' }, onChange: _this.udpateBlog.bind(_this, "blogTLDR"), value: _this.state.blogTLDR }),
+                _react2.default.createElement("textarea", { placeholder: "Content", style: { width: '86vw', height: '80vh', backgroundColor: 'rgba(0,0,0,0)',
+                        border: '2px solid white', color: 'white' }, onChange: _this.udpateBlog.bind(_this, "blogContent"), value: _this.state.blogContent })
             );
         };
 
@@ -111,23 +99,11 @@ var NewBlog = function (_Reflux$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                null,
+                { className: "item newDiv", style: { textAlign: 'center' } },
                 this.state.isEditable ? this.getEditView() : this.getBlogPreview(),
-                _react2.default.createElement(
-                    "button",
-                    { onClick: this.changeEditable },
-                    this.state.isEditable ? "Preview" : "Edit"
-                ),
-                _react2.default.createElement(
-                    "button",
-                    { onClick: this.saveNewBlog },
-                    "Save"
-                ),
-                _react2.default.createElement(
-                    "button",
-                    { onClick: this.props.goBack },
-                    "Back"
-                )
+                _react2.default.createElement("input", { type: "button", className: "button pbutton", defaultValue: this.state.isEditable ? "Preview" : "Edit", onClick: this.changeEditable }),
+                _react2.default.createElement("input", { type: "button", className: "button sbutton", defaultValue: "Save", onClick: this.saveNewBlog }),
+                _react2.default.createElement("input", { type: "button", className: "button bbutton", defaultValue: "Back", onClick: this.props.goBack })
             );
         }
     }]);

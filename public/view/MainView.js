@@ -108,15 +108,25 @@ var MainView = function (_Reflux$Component) {
     _createClass(MainView, [{
         key: "render",
         value: function render() {
-            return _react2.default.createElement(
+            return this.state.login ? _react2.default.createElement(
                 "div",
                 { className: "contentxt" },
-                this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog }),
+                this.state.view === "List" ? this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, goBack: this.goBackToList }),
                 this.state.view === "List" ? _react2.default.createElement(
                     "button",
                     { onClick: this.goToNewBlog },
                     " New "
                 ) : ""
+            ) : _react2.default.createElement(
+                "div",
+                null,
+                " ",
+                _react2.default.createElement(
+                    "label",
+                    null,
+                    "Password: "
+                ),
+                _react2.default.createElement("input", { type: "password", onKeyUp: this.unlock })
             );
         }
     }]);

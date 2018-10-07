@@ -117,7 +117,8 @@ var DlogsStore = function (_Reflux$Store) {
             following: [],
             displayBlogs: [],
             onlyShowForBlogger: "",
-            currentBlogContent: ""
+            currentBlogContent: "",
+            login: true
 
         };
 

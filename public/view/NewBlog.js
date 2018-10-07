@@ -122,6 +122,11 @@ var NewBlog = function (_Reflux$Component) {
                     "button",
                     { onClick: this.saveNewBlog },
                     "Save"
+                ),
+                _react2.default.createElement(
+                    "button",
+                    { onClick: this.props.goBack },
+                    "Back"
                 )
             );
         }

@@ -59,6 +59,7 @@ class NewBlog extends Reflux.Component {
             {this.state.isEditable ? this.getEditView() : this.getBlogPreview()}
             <button onClick={this.changeEditable}>{this.state.isEditable ? "Preview" : "Edit"}</button>
             <button onClick={this.saveNewBlog}>Save</button>
+            <button onClick={this.props.goBack}>Back</button>
         </div>);
 
     }

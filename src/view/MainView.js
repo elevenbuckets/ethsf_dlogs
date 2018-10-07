@@ -26,7 +26,7 @@ class MainView extends Reflux.Component {
         return this.state.blogs.map(blog => {
             return <div onClick={this.goToBlog.bind(this, blog)}>
                 <div>{blog.title}</div>
-                {renderHTML(marked(blog.content))}
+                {renderHTML(marked(blog.TLDR))}
             </div>
         })
     }

@@ -13,33 +13,36 @@ class DlogsStore extends Reflux.Store {
 
         this.ipfs.ipfsAPI.id()
             .then((o) => { console.log(JSON.stringify(o, 0, 2)) })
-            .then(() => { return dlogs.connect() })
-            .then(() => { return dlogs.init(ipfs) })
-            .then((r) => { if (r) console.log(dlogs.web3.eth.blockNumber) })
+            .then(() => { return this.dlogs.connect() })
+            .then(() => { return this.dlogs.init(this.ipfs) })
+            .then((r) => { if (r) console.log(this.dlogs.web3.eth.blockNumber);
+                this.initializeState(); })
 
         this.state = {
             blogs: [{
                 title: "Blog 1",
                 author: "0x...1",
                 timeStamp: "123123",
-                content: "# This is Blog 1\n" + "This is the content 1"
+                TLDR: "# This is Blog 1\n" + "This is the content 1"
             },
             {
                 title: "Blog 1",
                 author: "0x...1",
                 timeStamp: "123123",
-                content: "# This is Blog 1\n" + "This is the content 1"
+                TLDR: "# This is Blog 1\n" + "This is the content 1"
             }
             ],
             following : [],
             displayBlogs:[],
             onlyShowForBlogger : "0x89dc07a2f750cf62e757f909a4985a94a07d6359",
+            currentBlogContent:""
 
         }
-        this.initializeState();
+       
     }
 
     initializeState = () =>{
+        console.log(this.dlogs)
         let ipns = this.dlogs.lookUpByAddr(this.state.onlyShowForBlogger);
         this.ipfs.resolve(ipns).then(r =>{return this.ipfs.readPath(r)})
         .then(r=>{

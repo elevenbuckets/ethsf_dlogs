@@ -64,7 +64,7 @@ var MainView = function (_Reflux$Component) {
                         null,
                         blog.title
                     ),
-                    (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.content))
+                    (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.TLDR))
                 );
             });
         };

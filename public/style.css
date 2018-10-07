@@ -133,8 +133,19 @@ body {
    align-self: flex-end;
 }
 
+.button {
+    width: 50px;
+    text-align: center;
+    justify-self: center;
+    background-color: rgba(0,0,0,0);
+    border: 2px solid white;
+    color: white;
+    margin: 30px; 
+}
 
-
+.reader {
+    font-size: 18px;
+}
 
 .structurepic {
     justify-items: center;

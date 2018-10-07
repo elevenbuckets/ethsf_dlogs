@@ -55,18 +55,14 @@ var BlogView = function (_Reflux$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                { style: { color: 'white' } },
+                { className: "item reader", style: { color: 'white', padding: "50px" } },
                 _react2.default.createElement(
                     "div",
-                    null,
+                    { style: { textAlign: 'center', fontSize: '25px', padding: "35px" } },
                     this.props.blog.title
                 ),
                 (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.currentBlogContent)),
-                _react2.default.createElement(
-                    "button",
-                    { onClick: this.props.goBack },
-                    "Back"
-                )
+                _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Back", onClick: this.props.goBack })
             );
         }
     }]);

@@ -23,7 +23,7 @@ html {
 }
   
 body {
-   background: url(assets/golden_blockchain.png), linear-gradient(11deg, #9100009a, #0558d4);
+   background: url(assets/golden_blockchain.png), linear-gradient(11deg, #2c5b699a, #0558d4);
    background-repeat: repeat-y;
    display: grid;
    overflow: hidden;
@@ -62,11 +62,8 @@ body {
     border-radius: 0px;
     /*background: rgba(255, 255, 255, 0.21);*/
     grid-template-columns: 9% 1fr 9%;
-    grid-template-rows: 2% 9fr 1fr;
-    grid-template-areas:
-    ". centercontent ." 
-    ". centercontent ."
-    ". centercontent .";
+    grid-template-rows: 1fr;
+    grid-template-areas: ". centercontent .";
 }
 
 .content h2 {
@@ -82,7 +79,7 @@ body {
 
 .contentxt {
     height: 100%; 
-    width: 98%; 
+    width: 100%; 
     font-size: 20px;
     grid-area: centercontent;
     text-align: justify;
@@ -92,35 +89,44 @@ body {
 }
 
 .rpicDiv {
+   width: 100vw;
    display: grid;
-   grid-template-columns: 1fr 150px;
+   grid-template-columns: 1fr 200px;
    grid-template-rows: 150px;
    grid-template-areas: "rtitle rpic";
 }
 
 .rtitle {
+   color: white;
+   text-align: right;
    grid-area: rtitle;
-   width: calc(100vw - 150px);
+   width: calc(100vw - 200px);
+   border-bottom: 2px solid white;
 }
 
 .rpic {
    grid-area: rpic;
+   justify-self: right;
 }
 
 .lpicDiv {
    display: grid;
-   grid-template-columns: 150px 1fr;
+   grid-template-columns: 200px 1fr;
    grid-template-rows: 150px;
    grid-template-areas: "lpic ltitle";
 }
 
 .ltitle {
+   color: white;
+   text-align: left;
    grid-area: ltitle;
-   width: calc(100vw - 150px);
+   width: calc(100vw - 200px);
+   border-bottom: 2px solid white;
 }
 
 .lpic {
    grid-area: lpic;
+   justify-self: left;
 }
 
 

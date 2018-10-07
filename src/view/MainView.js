@@ -23,18 +23,17 @@ class MainView extends Reflux.Component {
     }
 
     getBlogList = () => {
-	let colors = ['purple', 'yellow'];
         return this.state.blogs.map((blog, idx) => {
 		let magic = (idx + 1) % 2;
                 let layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
                 let prefix = magic == 0 ? 'r' : 'l';
             return <div className={layout} onClick={this.goToBlog.bind(this, blog)}>
-                <div className={"item " + prefix + 'title'}>
+                <div className={prefix + 'title'}>
 			<p>{blog.title}</p>
                 	{renderHTML(marked(blog.TLDR))}
 		</div>
 		<div className={prefix + 'pic'} 
-		     style={{ backgroundColor: colors[magic], width: '150px', height: '150px' }}>
+		     style={{ backgroundColor: 'white', width: '15px', height: '15px' }}>
 		</div>
             </div>
         })

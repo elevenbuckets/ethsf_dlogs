@@ -64,10 +64,10 @@ var MainView = function (_Reflux$Component) {
                     { className: layout, onClick: _this.goToBlog.bind(_this, blog) },
                     _react2.default.createElement(
                         "div",
-                        { className: prefix + 'title' },
+                        { className: prefix + 'title', style: { color: 'rgb(155,155,155,0.85)' } },
                         _react2.default.createElement(
                             "p",
-                            null,
+                            { style: { fontSize: "28px", color: 'white' } },
                             blog.title
                         ),
                         (0, _reactRenderHtml2.default)((0, _marked2.default)(blog.TLDR))

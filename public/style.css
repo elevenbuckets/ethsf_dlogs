@@ -23,7 +23,7 @@ html {
 }
   
 body {
-   background: url(assets/golden_blockchain.png), linear-gradient(11deg, #2c5b699a, #0558d4);
+   background: url(assets/golden_blockchain.png), linear-gradient(11deg, #060606, #0558d4);
    background-repeat: repeat-y;
    display: grid;
    overflow: hidden;
@@ -102,11 +102,13 @@ body {
    grid-area: rtitle;
    width: calc(100vw - 200px);
    border-bottom: 2px solid white;
+   align-self: flex-end;
 }
 
 .rpic {
    grid-area: rpic;
-   justify-self: right;
+   justify-self: flex-start;
+   align-self: flex-end;
 }
 
 .lpicDiv {
@@ -122,11 +124,13 @@ body {
    grid-area: ltitle;
    width: calc(100vw - 200px);
    border-bottom: 2px solid white;
+   align-self: flex-end;
 }
 
 .lpic {
    grid-area: lpic;
-   justify-self: left;
+   justify-self: flex-end;
+   align-self: flex-end;
 }
 
 

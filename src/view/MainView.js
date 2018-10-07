@@ -28,8 +28,8 @@ class MainView extends Reflux.Component {
                 let layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
                 let prefix = magic == 0 ? 'r' : 'l';
             return <div className={layout} onClick={this.goToBlog.bind(this, blog)}>
-                <div className={prefix + 'title'}>
-			<p>{blog.title}</p>
+                <div className={prefix + 'title'} style={{color: 'rgb(155,155,155,0.85)'}}>
+			<p style={{fontSize: "28px", color: 'white'}}>{blog.title}</p>
                 	{renderHTML(marked(blog.TLDR))}
 		</div>
 		<div className={prefix + 'pic'} 

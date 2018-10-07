@@ -23,7 +23,7 @@ class NewBlog extends Reflux.Component {
     }
 
     getEditView = () => {
-        return <form style={{  width: '100vw', textAlign: 'center', margin: '20px'}}>
+        return <form className="newForm" style={{  width: '100vw', textAlign: 'center'}}>
         <textarea placeholder="Title" style={{width: '80vw', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
     border: '2px solid white', color: 'white'}} onChange={this.udpateBlog.bind(this, "blogTitle")} value={this.state.blogTitle}></textarea>
         <textarea placeholder="TL;DR" style={{width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
@@ -57,9 +57,9 @@ class NewBlog extends Reflux.Component {
     render() {
         return (<div className="item newDiv" style={{textAlign: 'center'}}>
             {this.state.isEditable ? this.getEditView() : this.getBlogPreview()}
-            <button onClick={this.changeEditable}>{this.state.isEditable ? "Preview" : "Edit"}</button>
-            <button onClick={this.saveNewBlog}>Save</button>
-            <button onClick={this.props.goBack}>Back</button>
+            <input type="button" className="button pbutton" defaultValue={this.state.isEditable ? "Preview" : "Edit"} onClick={this.changeEditable} />
+            <input type="button" className="button sbutton" defaultValue="Save" onClick={this.saveNewBlog} />
+            <input type="button" className="button bbutton" defaultValue="Back" onClick={this.props.goBack} />
         </div>);
 
     }

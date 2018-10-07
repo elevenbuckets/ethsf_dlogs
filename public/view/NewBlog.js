@@ -51,7 +51,7 @@ var NewBlog = function (_Reflux$Component) {
         _this.getEditView = function () {
             return _react2.default.createElement(
                 "form",
-                { style: { width: '100vw', textAlign: 'center', margin: '20px' } },
+                { className: "newForm", style: { width: '100vw', textAlign: 'center' } },
                 _react2.default.createElement("textarea", { placeholder: "Title", style: { width: '80vw', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
                         border: '2px solid white', color: 'white' }, onChange: _this.udpateBlog.bind(_this, "blogTitle"), value: _this.state.blogTitle }),
                 _react2.default.createElement("textarea", { placeholder: "TL;DR", style: { width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
@@ -101,21 +101,9 @@ var NewBlog = function (_Reflux$Component) {
                 "div",
                 { className: "item newDiv", style: { textAlign: 'center' } },
                 this.state.isEditable ? this.getEditView() : this.getBlogPreview(),
-                _react2.default.createElement(
-                    "button",
-                    { onClick: this.changeEditable },
-                    this.state.isEditable ? "Preview" : "Edit"
-                ),
-                _react2.default.createElement(
-                    "button",
-                    { onClick: this.saveNewBlog },
-                    "Save"
-                ),
-                _react2.default.createElement(
-                    "button",
-                    { onClick: this.props.goBack },
-                    "Back"
-                )
+                _react2.default.createElement("input", { type: "button", className: "button pbutton", defaultValue: this.state.isEditable ? "Preview" : "Edit", onClick: this.changeEditable }),
+                _react2.default.createElement("input", { type: "button", className: "button sbutton", defaultValue: "Save", onClick: this.saveNewBlog }),
+                _react2.default.createElement("input", { type: "button", className: "button bbutton", defaultValue: "Back", onClick: this.props.goBack })
             );
         }
     }]);

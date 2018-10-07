@@ -15,7 +15,8 @@ class NewBlog extends Reflux.Component {
         this.state = {
             isEditable: true,
             blogContent: "",
-            blogTitle:""
+            blogTitle:"",
+            blogTLDR : ""
         }
 
         this.store = DlogsStore;
@@ -24,23 +25,22 @@ class NewBlog extends Reflux.Component {
     getEditView = () => {
         return <form>
         <label >Title</label>
-        <textarea onChange={this.udpateBlogTitle} value={this.state.blogTitle}></textarea>
-        <textarea onChange={this.udpateBlogContent} value={this.state.blogContent}></textarea>
+        <textarea onChange={this.udpateBlog.bind(this, "blogTitle")} value={this.state.blogTitle}></textarea>
+        <label >TLDR</label>
+        <textarea onChange={this.udpateBlog.bind(this, "blogTLDR")} value={this.state.blogTLDR}></textarea>
+        <label >Content</label>
+        <textarea onChange={this.udpateBlog.bind(this, "blogContent")} value={this.state.blogContent}></textarea>
       </form>
       
     }
 
-    udpateBlogContent = (event) => {
-        this.setState({ blogContent: event.target.value })
-    }
-
-    udpateBlogTitle = (event) => {
-        this.setState({ blogTitle: event.target.value })
+    udpateBlog= (field, event) => {
+        this.setState({ [field]: event.target.value })
     }
 
 
     saveNewBlog = () => {
-        this.props.saveNewBlog(this.state.blogTitle, this.state.blogContent);
+        this.props.saveNewBlog(this.state.blogTitle, this.state.blogTLDR, this.state.blogContent);
     }
 
     changeEditable = () => {

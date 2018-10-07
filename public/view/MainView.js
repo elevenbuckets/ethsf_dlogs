@@ -91,8 +91,8 @@ var MainView = function (_Reflux$Component) {
             _this.setState({ view: "List", currentBlog: "" });
         };
 
-        _this.saveNewBlog = function (blogTitle, blogContent) {
-            _DlogsActions2.default.saveNewBlog(blogTitle, blogContent);
+        _this.saveNewBlog = function (blogTitle, blogTLDR, blogContent) {
+            _DlogsActions2.default.saveNewBlog(blogTitle, blogTLDR, blogContent);
             _this.goBackToList();
         };
 

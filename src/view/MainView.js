@@ -52,8 +52,8 @@ class MainView extends Reflux.Component {
         this.setState({ view: "List", currentBlog: "" })
     }
 
-    saveNewBlog = (blogTitle, blogContent) => {
-        DlogsActions.saveNewBlog(blogTitle, blogContent);
+    saveNewBlog = (blogTitle, blogTLDR, blogContent) => {
+        DlogsActions.saveNewBlog(blogTitle, blogTLDR, blogContent);
         this.goBackToList()
     }
 

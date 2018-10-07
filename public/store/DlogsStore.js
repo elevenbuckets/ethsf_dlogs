@@ -14,7 +14,11 @@ var _DlogsActions = require("../action/DlogsActions");
 
 var _DlogsActions2 = _interopRequireDefault(_DlogsActions);
 
+var _http = require("http");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -24,7 +28,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var path = require('path');
+var fs = require('fs');
 
 var DlogsStore = function (_Reflux$Store) {
     _inherits(DlogsStore, _Reflux$Store);
@@ -62,8 +66,6 @@ var DlogsStore = function (_Reflux$Store) {
             });
         };
 
-        _this.refreshBlogs = function () {};
-
         _this.onFetchBlogContent = function (ipfsHash) {
             _this.setState({ currentBlogContent: "" });
             _this.ipfs.read(ipfsHash).then(function (r) {
@@ -71,9 +73,25 @@ var DlogsStore = function (_Reflux$Store) {
             });
         };
 
-        _this.onSaveNewBlog = function (title, content) {
-            var blog = { title: title, content: content };
-            _this.setState({ blogs: [].concat(_toConsumableArray(_this.state.blogs), [blog]) });
+        _this.onSaveNewBlog = function (title, TLDR, content) {
+            var tempFile = ".tempBlog";
+            var tempIPNSFile = ".ipns.json";
+
+            fs.writeFileSync(tempFile, content, 'utf8');
+            _this.ipfs.put(tempFile).then(function (r) {
+                var ipns = _this.dlogs.lookUpByAddr(_this.dlogs.getAccount());
+                _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
+                    var newArticle = { title: title, author: _this.dlogs.getAccount(), timestamp: Date.now(), TLDR: TLDR };
+                    var newJSON = _extends({}, metaJSON);
+                    newJSON.Articles = _extends({}, newJSON.Articles, _defineProperty({}, r[0].hash, newArticle));
+                    fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                    _this.ipfs.put(tempIPNSFile).then(function (r) {
+                        _this.ipfs.publish(r[0].hash);
+                        fs.unlinkSync(tempFile);
+                        fs.unlinkSync(tempIPNSFile);
+                    });
+                });
+            });
         };
 
         _this.listenables = _DlogsActions2.default;
@@ -92,6 +110,7 @@ var DlogsStore = function (_Reflux$Store) {
         }).then(function (r) {
             if (r) console.log(_this.dlogs.web3.eth.blockNumber);
             _this.initializeState();
+            _this.dlogs.linkAccount(_this.dlogs.allAccounts()[0], "test");
         });
 
         _this.state = {

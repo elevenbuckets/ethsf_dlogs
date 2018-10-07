@@ -1,0 +1,395 @@
+:root {
+    --yellow: #ffc600;
+    --black: #272727;
+    --oak: #910000;
+}
+  
+html {
+    /* border-box box model allows us to add padding and border to our elements without increasing their size */
+    box-sizing: border-box;
+    /* A system font stack so things load nice and quick! */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+      Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-weight: 900;
+    font-size: 10px;
+    color: var(--black);
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+  
+body {
+   /*background: url(/assets/Background.jpg);*/
+   background: url(/assets/golden_blockchain.png), linear-gradient(11deg, #9100009a, #0558d4);
+   background-repeat: repeat-y;
+   display: grid;
+   overflow: hidden;
+   min-height: 100vh;
+   margin: 0px;
+   grid-template-rows: 110px auto 100px;
+   grid-template-columns: 110px 1fr 110px;
+   grid-template-areas: 
+    "topbar topbar topbar"
+    "content content content"
+    "footer footer footer";
+}
+
+/* Each item in our grid will contain numbers */
+.item {
+    /* We center the contents of these items. You can also do this with flexbox too! */
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    /*
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    border-radius: 6px;
+    */
+    font-size: 27px;
+    color: white;
+}
+  
+.item p {
+    margin: 0 0 5px 0;
+}
+  
+.topside {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 8vh;
+    grid-template-areas: 
+    "logo navigation";
+    grid-area: topbar;
+    background: linear-gradient(180deg, #05040485, #2f08990e);
+}
+
+.content {
+    display: grid;
+    overflow-y: auto;
+    max-height: calc(100vh - 220px);
+    grid-area: content;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 50px 10px 50px;
+    font-size: 16px;
+    color: white;
+    border-radius: 0px;
+    /*background: rgba(255, 255, 255, 0.21);*/
+    grid-template-columns: 9% 1fr 9%;
+    grid-template-rows: 2% 9fr 1fr;
+    grid-template-areas:
+    ". centercontent ." 
+    ". centercontent ."
+    ". centercontent .";
+}
+
+.content h2 {
+    font-style: italic;
+    text-decoration: underline;
+    color: var(--yellow);
+}
+
+.content #marker {
+    color: #6ff5ff;
+    display: inline;
+}
+
+#contentxt {
+    height: 100%; 
+    width: 98%; 
+    font-size: 20px;
+    grid-area: centercontent;
+    text-align: justify;
+    justify-self: center;
+    align-items: center;
+    margin: 0px;
+}
+
+.structurepic {
+    justify-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+.structurepic img {
+    height: 30vh;
+}
+
+.mediaContainer {
+    align-items: center;
+    padding: 0px;
+    justify-content: center;
+    display: grid;
+    grid-template-rows: repeat(auto-fill, 1fr);
+    grid-template-columns: repeat(auto-fill, 1fr);
+    grid-template-areas: 
+      "vidtitle pictitle"
+      "videos pictures"
+      "pmtitle pmtitle"
+      "pminfo pminfo";
+    text-align: center;
+    grid-gap: 4px;
+}
+.picContainer {
+    display: grid;
+    grid-area: pictures;
+    grid-template-columns: 1fr repeat(auto-fit, minmax(385px, 769px)) 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: ". pics .";
+    grid-gap: 5px;
+    justify-items: center;
+    text-align: center;
+    align-self: baseline;
+}
+
+.videoContainer {
+    justify-items: center;
+    align-self: center;
+    display: grid;
+    grid-area: videos;
+    grid-template-columns: 1fr repeat(auto-fit, 1fr) 1fr;
+    grid-template-areas: ". vids .";
+    grid-gap: 5px;
+    align-self: center;
+}
+
+.meetupLinks a {
+    text-decoration: none;
+    color: white;
+}
+
+.meetupLinks a:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+}
+
+.navibar {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 1fr);
+    grid-area: navigation;
+    grid-template-areas: "myhome myabout mydemo mycontact";
+    margin: 30px 1% 0 50%;
+}
+
+.mylogo {
+    display: grid;
+    grid-area: logo;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas: "logopic logotext";
+}
+
+.logopic {
+    grid-area: logopic;
+    margin: 20px 0px 4px 20px; 
+    border:2px solid #eeffff;
+}
+
+.logotext {
+    font-size: 29px;
+    text-align: left;
+    grid-area: logotext;
+    align-self: self-end;
+    padding: 0 0 11px 11px;
+}
+
+.myhome {
+    grid-area: myhome;
+    display: grid;
+    padding: 0 5px 0 5px;
+}
+
+.myhome a:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+}
+
+.myhome a:focus {
+    color: var(--yellow);
+    text-decoration: underline;
+    outline: none;
+}
+
+.myhome a {
+    text-decoration: none;
+    color: white;
+}
+
+.myabout {
+    grid-area: myabout;
+    display: grid;
+    padding: 0 5px 0 5px;
+}
+
+.myabout a:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+}
+
+.myabout a:focus {
+    color: var(--yellow);
+    text-decoration: underline;
+    outline: none;
+}
+
+.myabout a {
+    text-decoration: none;
+    color: white;
+}
+
+.mydemo {
+    grid-area: mydemo;
+    display: grid;
+    padding: 0 5px 0 5px;
+}
+
+.mydemo a:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+}
+
+.mydemo a:focus {
+    color: var(--yellow);
+    text-decoration: underline;
+    outline: none;
+}
+
+.mydemo a {
+    text-decoration: none;
+    color: white;
+}
+
+.mycontact {
+    grid-area: mycontact;
+    display: grid;
+    padding: 0 5px 0 5px;
+}
+
+.mycontact a:hover {
+    color: var(--yellow);
+    text-decoration: underline;
+}
+
+.mycontact a:focus {
+    color: var(--yellow);
+    text-decoration: underline;
+    outline: none;
+}
+
+.mycontact a {
+    text-decoration: none;
+    color: white;
+}
+
+.copyright {
+    font-size: 12px;
+    text-align: center;
+}
+
+.footbar {
+    display: grid;
+    grid-area: footer;
+    background: linear-gradient(180deg, #b1676707, #412d6e57);
+}
+
+/* React Dropdown */
+.Dropdown-root {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+  font-family: Arial;
+  font-size: 16px;
+}
+
+.Dropdown-control {
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  box-sizing: border-box;
+  color: #333;
+  cursor: default;
+  outline: none;
+  padding: 8px 52px 8px 10px;
+  transition: all 200ms ease;
+}
+
+.Dropdown-control:hover {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+.Dropdown-arrow {
+  border-color: #999 transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  content: ' ';
+  display: block;
+  height: 0;
+  margin-top: -ceil(2.5);
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  width: 0
+}
+
+.is-open .Dropdown-arrow {
+  border-color: transparent transparent #999;
+  border-width: 0 5px 5px;
+}
+
+.Dropdown-menu {
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  margin-top: -1px;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 1000;
+  -webkit-overflow-scrolling: touch;
+}
+
+.Dropdown-menu .Dropdown-group > .Dropdown-title{
+  padding: 8px 10px;
+  color: rgba(51, 51, 51, 1);
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.Dropdown-option {
+  box-sizing: border-box;
+  color: rgba(51, 51, 51, 0.8);
+  cursor: pointer;
+  display: block;
+  padding: 8px 10px;
+}
+
+.Dropdown-option:last-child {
+  border-bottom-right-radius: 2px;
+   border-bottom-left-radius: 2px;
+}
+
+.Dropdown-option:hover {
+  background-color: #f2f9fc;
+  color: #333;
+}
+
+.Dropdown-option.is-selected {
+  background-color: #f2f9fc;
+  color: #333;
+}
+
+.Dropdown-noresults {
+  box-sizing: border-box;
+  color: #ccc;
+  cursor: default;
+  display: block;
+  padding: 8px 10px;
+}

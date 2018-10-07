@@ -23,10 +23,17 @@ class MainView extends Reflux.Component {
     }
 
     getBlogList = () => {
-        return this.state.blogs.map(blog => {
-            return <div onClick={this.goToBlog.bind(this, blog)}>
-                <div>{"Title:" + blog.title}</div>
-                {renderHTML(marked(blog.TLDR))}
+	let colors = ['purple', 'yellow'];
+        return this.state.blogs.map((blog, idx) => {
+		let magic = (idx + 1) % 2;
+                let layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
+                let prefix = magic == 0 ? 'r' : 'l';
+            return <div className={layout} onClick={this.goToBlog.bind(this, blog)}>
+                <div className={prefix + 'titleDiv'}>
+			{blog.title}<br/>
+                	{renderHTML(marked(blog.TLDR))}
+		</div>
+		<div className={prefix + 'picDiv'} style={{ backgroundColor: colors[magic] }}></div>
             </div>
         })
     }

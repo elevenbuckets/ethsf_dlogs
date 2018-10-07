@@ -76,6 +76,7 @@ var MainView = function (_Reflux$Component) {
         };
 
         _this.goToBlog = function (blog) {
+            _DlogsActions2.default.fetchBlogContent(blog.ipfsHash);
             _this.setState({ view: "Content", currentBlog: blog });
         };
 

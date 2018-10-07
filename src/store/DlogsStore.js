@@ -19,18 +19,7 @@ class DlogsStore extends Reflux.Store {
                 this.initializeState(); })
 
         this.state = {
-            blogs: [{
-                title: "Blog 1",
-                author: "0x...1",
-                timeStamp: "123123",
-                TLDR: "# This is Blog 1\n" + "This is the content 1"
-            },
-            {
-                title: "Blog 1",
-                author: "0x...1",
-                timeStamp: "123123",
-                TLDR: "# This is Blog 1\n" + "This is the content 1"
-            }
+            blogs: [
             ],
             following : [],
             displayBlogs:[],
@@ -56,6 +45,13 @@ class DlogsStore extends Reflux.Store {
 
     refreshBlogs = () =>{
         
+    }
+
+    onFetchBlogContent = (ipfsHash) =>{
+        this.setState({currentBlogContent : ""});
+        this.ipfs.read(ipfsHash).then(r =>{
+            this.setState({currentBlogContent : JSON.parse(r.toString()).content});
+        })
     }
 
     onSaveNewBlog = (title, content) => {

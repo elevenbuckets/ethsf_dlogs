@@ -24,7 +24,7 @@ class BlogView extends Reflux.Component {
     render() {
         return (<div>
             <div>{this.props.blog.title}</div>
-            {renderHTML(marked(this.props.blog.content))}
+            {renderHTML(marked(this.state.currentBlogContent))}
 
             <button onClick = {this.props.goBack}>Back</button>
         </div>);

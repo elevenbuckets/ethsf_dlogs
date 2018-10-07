@@ -39,7 +39,8 @@ class MainView extends Reflux.Component {
     }
 
     goToBlog = (blog) => {
-        this.setState({ view: "Content", currentBlog: blog })
+        DlogsActions.fetchBlogContent(blog.ipfsHash);
+        this.setState({ view: "Content", currentBlog: blog });
     }
 
     goToNewBlog = () => {

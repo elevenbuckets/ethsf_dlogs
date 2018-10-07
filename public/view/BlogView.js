@@ -66,7 +66,7 @@ var BlogView = function (_Reflux$Component) {
                     null,
                     this.props.blog.title
                 ),
-                (0, _reactRenderHtml2.default)((0, _marked2.default)(this.props.blog.content)),
+                (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.currentBlogContent)),
                 _react2.default.createElement(
                     "button",
                     { onClick: this.props.goBack },

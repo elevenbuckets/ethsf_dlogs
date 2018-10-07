@@ -105,6 +105,7 @@ var DlogsStore = function (_Reflux$Store) {
         };
 
         _this.onRefresh = function () {
+            _this.setState({ blogs: [] });
             _this.initializeState();
         };
 

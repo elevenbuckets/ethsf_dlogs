@@ -78,7 +78,7 @@ class MainView extends Reflux.Component {
                 <input type="button" className="button" defaultValue="Refresh" onClick={this.refresh} /></div> : ""}
         </div> : <div className="contentxt">
             <div className="item login"> <label style={{margin: '10px', alignSelf: "flex-end"}}>Password: </label>
-                <input style={{alignSelf: 'flex-start'}} type="password" ref="ps" onKeyUp={this.unlock} />
+                <input autoFocus style={{alignSelf: 'flex-start'}} type="password" ref="ps" onKeyUp={this.unlock} />
             </div></div>);
 
     }

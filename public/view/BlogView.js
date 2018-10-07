@@ -69,7 +69,7 @@ var BlogView = function (_Reflux$Component) {
                 (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.currentBlogContent)),
                 this.props.blog.author == this.state.account ? _react2.default.createElement(
                     "div",
-                    { className: "item mainctr" },
+                    { className: "item secondmainctr" },
                     " ",
                     _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Back", onClick: this.props.goBack }),
                     _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Edit", onClick: this.props.goEdit }),

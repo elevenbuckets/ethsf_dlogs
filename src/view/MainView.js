@@ -59,7 +59,7 @@ class MainView extends Reflux.Component {
     saveNewBlog = (blogTitle, blogTLDR, blogContent) => {
     
         this.state.view == "New"? DlogsActions.saveNewBlog(blogTitle, blogTLDR, blogContent):
-        DlogsActions.editBlog(blogTitle, blogTLDR, blogContent,this.currentBlog.ipfsHash);
+        DlogsActions.editBlog(blogTitle, blogTLDR, blogContent,this.state.currentBlog.ipfsHash);
         this.goBackToList()
     }
 

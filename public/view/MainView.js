@@ -96,7 +96,8 @@ var MainView = function (_Reflux$Component) {
         };
 
         _this.saveNewBlog = function (blogTitle, blogTLDR, blogContent) {
-            _DlogsActions2.default.saveNewBlog(blogTitle, blogTLDR, blogContent);
+
+            _this.state.view == "New" ? _DlogsActions2.default.saveNewBlog(blogTitle, blogTLDR, blogContent) : _DlogsActions2.default.editBlog(blogTitle, blogTLDR, blogContent, _this.state.currentBlog.ipfsHash);
             _this.goBackToList();
         };
 

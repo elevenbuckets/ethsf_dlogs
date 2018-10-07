@@ -27,7 +27,7 @@ class BlogView extends Reflux.Component {
             <div style={{textAlign: 'center', fontSize: '25px', padding: "35px"}}>{this.props.blog.title}</div>
             {renderHTML(marked(this.state.currentBlogContent))}
 
-            {this.props.blog.author == this.state.account? <div className="item mainctr"> <input type="button" className="button" defaultValue="Back" onClick={this.props.goBack} />
+            {this.props.blog.author == this.state.account? <div className="item secondmainctr"> <input type="button" className="button" defaultValue="Back" onClick={this.props.goBack} />
             <input type="button" className="button" defaultValue="Edit" onClick={this.props.goEdit} /> 
             <input type="button" className="button" defaultValue="Delete" onClick={this.delete} /></div> :  <input type="button" className="button" defaultValue="Back" onClick={this.props.goBack} />
     }

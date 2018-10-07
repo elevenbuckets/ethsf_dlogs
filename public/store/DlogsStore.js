@@ -35,6 +35,24 @@ var DlogsStore = function (_Reflux$Store) {
         var _this = _possibleConstructorReturn(this, (DlogsStore.__proto__ || Object.getPrototypeOf(DlogsStore)).call(this));
 
         _this.initializeState = function () {
+            var Max = 10;
+            var helper = _this.dlogs.dapp.browse(0, Max);
+            var blogs = [];
+            helper.reduce(function (acc, vaule, index) {
+                var ipns = _this.dlogs.parseEntry(_this.dlogs.dapp.browse(0, Max), index).ipnsHash;
+                _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
+                    var tempBlogs = Object.keys(metaJSON.Articles).map(function (hash) {
+                        return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
+                    });
+                    blogs = [].concat(_toConsumableArray(blogs), _toConsumableArray(tempBlogs));
+                    if (index == helper.length - 1) {
+                        _this.setState({ blogs: blogs });
+                    }
+                });
+            }, blogs);
+        };
+
+        _this.getBlogOnlyShowForBloger = function () {
             var ipns = _this.dlogs.lookUpByAddr(_this.state.onlyShowForBlogger);
             _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
                 var blogs = Object.keys(metaJSON.Articles).map(function (hash) {

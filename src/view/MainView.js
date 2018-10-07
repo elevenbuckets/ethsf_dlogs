@@ -24,17 +24,17 @@ class MainView extends Reflux.Component {
 
     getBlogList = () => {
         return this.state.blogs.map((blog, idx) => {
-		let magic = (idx + 1) % 2;
-                let layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
-                let prefix = magic == 0 ? 'r' : 'l';
+            let magic = (idx + 1) % 2;
+            let layout = magic == 0 ? 'rpicDiv' : 'lpicDiv';
+            let prefix = magic == 0 ? 'r' : 'l';
             return <div className={layout} onClick={this.goToBlog.bind(this, blog)}>
-                <div className={prefix + 'title'} style={{color: 'rgb(155,155,155,0.85)'}}>
-			<p style={{fontSize: "28px", color: 'white'}}>{blog.title}</p>
-                	{renderHTML(marked(blog.TLDR))}
-		</div>
-		<div className={prefix + 'pic'} 
-		     style={{ backgroundColor: 'white', width: '15px', height: '15px' }}>
-		</div>
+                <div className={prefix + 'title'} style={{ color: 'rgb(155,155,155,0.85)' }}>
+                    <p style={{ fontSize: "28px", color: 'white' }}>{blog.title}</p>
+                    {renderHTML(marked(blog.TLDR))}
+                </div>
+                <div className={prefix + 'pic'}
+                    style={{ backgroundColor: 'white', width: '15px', height: '15px' }}>
+                </div>
             </div>
         })
     }
@@ -57,16 +57,29 @@ class MainView extends Reflux.Component {
         this.goBackToList()
     }
 
+    unlock = (event) => {
+        if (event.keyCode == 13) {
+            let variable = this.refs.ps.value;
+            this.refs.ps.value = "";
+            DlogsActions.unlock(variable);
+        }
+    }
+
+    refresh = () =>{
+        DlogsActions.refresh();
+    }
+
     render() {
-        return (this.state.login? <div className="contentxt">
+        return (this.state.login ? <div className="contentxt">
             {this.state.view === "List" ? this.getBlogList() :
                 this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goBack={this.goBackToList} />
-                    : <NewBlog saveNewBlog={this.saveNewBlog} goBack={this.goBackToList}/>}
-            {this.state.view === "List" ? <button onClick={this.goToNewBlog}> New </button> : ""}
+                    : <NewBlog saveNewBlog={this.saveNewBlog} goBack={this.goBackToList} />}
+            {this.state.view === "List" ? <div><button onClick={this.goToNewBlog}> New </button >
+                <button onClick={this.refresh}> Refresh </button ></div> : ""}
         </div> :
-        <div> <label >Password: </label>
-        <input type="password" onKeyUp={this.unlock}/>
-       </div>);
+            <div> <label >Password: </label>
+                <input type="password" ref="ps" onKeyUp={this.unlock} />
+            </div>);
 
     }
 

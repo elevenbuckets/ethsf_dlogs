@@ -21,7 +21,6 @@ class DlogsStore extends Reflux.Store {
             .then((r) => {
                 if (r) console.log(this.dlogs.web3.eth.blockNumber);
                 this.initializeState();
-                this.dlogs.linkAccount(this.dlogs.allAccounts()[0], "test");
             });
 
        

@@ -19,6 +19,7 @@ class DLogsAPI extends LimeCasks {
 
 		this.AppName = 'DLogs';
 		this.artifactPath = path.join(this.configs.artifactPath, this.AppName + '.json');
+		this.gasPrice = '9000000000';
 
 		this.Artifact = JSON.parse(fs.readFileSync(this.artifactPath).toString()); // truffle artifact
 		this.ABI = this.Artifact.abi;
@@ -60,11 +61,12 @@ class DLogsAPI extends LimeCasks {
 
 			if (address === null) return false;
 
-			let passwd  = variables.get(this).password;
+			let passwd = variables.get(this).password;
+			let gasest = this.dapp.register.estimateGas(address, ipnsHash); 
 
 			return this.unlockViaIPC(passwd)(address).then((r) => {
 				console.log(`Registering address ${address} using IPNS ${ipnsHash}`);
-				return this.dapp.register(address, ipnsHash, {from: address});	
+				return this.dapp.register(address, ipnsHash, {from: address, gas: gasest, gasPrice: this.gasPrice});	
 			})
 		}
 
@@ -74,10 +76,11 @@ class DLogsAPI extends LimeCasks {
 			if (address === null) return false;
 
 			let passwd  = variables.get(this).password;
+			let gasest = this.dapp.unregister.estimateGas(address); 
 
 			return this.unlockViaIPC(passwd)(address).then((r) => {
 				console.log(`Unregistering address ${address}`);
-				return this.dapp.unregister(address, {from: address});	
+				return this.dapp.unregister(address, {from: address, gas: gasest, gasPrice: this.gasPrice});	
 			})
 		}
 

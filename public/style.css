@@ -209,6 +209,7 @@ body {
   grid-template-areas:
    "newForm newForm newForm"
    "pbutton sbutton bbutton";
+  overflow: hidden;
 }
 
 .pbutton {
@@ -226,6 +227,8 @@ body {
 .newForm {
   grid-area: newForm;
   margin: 20px 20px 0px 20px;
+  max-height: 85vh;
+  overflow: hidden;
 }
 
 .loader {

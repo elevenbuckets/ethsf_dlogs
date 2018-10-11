@@ -60,7 +60,7 @@ var BlogView = function (_Reflux$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                { className: "item readloader", style: { margin: '5vw' } },
+                { className: "item readloader", style: { margin: '20px 20px 0px 20px' } },
                 _react2.default.createElement(
                     "div",
                     { style: { overflow: 'scroll', maxHeight: "85vh", color: 'white', padding: "10px" } },

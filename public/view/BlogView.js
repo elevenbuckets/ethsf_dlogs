@@ -60,13 +60,17 @@ var BlogView = function (_Reflux$Component) {
         value: function render() {
             return _react2.default.createElement(
                 "div",
-                { className: "item reader", style: { color: 'white', padding: "50px" } },
+                { className: "item readloader", style: { margin: '5vw' } },
                 _react2.default.createElement(
                     "div",
-                    { style: { textAlign: 'center', fontSize: '25px', padding: "35px", textDecoration: 'underline' } },
-                    this.props.blog.title
+                    { style: { overflow: 'scroll', maxHeight: "85vh", color: 'white', padding: "10px" } },
+                    _react2.default.createElement(
+                        "div",
+                        { style: { textAlign: 'center', fontSize: '25px', padding: "35px", textDecoration: 'underline' } },
+                        this.props.blog.title
+                    ),
+                    (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.currentBlogContent))
                 ),
-                (0, _reactRenderHtml2.default)((0, _marked2.default)(this.state.currentBlogContent)),
                 this.props.blog.author == this.state.account ? _react2.default.createElement(
                     "div",
                     { className: "item secondmainctr" },

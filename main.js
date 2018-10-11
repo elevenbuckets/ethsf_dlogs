@@ -30,6 +30,7 @@ class IPFS_REPL extends IPFS_Base {
 
 		// local IPNS cache
 		this.localCache = {};
+		this.resolveTimer;
 
 		// Class methods in constructor to skip babel class transform
 		this.pullFile = (ipfshash, outpath) => {
@@ -57,6 +58,7 @@ class IPFS_REPL extends IPFS_Base {
 		}
 
 		this.resolve = (ipnsHash) => {
+                      /*
 			const __resolve_background = (resolve, reject) => {
 				try {
 					let result = this.ipfsAPI.name.resolve(ipnsHash);
@@ -66,12 +68,20 @@ class IPFS_REPL extends IPFS_Base {
 					reject(err);
 				}
 			}
+		      */
+
+		        const __resolve_background = () => {
+				return setTimeout(() => {
+					let result = this.ipfsAPI.name.resolve(ipnsHash);
+					this.localCache[ipnsHash] = {seen: Date.now(), result};
+				});
+			}
 
 			if (ipnsHash in this.localCache) {
 				console.log(`DEBUG: using cache`);
 				if (Date.now() - this.localCache[ipnsHash].seen >= 30000) {
 					console.log(`DEBUG: cache will be refreshed`);
-					new Promise(__resolve_background);
+					this.resolveTimer = __resolve_background();
 				}
 				return this.localCache[ipnsHash].result;
 			} else {

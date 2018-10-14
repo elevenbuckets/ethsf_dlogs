@@ -53,15 +53,16 @@ class NewBlog extends Reflux.Component {
     }
 
     getBlogPreview = () =>{
-        return <div style={{  width: '100vw', textAlign: 'center'}}> {this.state.blogTitle}
-        {renderHTML(marked(this.state.blogContent))}
-        </div>
+        return <div className="newForm"><div style={{textAlign: 'center', fontSize: '25px', padding: "35px", textDecoration: 'underline'}}>{this.state.blogTitle}</div>
+            <div style={{overflow: 'scroll', maxHeight: "85vh", color: 'white', padding: "10px"}}>
+              {renderHTML(marked(this.state.blogContent))}
+            </div></div>
     }
 
 
     render() {
-        return (<div className="item newDiv" style={{textAlign: 'justify'}}>
-            {this.state.isEditable ? this.getEditView() : this.getBlogPreview()}
+        return (<div className="item newDiv">
+              {this.state.isEditable ? this.getEditView() : this.getBlogPreview()}
             <input type="button" className="button pbutton" defaultValue={this.state.isEditable ? "Preview" : "Edit"} onClick={this.changeEditable} />
             <input type="button" className="button sbutton" defaultValue="Save" onClick={this.saveNewBlog} />
             <input type="button" className="button bbutton" defaultValue="Back" onClick={this.props.goBack} />

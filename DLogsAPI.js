@@ -10,7 +10,7 @@ class DLogsAPI extends BladeIronClient {
 	constructor(options) {
 		super(options);
 
-		this.ctrName = 'DLogs'; // there's only one, so we can just define it here.
+		this.ctrName = 'DLogs'; // there's only one smart contract in this app, so we can just define it here.
 		this.bindAddr = '0x';
 		
 		this.linkAccount = (address) => { this.bindAddr = address; return this.client.request('setAccount', [address]) };
@@ -22,7 +22,7 @@ class DLogsAPI extends BladeIronClient {
 			if (this.bindAddr == '0x') {
 				return Promise.reject(false); 
 			} else {
-				return this.sendTk('DLogs')('register')(this.bindAddr, ipnsHash)();
+				return this.sendTk(this.ctrName)('register')(this.bindAddr, ipnsHash)();
 			}
 		}
 
@@ -31,7 +31,7 @@ class DLogsAPI extends BladeIronClient {
 			if (this.bindAddr == '0x') {
 				return Promise.reject(false); 
 			} else {
-				return this.sendTk('DLogs')('unregister')(this.bindAddr)();
+				return this.sendTk(this.ctrName)('unregister')(this.bindAddr)();
 			}
 		}
 
@@ -65,3 +65,5 @@ class DLogsAPI extends BladeIronClient {
 		}	
 	}
 }
+
+module.exports = DLogsAPI;

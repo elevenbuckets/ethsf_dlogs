@@ -38,12 +38,16 @@ class DLogsAPI extends BladeIronClient {
 		// constant function calls are now also promises, due to RPC interaction
 		this.lookUpByAddr = (address) =>
 		{
-			return this.client.request('call', {appName: this.appName, ctrName: this.ctrName, callName: 'addr2ipns', args: [address]})
+			return this.call(this.ctrName)('addr2ipns')(address)
+				   .then((rc) => { return rc.result })
+				   .catch((err) => { console.log(err); return 'Qm';});
 		}
 
 		this.lookUpByIPNS = (ipnsHash) =>
 		{
-			return this.client.request('call', {appName: this.appName, ctrName: this.ctrName, callName: 'ipns2addr', args: [ipnsHash]})
+			return this.call(this.ctrName)('ipns2addr')(ipnsHash)
+				   .then((rc) => { return rc.result })
+				   .catch((err) => { console.log(err); return '0x';});
 		}
 
 		this.parseEntry = (entry, idx) => {  // entry is one element returned from this.dapp.browse() smart contract call
@@ -57,7 +61,7 @@ class DLogsAPI extends BladeIronClient {
 
 		this.browse = (start, end) => 
 		{
-                        this.client.request('call', {appName: this.appName, ctrName: this.ctrName, callName: 'browse', args: [start, end]})
+                        return this.client.request('call', {appName: this.appName, ctrName: this.ctrName, callName: 'browse', args: [start, end]})
 			    .then((rc) => {
 				 let entry = rc.result;
                         	 return entry.map((e) => { return this.parseEntry([e], 0) });

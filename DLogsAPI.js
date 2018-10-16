@@ -13,32 +13,8 @@ class DLogsAPI extends BladeIronClient {
 		this.ctrName = 'DLogs'; // there's only one, so we can just define it here.
 		this.bindAddr = '0x';
 		
-		this.linkAccount = (address) => { this.bindAddr = address; return this.client.request('setAccount', [address]);
+		this.linkAccount = (address) => { this.bindAddr = address; return this.client.request('setAccount', [address]) };
 		this.getAccount = () => { return this.bindAddr };
-
-		// This should eventually become standardize, base class function that can handle all kinds of calls 
-		// it should learn more from ABI about possible calls. Right now we only have one contract in the app,
-		// so the input argument can ignore the ctrName...
-		//
-		// Usage:
-		//
-		// 	this.sendTk('register')(address, ipfsHash)(); // default amount is set to null
-		//
-		this.sendTk = (callName) => (...__args) => (amount = null) => 
-		{
-			this.gasAmount = 250000; // should have dedicated request for gas estimation
-
-			let tkObj = {};
-			__args.map((i,j) => { tkObj = { ...tkObj, ['arg'+j]: i } );
-			let args = Object.keys(tkObj).sort();
-
-			return this.client.request('enqueueTk', [this.appName, this.ctrName, callName, args, amount, this.gasAmount, tkObj])
-				   .then((rc) => { let jobObj = rc.result; return this.client.request('processJobs', [jobObj]); });
-		}
-
-		this.bytes32ToAscii = (b) => {
-                        return this.toAscii(this.toHex(this.toBigNumber(String(b))))
-                }
 
 		// mapping rest of original functions
 		this.register = (ipnsHash) => 
@@ -46,7 +22,7 @@ class DLogsAPI extends BladeIronClient {
 			if (this.bindAddr == '0x') {
 				return Promise.reject(false); 
 			} else {
-				return this.sendTk('register')(this.bindAddr, ipnsHash)();
+				return this.sendTk('DLogs')('register')(this.bindAddr, ipnsHash)();
 			}
 		}
 
@@ -55,7 +31,7 @@ class DLogsAPI extends BladeIronClient {
 			if (this.bindAddr == '0x') {
 				return Promise.reject(false); 
 			} else {
-				return this.sendTk('unregister')(this.bindAddr)();
+				return this.sendTk('DLogs')('unregister')(this.bindAddr)();
 			}
 		}
 

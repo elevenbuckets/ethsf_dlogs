@@ -1,133 +1,54 @@
 'use strict';
 
-// External modules
 const repl = require('repl');
-const fs   = require('fs');
-const path = require('path');
 const figlet = require('figlet');
-const variables = new WeakMap();
+const DLogsAPI = require('./DLogsAPI.js');
 
-// ElevenBuckets SDK modules
+const dlogs = new DLogsAPI(
+    {
+       "appName": "DLogs",
+       "artifactDir": "/home/jasonlin/Proj/Playground/dlogs/build/contracts",
+       "conditionDir": "/home/jasonlin/Proj/Playground/ethsf_dlogs/conditions",
+       "contracts": [{ "ctrName": "DLogs", "conditions": ["Sanity"] }],
+       "networkID": 4,
+       "version": "1.0"	
+    }
+);
 
-const IPFS_Base = require('ipfs_base/IPFS_GO.js');
+// Temporary solution before UI is migrated...
+dlogs.cfgObjs.geth = require('/home/jasonlin/.rinkeby/config.json');
+dlogs.cfgObjs.ipfs = require('/home/jasonlin/.rinkeby/ipfsserv.json');
+dlogs.connectRPC(3000)();
 
 // ASCII Art!!!
 const ASCII_Art = (word) => {
-	const _aa = (resolve, reject) => {
-		figlet(word, {font: 'Big'}, (err, data) => {
-			if (err) return reject(err);
-			resolve(data);
-		})
-	}
+        const _aa = (resolve, reject) => {
+                figlet(word, {font: 'Big'}, (err, data) => {
+                        if (err) return reject(err);
+                        resolve(data);
+                })
+        }
 
-	return new Promise(_aa);
+        return new Promise(_aa);
 }
-
-// extending classes for REPL
-class IPFS_REPL extends IPFS_Base {
-	constructor(cfpath) {
-		super(cfpath);
-
-		// local IPNS cache
-		this.localCache = {};
-		this.resolveTimer;
-
-		// Class methods in constructor to skip babel class transform
-		this.pullFile = (ipfshash, outpath) => {
-			return this.read(ipfshash).then((r) => {
-				fs.writeFileSync(outpath, r);
-				return true;
-			})
-		}
-
-		this.reload = (ipfs) => {
-			this.ready = false;
-  			return this.stop().then(() => {
-	  			console.log("Reset IPFS ...");
-
-	  			return ipfs.start().then(() => { this.ready = true; return true; });
-  			})
-		}
-
-		this.ping = (nodehash) => { return this.ipfsAPI.ping(nodehash, {count: 3}).then((r) => { return {cmd: r[0].text, count: 3, results: r[4]}}) }
-		this.getConfigs = () => { return this.ipfsAPI.config.get().then((b) => { return JSON.parse(b.toString())}); }
-		this.setConfigs = (entry, value) => { 
-			return this.ipfsAPI.config.set(entry, value).then( () => { 
-				return this.ipfsAPI.config.get(entry).then((r) => { return { [entry]: r } });
-			}); 
-		}
-
-		this.resolve = (ipnsHash) => {
-                      /*
-			const __resolve_background = (resolve, reject) => {
-				try {
-					let result = this.ipfsAPI.name.resolve(ipnsHash);
-					this.localCache[ipnsHash] = {seen: Date.now(), result};
-					resolve();
-				} catch (err) {
-					reject(err);
-				}
-			}
-		      */
-
-		        const __resolve_background = () => {
-				return setTimeout(() => {
-					let result = this.ipfsAPI.name.resolve(ipnsHash);
-					this.localCache[ipnsHash] = {seen: Date.now(), result};
-				});
-			}
-
-			if (ipnsHash in this.localCache) {
-				console.log(`DEBUG: using cache`);
-				if (Date.now() - this.localCache[ipnsHash].seen >= 30000) {
-					console.log(`DEBUG: cache will be refreshed`);
-					this.resolveTimer = __resolve_background();
-				}
-				return this.localCache[ipnsHash].result;
-			} else {
-				console.log(`DEBUG: initalizing new query ...`);
-				let result = this.ipfsAPI.name.resolve(ipnsHash);
-				this.localCache[ipnsHash] = {seen: Date.now(), result};
-				return result;
-			}
-		}
-
-		this.bootnodes = () => { return this.ipfsAPI.bootstrap.list(); }
-		this.pullIPNS = (ipnsHash) => {
-			return this.resolve(ipnsHash)
-				.then((ipfshash) => { return this.readPath(ipfshash) })
-				.then((r) => { return JSON.parse(r.toString()); });
-		}
-		this.myid = () => { return this.ipfsAPI.id() }
-	}
-}
-
-// Class instances
-const ipfs  = new IPFS_REPL('../.local/ipfsserv.json');
 
 // electron window global object
 let win;
 
-// Parsing argv to see if we're running CLI or GUI
 if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
 	const { execFile } = require('child_process');
 
-	//console.log('HERE ' + process.argv[0]);
-
-	if (path.basename(process.argv[0]) === 'node') {
-		//console.log('node --gui');
-		execFile('./node_modules/.bin/electron', ['.'], {env: {'__GUI__': true, ...process.env}}, (error, stdout, stderr) => {
-  			if (error) throw error;
-  			console.log(stdout);
-		});
-	} else if (path.basename(process.argv[0]) === 'electron') {
+        if (path.basename(process.argv[0]) === 'node') {
+                execFile('./node_modules/.bin/electron', ['.'], {env: {'__GUI__': true, ...process.env}}, (error, stdout, stderr) => {
+                        if (error) throw error;
+                });
+        } else if (path.basename(process.argv[0]) === 'electron') {
 		// electron main.js 
 		const {app, BrowserWindow, ipcMain} = require('electron');
 		const url = require('url');
-
-		function createWindow () {
+		const createWindow = () => {
 		  // Create the browser window.
-		  ipfs.start().then((API) => {
+		  dlogs.init('masterpass').then((rc) => {
 		    win = new BrowserWindow({minWidth: 1280, minHeight: 960, resizable: true, icon: path.join(__dirname, 'public', 'assets', 'icon', '11be_logo.png')});
 		    win.setMenu(null);
 		
@@ -138,7 +59,7 @@ if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
 		      slashes: true
 		    }))
 		
-		    global.ipfs  = ipfs;
+		    global.dlogs  = dlogs;
 		
 		    // Open the DevTools.
 		    win.webContents.openDevTools()
@@ -179,9 +100,6 @@ if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
 		})
 	}
 } else if (process.argv[2] === '--cli') {
-	const DLogsAPI = require('./DLogsAPI.js');
-	const dlogs = new DLogsAPI('../.local/config.json');
-
 	// Handling promises in REPL (for node < 10.x)
 	const replEvalPromise = (cmd,ctx,filename,cb) => {
 	  let result=eval(cmd);
@@ -189,34 +107,31 @@ if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
 	    return result.then(response=>cb(null,response));
 	  }
 	  return cb(null, result);
-	} 
+	}
 	
 	// REPL main function
-	const terminal = (ipfs) => {
-	  return ipfs.start()
-		.then(() => { return dlogs.connect() })
-		.then((rc) => { if (rc && dlogs.init(ipfs) ) return ASCII_Art('DLogs  By  ElevenBuckets') })
-		.then((art) => {
-		  console.log(art + "\n");
+	const terminal = (slogan = 'ElevenBuckets :  BladeIron') => {
+	  return dlogs.init('masterpass')  // should use readline to get master pass here
+	        .then((rc) => {
+			 if (rc.result) return ASCII_Art(slogan)
+		})
+	        .then((art) => {
+	          console.log(art + "\n");
 	
-	  	  let r = repl.start({ prompt: '[-= ElevenBuckets@ETHSF =-]$ ', eval: replEvalPromise });
-	  	  r.context = {ipfs, dlogs};
+	          let r = repl.start({ prompt: '[-= ElevenBuckets@Web3_Summit_2018 =-]$ ', eval: replEvalPromise });
+	          r.context = {dlogs};
 	
-	  	  r.on('exit', () => {
-	  		  console.log("\n" + 'Stopping CLI...');
-	  		  if (ipfs.controller.started) {
-				  ipfs.stop().then(() => {
-			  		process.exit(0);
-			  	  });
-			  }
-	  	  })
+	          r.on('exit', () => {
+	                  console.log("\n" + 'Stopping CLI...');
+	                  process.exit(0);
+	          })
 	    })
 	    .catch((err) => {
-	  	console.log(err);
-	  	process.exit(12);
+	        console.log(err);
+	        process.exit(12);
 	    })
 	}
 	
 	// Main
-	terminal(ipfs);
+	terminal('DLogs  by  ElevenBuckets');
 }

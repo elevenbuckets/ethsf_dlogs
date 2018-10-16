@@ -105,7 +105,7 @@ var MainView = function (_Reflux$Component) {
             if (event.keyCode == 13) {
                 var variable = _this.refs.ps.value;
                 _this.refs.ps.value = "";
-                _DlogsActions2.default.unlock(variable);
+                _DlogsActions2.default.unlock();
             }
         };
 

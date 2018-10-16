@@ -66,7 +66,7 @@ class DLogsAPI extends BladeIronClient {
 				 let entry = rc.result;
                         	 return entry.map((e) => { return this.parseEntry([e], 0) });
 			    })
-		}	
+		}
 	}
 }
 

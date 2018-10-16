@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const repl = require('repl');
 const figlet = require('figlet');
 const DLogsAPI = require('./DLogsAPI.js');

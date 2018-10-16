@@ -40,38 +40,40 @@ var DlogsStore = function (_Reflux$Store) {
 
         _this.initializeState = function () {
             var Max = 10;
-            var helper = _this.dlogs.dapp.browse(0, Max);
             var blogs = [];
             var count = 0;
-            helper.reduce(function (acc, vaule, index) {
-                var ipns = _this.dlogs.parseEntry(_this.dlogs.dapp.browse(0, Max), index).ipnsHash;
-                _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
-                    var tempBlogs = Object.keys(metaJSON.Articles).map(function (hash) {
-                        return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
+            _this.dlogs.browse(0, Max).then(function (helper) {
+                helper.map(function (value, index) {
+                    var ipns = value.ipnsHash;
+                    _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
+                        var tempBlogs = Object.keys(metaJSON.Articles).map(function (hash) {
+                            return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
+                        });
+                        blogs = [].concat(_toConsumableArray(blogs), _toConsumableArray(tempBlogs));
+                        count = count + 1;
+                        if (count == helper.length) {
+                            _this.setState({ blogs: blogs });
+                        }
                     });
-                    blogs = [].concat(_toConsumableArray(blogs), _toConsumableArray(tempBlogs));
-                    count = count + 1;
-                    if (count == helper.length) {
-                        _this.setState({ blogs: blogs });
-                    }
                 });
-            }, blogs);
+            });
         };
 
         _this.getBlogOnlyShowForBloger = function () {
-            var ipns = _this.dlogs.lookUpByAddr(_this.state.onlyShowForBlogger);
-            _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
-                var blogs = Object.keys(metaJSON.Articles).map(function (hash) {
-                    return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
+            _this.dlogs.lookUpByAddr(_this.state.onlyShowForBlogger).then(function (ipns) {
+                _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
+                    var blogs = Object.keys(metaJSON.Articles).map(function (hash) {
+                        return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
+                    });
+                    _this.setState({ blogs: blogs });
                 });
-                _this.setState({ blogs: blogs });
             });
         };
 
         _this.onFetchBlogContent = function (ipfsHash) {
             _this.setState({ currentBlogContent: "" });
-            _this.ipfs.read(ipfsHash).then(function (r) {
-                _this.setState({ currentBlogContent: r.toString() });
+            _this.dlogs.ipfsRead(ipfsHash).then(function (r) {
+                _this.setState({ currentBlogContent: r });
             });
         };
 
@@ -80,17 +82,19 @@ var DlogsStore = function (_Reflux$Store) {
             var tempIPNSFile = ".ipns.json";
 
             fs.writeFileSync(tempFile, content, 'utf8');
-            _this.ipfs.put(tempFile).then(function (r) {
-                var ipns = _this.dlogs.lookUpByAddr(_this.dlogs.getAccount());
-                _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
-                    var newArticle = { title: title, author: _this.dlogs.getAccount(), timestamp: Date.now(), TLDR: TLDR };
-                    var newJSON = _extends({}, metaJSON);
-                    newJSON.Articles = _extends({}, newJSON.Articles, _defineProperty({}, r[0].hash, newArticle));
-                    fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
-                    _this.ipfs.put(tempIPNSFile).then(function (r) {
-                        _this.ipfs.publish(r[0].hash);
-                        fs.unlinkSync(tempFile);
-                        fs.unlinkSync(tempIPNSFile);
+            _this.dlogs.lookUpByAddr(_this.dlogs.getAccount()).then(function (ipns) {
+                _this.dlogs.ipfsPut(tempFile).then(function (r) {
+                    _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
+                        var newArticle = { title: title, author: _this.dlogs.getAccount(), timestamp: Date.now(), TLDR: TLDR };
+                        var newJSON = _extends({}, metaJSON);
+                        newJSON.Articles = _extends({}, newJSON.Articles, _defineProperty({}, r[0].hash, newArticle));
+                        fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                        _this.dlogs.ipfsPut(tempIPNSFile).then(function (r) {
+                            _this.dlogs.ipnsPublish(r[0].hash).then(function (rc) {
+                                fs.unlinkSync(tempFile);
+                                fs.unlinkSync(tempIPNSFile);
+                            });
+                        });
                     });
                 });
             });
@@ -98,16 +102,18 @@ var DlogsStore = function (_Reflux$Store) {
 
         _this.onDeleteBlog = function (ipfsHash) {
             var tempIPNSFile = ".ipns.json";
-            var ipns = _this.dlogs.lookUpByAddr(_this.dlogs.getAccount());
-            _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
-                var newJSON = _extends({}, metaJSON);
-                var articles = newJSON.Articles;
-                articles[ipfsHash] = undefined;
-                newJSON.Articles = articles;
-                fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
-                _this.ipfs.put(tempIPNSFile).then(function (r) {
-                    _this.ipfs.publish(r[0].hash);
-                    fs.unlinkSync(tempIPNSFile);
+            _this.dlogs.lookUpByAddr(_this.dlogs.getAccount()).then(function (ipns) {
+                _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
+                    var newJSON = _extends({}, metaJSON);
+                    var articles = newJSON.Articles;
+                    articles[ipfsHash] = undefined;
+                    newJSON.Articles = articles;
+                    fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                    _this.dlogs.ipfsPut(tempIPNSFile).then(function (r) {
+                        _this.dlogs.ipnsPublish(r[0].hash).then(function (rc) {
+                            fs.unlinkSync(tempIPNSFile);
+                        });
+                    });
                 });
             });
         };
@@ -117,30 +123,34 @@ var DlogsStore = function (_Reflux$Store) {
             var tempIPNSFile = ".ipns.json";
 
             fs.writeFileSync(tempFile, content, 'utf8');
-            _this.ipfs.put(tempFile).then(function (r) {
-                var ipns = _this.dlogs.lookUpByAddr(_this.dlogs.getAccount());
-                _this.ipfs.pullIPNS(ipns).then(function (metaJSON) {
-                    var newArticle = { title: title, author: _this.dlogs.getAccount(), timestamp: Date.now(), TLDR: TLDR };
-                    var newJSON = _extends({}, metaJSON);
-                    var articles = newJSON.Articles;
-                    articles[ipfsHash] = undefined;
-                    newJSON.Articles = articles;
-                    newJSON.Articles = _extends({}, newJSON.Articles, _defineProperty({}, r[0].hash, newArticle));
-                    fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
-                    _this.ipfs.put(tempIPNSFile).then(function (r) {
-                        _this.ipfs.publish(r[0].hash);
-                        fs.unlinkSync(tempFile);
-                        fs.unlinkSync(tempIPNSFile);
+            _this.dlogs.lookUpByAddr(_this.dlogs.getAccount()).then(function (ipns) {
+                _this.dlogs.ipfsPut(tempFile).then(function (r) {
+                    _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
+                        var newArticle = { title: title, author: _this.dlogs.getAccount(), timestamp: Date.now(), TLDR: TLDR };
+                        var newJSON = _extends({}, metaJSON);
+                        var articles = newJSON.Articles;
+                        articles[ipfsHash] = undefined;
+                        newJSON.Articles = articles;
+                        newJSON.Articles = _extends({}, newJSON.Articles, _defineProperty({}, r[0].hash, newArticle));
+                        fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                        _this.dlogs.ipfsPut(tempIPNSFile).then(function (r) {
+                            _this.dlogs.ipnsPublish(r[0].hash).then(function (rc) {
+                                fs.unlinkSync(tempFile);
+                                fs.unlinkSync(tempIPNSFile);
+                            });
+                        });
                     });
                 });
             });
         };
 
-        _this.onUnlock = function (ps) {
-            _this.dlogs.linkAccount(_this.dlogs.allAccounts()[0], ps).then(function (r) {
-                if (r) {
-                    _this.setState({ login: true, account: _this.dlogs.getAccount() });
-                }
+        _this.onUnlock = function () {
+            _this.dlogs.allAccounts().then(function (addr) {
+                _this.dlogs.linkAccount(addr).then(function (r) {
+                    if (r) {
+                        _this.setState({ login: true, account: _this.dlogs.getAccount() });
+                    }
+                });
             });
         };
 
@@ -151,19 +161,10 @@ var DlogsStore = function (_Reflux$Store) {
 
         _this.listenables = _DlogsActions2.default;
         var remote = require('electron').remote;
-        _this.ipfs = remote.getGlobal('ipfs');
-        var DLogsAPI = require('../../DLogsAPI.js');
+        _this.dlogs = remote.getGlobal('dlogs');
 
-        _this.dlogs = new DLogsAPI('../.local/config.json');
-
-        _this.ipfs.ipfsAPI.id().then(function (o) {
+        _this.dlogs.ipfsId().then(function (o) {
             console.log(JSON.stringify(o, 0, 2));
-        }).then(function () {
-            return _this.dlogs.connect();
-        }).then(function () {
-            return _this.dlogs.init(_this.ipfs);
-        }).then(function (r) {
-            if (r) console.log(_this.dlogs.web3.eth.blockNumber);
             _this.initializeState();
         });
 

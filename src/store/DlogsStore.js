@@ -141,7 +141,7 @@ class DlogsStore extends Reflux.Store {
 
     onUnlock = () => {
 	this.dlogs.allAccounts().then((addr) => {
-        	this.dlogs.linkAccount(addr).then(r => {
+        	this.dlogs.linkAccount(addr[0]).then(r => {
             		if (r) {
                 		this.setState({ login: true, account: this.dlogs.getAccount() })
             		}

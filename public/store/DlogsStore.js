@@ -54,6 +54,11 @@ var DlogsStore = function (_Reflux$Store) {
                     if (count == helper.length) {
                         _this.setState({ blogs: blogs });
                     }
+                }).catch(function (e) {
+                    count = count + 1;
+                    if (count == helper.length) {
+                        _this.setState({ blogs: blogs });
+                    }
                 });
             }, blogs);
         };
@@ -154,7 +159,7 @@ var DlogsStore = function (_Reflux$Store) {
         _this.ipfs = remote.getGlobal('ipfs');
         var DLogsAPI = require('../../DLogsAPI.js');
 
-        _this.dlogs = new DLogsAPI('../.local/config.json');
+        _this.dlogs = new DLogsAPI('.local/config.json');
 
         _this.ipfs.ipfsAPI.id().then(function (o) {
             console.log(JSON.stringify(o, 0, 2));

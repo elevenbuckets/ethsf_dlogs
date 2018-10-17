@@ -12,7 +12,7 @@ class DlogsStore extends Reflux.Store {
         this.ipfs = remote.getGlobal('ipfs');
         const DLogsAPI = require('../../DLogsAPI.js');
 
-        this.dlogs = new DLogsAPI('../.local/config.json');
+        this.dlogs = new DLogsAPI('.local/config.json');
 
         this.ipfs.ipfsAPI.id()
             .then((o) => { console.log(JSON.stringify(o, 0, 2)) })
@@ -55,7 +55,12 @@ class DlogsStore extends Reflux.Store {
                 if (count == helper.length) {
                     this.setState({ blogs: blogs });
                 }
-            })
+            }).catch((e) =>{
+                count = count + 1;
+                if (count == helper.length) {
+                    this.setState({ blogs: blogs });
+                }
+            } )
 
         }, blogs);
 

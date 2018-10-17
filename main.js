@@ -103,7 +103,7 @@ class IPFS_REPL extends IPFS_Base {
 }
 
 // Class instances
-const ipfs  = new IPFS_REPL('../.local/ipfsserv.json');
+const ipfs  = new IPFS_REPL('.local/ipfsserv.json');
 
 // electron window global object
 let win;
@@ -180,7 +180,7 @@ if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
 	}
 } else if (process.argv[2] === '--cli') {
 	const DLogsAPI = require('./DLogsAPI.js');
-	const dlogs = new DLogsAPI('../.local/config.json');
+	const dlogs = new DLogsAPI('.local/config.json');
 
 	// Handling promises in REPL (for node < 10.x)
 	const replEvalPromise = (cmd,ctx,filename,cb) => {

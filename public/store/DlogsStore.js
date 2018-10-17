@@ -146,7 +146,7 @@ var DlogsStore = function (_Reflux$Store) {
 
         _this.onUnlock = function () {
             _this.dlogs.allAccounts().then(function (addr) {
-                _this.dlogs.linkAccount(addr).then(function (r) {
+                _this.dlogs.linkAccount(addr[0]).then(function (r) {
                     if (r) {
                         _this.setState({ login: true, account: _this.dlogs.getAccount() });
                     }

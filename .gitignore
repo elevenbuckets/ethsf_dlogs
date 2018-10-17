@@ -63,3 +63,8 @@ typings/
 .next
 
 BladeAPI.js
+public/view/
+public/store/
+public/action/
+public/assets/
+public/app.js

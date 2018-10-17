@@ -7,8 +7,8 @@ const path = require('path');
 const BladeIronClient = require('./BladeAPI.js');
 
 class DLogsAPI extends BladeIronClient {
-	constructor(options) {
-		super(options);
+	constructor(rpcport, rpchost, options) {
+		super(rpcport, rpchost, options);
 
 		this.ctrName = 'DLogs'; // there's only one smart contract in this app, so we can just define it here.
 		this.bindAddr = '0x';

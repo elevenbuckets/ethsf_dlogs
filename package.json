@@ -33,6 +33,7 @@
     "electron": "^3.0.2",
     "figlet": "^1.2.0",
     "ipfs_base": "git+ssh://git@github.com/elevenbuckets/Ipfs_go.git",
+    "jayson": "^2.1.0",
     "marked": "^0.5.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",

@@ -9,21 +9,13 @@ class DlogsStore extends Reflux.Store {
         super();
         this.listenables = DlogsActions;
         const remote = require('electron').remote;
-        this.ipfs = remote.getGlobal('ipfs');
-        const DLogsAPI = require('../../DLogsAPI.js');
+        this.dlogs = remote.getGlobal('dlogs');
 
-        this.dlogs = new DLogsAPI('../.local/config.json');
-
-        this.ipfs.ipfsAPI.id()
-            .then((o) => { console.log(JSON.stringify(o, 0, 2)) })
-            .then(() => { return this.dlogs.connect() })
-            .then(() => { return this.dlogs.init(this.ipfs) })
-            .then((r) => {
-                if (r) console.log(this.dlogs.web3.eth.blockNumber);
+        this.dlogs.ipfsId()
+            .then((o) => { 
+		console.log(JSON.stringify(o, 0, 2)) 
                 this.initializeState();
             });
-
-
 
         this.state = {
             blogs: [
@@ -41,43 +33,41 @@ class DlogsStore extends Reflux.Store {
 
     initializeState = () => {
         let Max = 10;
-        let helper = this.dlogs.dapp.browse(0, Max);
         let blogs = [];
         let count = 0;
-        helper.reduce((acc, vaule, index) => {
-            let ipns = this.dlogs.parseEntry(this.dlogs.dapp.browse(0, Max), index).ipnsHash;
-            this.ipfs.pullIPNS(ipns).then(metaJSON => {
-                let tempBlogs = Object.keys(metaJSON.Articles).map(hash => {
-                    return { ...metaJSON.Articles[hash], ipfsHash: hash }
+        this.dlogs.browse(0, Max).then((helper) => {
+            helper.map((value, index) => {
+                let ipns = value.ipnsHash;
+                this.dlogs.pullIPNS(ipns).then(metaJSON => {
+                    let tempBlogs = Object.keys(metaJSON.Articles).map(hash => {
+                        return { ...metaJSON.Articles[hash], ipfsHash: hash }
+                    })
+                    blogs = [...blogs, ...tempBlogs];
+                    count = count + 1;
+                    if (count == helper.length) {
+                        this.setState({ blogs: blogs });
+                    }
                 })
-                blogs = [...blogs, ...tempBlogs];
-                count = count + 1;
-                if (count == helper.length) {
-                    this.setState({ blogs: blogs });
-                }
-            })
-
-        }, blogs);
-
-
+            });
+	})
     }
 
-
     getBlogOnlyShowForBloger = () => {
-        let ipns = this.dlogs.lookUpByAddr(this.state.onlyShowForBlogger);
-        this.ipfs.pullIPNS(ipns).then(metaJSON => {
-            let blogs = Object.keys(metaJSON.Articles).map(hash => {
-                return { ...metaJSON.Articles[hash], ipfsHash: hash }
+        this.dlogs.lookUpByAddr(this.state.onlyShowForBlogger).then((ipns) => {
+            this.dlogs.pullIPNS(ipns).then(metaJSON => {
+                let blogs = Object.keys(metaJSON.Articles).map(hash => {
+                    return { ...metaJSON.Articles[hash], ipfsHash: hash }
+                })
+                this.setState({ blogs: blogs })
             })
-            this.setState({ blogs: blogs })
-        })
+	})
     }
 
 
     onFetchBlogContent = (ipfsHash) => {
         this.setState({ currentBlogContent: "" });
-        this.ipfs.read(ipfsHash).then(r => {
-            this.setState({ currentBlogContent: r.toString() });
+        this.dlogs.ipfsRead(ipfsHash).then(r => {
+            this.setState({ currentBlogContent: r });
         })
     }
 
@@ -86,38 +76,40 @@ class DlogsStore extends Reflux.Store {
         let tempIPNSFile = ".ipns.json";
 
         fs.writeFileSync(tempFile, content, 'utf8');
-        this.ipfs.put(tempFile).then(r => {
-            let ipns = this.dlogs.lookUpByAddr(this.dlogs.getAccount());
-            this.ipfs.pullIPNS(ipns).then(metaJSON => {
-                let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
-                let newJSON = { ...metaJSON };
-                newJSON.Articles = { ...newJSON.Articles, [r[0].hash]: newArticle };
-                fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
-                this.ipfs.put(tempIPNSFile).then(r => {
-                    this.ipfs.publish(r[0].hash);
-                    fs.unlinkSync(tempFile);
-                    fs.unlinkSync(tempIPNSFile);
+        this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
+            this.dlogs.ipfsPut(tempFile).then(r => {
+                this.dlogs.pullIPNS(ipns).then(metaJSON => {
+                    let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
+                    let newJSON = { ...metaJSON };
+                    newJSON.Articles = { ...newJSON.Articles, [r[0].hash]: newArticle };
+                    fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                    this.dlogs.ipfsPut(tempIPNSFile).then(r => {
+                        this.dlogs.ipnsPublish(r[0].hash).then((rc) => {
+                        	fs.unlinkSync(tempFile);
+                        	fs.unlinkSync(tempIPNSFile);
+			})
+                    })
                 })
-
             })
-        })
+	})
     }
 
     onDeleteBlog = (ipfsHash) => {
         let tempIPNSFile = ".ipns.json";
-        let ipns = this.dlogs.lookUpByAddr(this.dlogs.getAccount());
-        this.ipfs.pullIPNS(ipns).then(metaJSON => {
-            let newJSON = { ...metaJSON };
-            let articles = newJSON.Articles;
-            articles[ipfsHash] = undefined;
-            newJSON.Articles = articles;
-            fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
-            this.ipfs.put(tempIPNSFile).then(r => {
-                this.ipfs.publish(r[0].hash);
-                fs.unlinkSync(tempIPNSFile);
+        this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
+            this.dlogs.pullIPNS(ipns).then(metaJSON => {
+                let newJSON = { ...metaJSON };
+                let articles = newJSON.Articles;
+                articles[ipfsHash] = undefined;
+                newJSON.Articles = articles;
+                fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                this.dlogs.ipfsPut(tempIPNSFile).then(r => {
+                    this.dlogs.ipnsPublish(r[0].hash).then((rc) => {
+                    	fs.unlinkSync(tempIPNSFile);
+		    })
+                })
             })
-
-        })
+	})
     }
 
 
@@ -126,31 +118,35 @@ class DlogsStore extends Reflux.Store {
         let tempIPNSFile = ".ipns.json";
 
         fs.writeFileSync(tempFile, content, 'utf8');
-        this.ipfs.put(tempFile).then(r => {
-            let ipns = this.dlogs.lookUpByAddr(this.dlogs.getAccount());
-            this.ipfs.pullIPNS(ipns).then(metaJSON => {
-                let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
-                let newJSON = { ...metaJSON };
-                let articles = newJSON.Articles;
-                articles[ipfsHash] = undefined;
-                newJSON.Articles = articles;
-                newJSON.Articles = { ...newJSON.Articles, [r[0].hash]: newArticle };
-                fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
-                this.ipfs.put(tempIPNSFile).then(r => {
-                    this.ipfs.publish(r[0].hash);
-                    fs.unlinkSync(tempFile);
-                    fs.unlinkSync(tempIPNSFile);
+        this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
+            this.dlogs.ipfsPut(tempFile).then(r => {
+                this.dlogs.pullIPNS(ipns).then(metaJSON => {
+                    let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
+                    let newJSON = { ...metaJSON };
+                    let articles = newJSON.Articles;
+                    articles[ipfsHash] = undefined;
+                    newJSON.Articles = articles;
+                    newJSON.Articles = { ...newJSON.Articles, [r[0].hash]: newArticle };
+                    fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+                    this.dlogs.ipfsPut(tempIPNSFile).then(r => {
+                        this.dlogs.ipnsPublish(r[0].hash).then((rc) => {
+                        	fs.unlinkSync(tempFile);
+                        	fs.unlinkSync(tempIPNSFile);
+			})
+                    })
                 })
-
             })
-        })
+	})
     }
-    onUnlock = ps => {
-        this.dlogs.linkAccount(this.dlogs.allAccounts()[0], ps).then(r => {
-            if (r) {
-                this.setState({ login: true, account: this.dlogs.getAccount() })
-            }
-        })
+
+    onUnlock = () => {
+	this.dlogs.allAccounts().then((addr) => {
+        	this.dlogs.linkAccount(addr[0]).then(r => {
+            		if (r) {
+                		this.setState({ login: true, account: this.dlogs.getAccount() })
+            		}
+        	})
+	})
     }
 
     onRefresh = () => {

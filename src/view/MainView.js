@@ -67,7 +67,7 @@ class MainView extends Reflux.Component {
         if (event.keyCode == 13) {
             let variable = this.refs.ps.value;
             this.refs.ps.value = "";
-            DlogsActions.unlock();
+            DlogsActions.unlock(variable);
         }
     }
 
@@ -84,7 +84,7 @@ class MainView extends Reflux.Component {
             {this.state.view === "List" ? <div className="item mainctr"><input type="button" className="button" defaultValue="New" onClick={this.goToNewBlog} />
                 <input type="button" className="button" defaultValue="Refresh" onClick={this.refresh} /></div> : ""}
         </div> : <div className="item contentxt">
-            <div className="item login"> <label style={{margin: '10px', alignSelf: "flex-end"}}>Password: </label>
+            <div className="item login"> <label style={{margin: '10px', alignSelf: "flex-end"}}>Master Password: </label>
                 <input autoFocus style={{alignSelf: 'flex-start'}} type="password" ref="ps" onKeyUp={this.unlock} />
             </div></div>);
 

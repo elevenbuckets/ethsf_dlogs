@@ -23,43 +23,26 @@ cfgObjs.ipfs = require('/home/jasonlin/.rinkeby/ipfsserv.json');
 dlogs.connectRPC();
 
 const __master_init = (masterpass) => {
-	return dlogs.client.request('connected', [])
-	.then((rc) => {
-		if (!rc.result) return dlogs.client.request('initialize', cfgObjs.geth);
-		return {result: true};
-	})
-	.then((rc) => {
-		if (!rc.result) throw "Server geth setup failed ...";
-		//console.log('geth connected');
-		return dlogs.client.request('ipfs_connected', []);
-	})
-	.then((rc) => {
-		//console.log("DEBUG IPFS: "); console.log(rc);
-		if (!rc.result) return dlogs.client.request('ipfs_initialize', cfgObjs.ipfs);
-		//console.log('ipfs already connected');
-		return {result: true};
-	})
-	.then((rc) => {
-		//console.log("DEBUG IPFS after ipfs_initialize: "); console.log(rc);
-		if (!rc.result) throw "Server ipfs setup failed ...";
-		//console.log('ipfs connected');
-		return dlogs.client.request('hasPass', []);
-	})
-	.then((rc) => {
-		//console.log("DEBUG after hasPass "); console.log(rc);
-		if (!rc.result) return dlogs.client.request('unlock', [masterpass]);
-		//console.log('server awaken');
-		return {result: true};
-	})
-	.then((rc) => {
-		//console.log("DEBUG after unlock "); console.log(rc);
-		if (!rc.result) throw "Server awaken failed ...";
-		return dlogs.init();
-	})
-	.then((rc) => {
-		//console.log("DEBUG after dapp init "); console.log(rc);
-		return dlogs;
-	})
+        return dlogs.client.request('fully_initialize', cfgObjs)
+        .then((rc) => {
+                if (!rc.result[0] || !rc.result[1])  throw "Server setup failed ...";
+                return dlogs.client.request('hasPass', []);
+        })
+        .then((rc) => {
+                //console.log("DEBUG after hasPass "); console.log(rc);
+                if (!rc.result) return dlogs.client.request('unlock', [masterpass]);
+                //console.log('server awaken');
+                return {result: true};
+        })
+        .then((rc) => {
+                //console.log("DEBUG after unlock "); console.log(rc);
+                if (!rc.result) throw "Server awaken failed ...";
+                return dlogs.init();
+        })
+        .then((rc) => {
+                //console.log("DEBUG after dapp init "); console.log(rc);
+                return dlogs;
+        })
 }
 
 // ASCII Art!!!

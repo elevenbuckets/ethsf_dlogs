@@ -32,7 +32,7 @@ class DlogsStore extends Reflux.Store {
     }
 
     initializeState = () => {
-        let Max = 10;
+        let Max = 0;
         let blogs = [];
         let count = 0;
         this.dlogs.browse(0, Max).then((helper) => {
@@ -139,13 +139,16 @@ class DlogsStore extends Reflux.Store {
 	})
     }
 
-    onUnlock = () => {
-	this.dlogs.allAccounts().then((addr) => {
-        	this.dlogs.linkAccount(addr[0]).then(r => {
-            		if (r) {
-                		this.setState({ login: true, account: this.dlogs.getAccount() })
-            		}
-        	})
+    onUnlock = (pw) => {
+	this.dlogs.client.request('unlock', [pw]).then((rc) => {
+		if (!rc.result) return false;
+		this.dlogs.allAccounts().then((addr) => {
+	        	this.dlogs.linkAccount(addr[0]).then(r => {
+	            		if (r) {
+	                		this.setState({ login: true, account: this.dlogs.getAccount() })
+	            		}
+	        	})
+		})
 	})
     }
 

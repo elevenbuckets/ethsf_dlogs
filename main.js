@@ -20,30 +20,14 @@ const dlogs = new DLogsAPI(3000, '127.0.0.1',
 
 // Temporary solution before UI is migrated...
 const cfgObjs = {};
-let masterpass = 'masterpass';
 cfgObjs.geth = require('/home/jasonlin/.rinkeby/config.json');
 cfgObjs.ipfs = require('/home/jasonlin/.rinkeby/ipfsserv.json');
 dlogs.connectRPC();
 
-const __master_init = (masterpass) => {
+const __master_init = () => {
 	return dlogs.client.request('fully_initialize', cfgObjs)
 	.then((rc) => {
 		if (!rc.result[0] || !rc.result[1])  throw "Server setup failed ...";
-		return dlogs.client.request('hasPass', []);
-	})
-	.then((rc) => {
-		//console.log("DEBUG after hasPass "); console.log(rc);
-		if (!rc.result) return dlogs.client.request('unlock', [masterpass]);
-		//console.log('server awaken');
-		return {result: true};
-	})
-	.then((rc) => {
-		//console.log("DEBUG after unlock "); console.log(rc);
-		if (!rc.result) throw "Server awaken failed ...";
-		return dlogs.init();
-	})
-	.then((rc) => {
-		//console.log("DEBUG after dapp init "); console.log(rc);
 		return dlogs;
 	})
 }
@@ -65,7 +49,7 @@ let win;
 
 const createWindow = () => {
 	  // Create the browser window.
-	  __master_init(masterpass).then((dlogs) => {
+	  __master_init().then((dlogs) => {
 	    win = new BrowserWindow({minWidth: 1280, minHeight: 960, resizable: true, icon: path.join(__dirname, 'public', 'assets', 'icon', '11be_logo.png')});
 	    win.setMenu(null);
 	

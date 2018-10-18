@@ -39,7 +39,7 @@ var DlogsStore = function (_Reflux$Store) {
         var _this = _possibleConstructorReturn(this, (DlogsStore.__proto__ || Object.getPrototypeOf(DlogsStore)).call(this));
 
         _this.initializeState = function () {
-            var Max = 10;
+            var Max = 0;
             var blogs = [];
             var count = 0;
             _this.dlogs.browse(0, Max).then(function (helper) {
@@ -144,12 +144,15 @@ var DlogsStore = function (_Reflux$Store) {
             });
         };
 
-        _this.onUnlock = function () {
-            _this.dlogs.allAccounts().then(function (addr) {
-                _this.dlogs.linkAccount(addr[0]).then(function (r) {
-                    if (r) {
-                        _this.setState({ login: true, account: _this.dlogs.getAccount() });
-                    }
+        _this.onUnlock = function (pw) {
+            _this.dlogs.client.request('unlock', [pw]).then(function (rc) {
+                if (!rc.result) return false;
+                _this.dlogs.allAccounts().then(function (addr) {
+                    _this.dlogs.linkAccount(addr[0]).then(function (r) {
+                        if (r) {
+                            _this.setState({ login: true, account: _this.dlogs.getAccount() });
+                        }
+                    });
                 });
             });
         };

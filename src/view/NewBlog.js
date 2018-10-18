@@ -30,6 +30,22 @@ class NewBlog extends Reflux.Component {
     }
 
     getEditView = () => {
+        let modules = {
+            toolbar: [
+                [{ 'header': [1, 2, false] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                ['link', 'image'],
+                ['clean']
+            ],
+        };
+
+        let formats = [
+            'header',
+            'bold', 'italic', 'underline', 'strike', 'blockquote',
+            'list', 'bullet', 'indent',
+            'link', 'image'
+        ];
         return <form className="newForm" style={{ width: '100vw', textAlign: 'center' }}>
             <textarea placeholder="Title" style={{
                 width: '80vw', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
@@ -39,10 +55,7 @@ class NewBlog extends Reflux.Component {
                 width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
                 border: '2px solid white', color: 'white'
             }} onChange={this.udpateBlog.bind(this, "blogTLDR")} value={this.state.blogTLDR}></textarea>
-            <textarea placeholder="Content" style={{
-                width: '86vw', height: '80vh', backgroundColor: 'rgba(0,0,0,0)',
-                border: '2px solid white', color: 'white'
-            }} onChange={this.udpateBlog.bind(this, "blogContent")} value={this.state.blogContent}></textarea>
+            <ReactQuill value="test!!!" theme='snow' modules={modules} formats={formats} style={{ minHeight: '500px' }} />
         </form>
 
     }
@@ -69,30 +82,17 @@ class NewBlog extends Reflux.Component {
 
 
     render() {
-        let modules = {
-            toolbar: [
-              [{ 'header': [1, 2, false] }],
-              ['bold', 'italic', 'underline','strike', 'blockquote'],
-              [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-              ['link', 'image'],
-              ['clean']
-            ],
-          };
-         
-          let formats = [
-            'header',
-            'bold', 'italic', 'underline', 'strike', 'blockquote',
-            'list', 'bullet', 'indent',
-            'link', 'image'
-          ];
-        return (<div >
-            <ReactQuill value="test!!!" theme='snow' modules={modules} formats={formats} style={{minHeight:'500px'}}/>
-          
-            <input type="button" className="button pbutton" defaultValue={this.state.isEditable ? "Preview" : "Edit"} onClick={this.changeEditable} />
-            <input type="button" className="button sbutton" defaultValue="Save" onClick={this.saveNewBlog} />
-            <input type="button" className="button bbutton" defaultValue="Back" onClick={this.props.goBack} />
 
-        </div>);
+        return (
+
+            <div className="item newDiv" style={{ textAlign: 'center' }}>
+                {this.state.isEditable ? this.getEditView() : this.getBlogPreview()}
+
+                <input type="button" className="button pbutton" defaultValue={this.state.isEditable ? "Preview" : "Edit"} onClick={this.changeEditable} />
+                <input type="button" className="button sbutton" defaultValue="Save" onClick={this.saveNewBlog} />
+                <input type="button" className="button bbutton" defaultValue="Back" onClick={this.props.goBack} />
+
+            </div>);
 
     }
 

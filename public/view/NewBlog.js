@@ -53,6 +53,11 @@ var NewBlog = function (_Reflux$Component) {
         var _this = _possibleConstructorReturn(this, (NewBlog.__proto__ || Object.getPrototypeOf(NewBlog)).call(this, props));
 
         _this.getEditView = function () {
+            var modules = {
+                toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline', 'strike', 'blockquote'], [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }], ['link', 'image'], ['clean']]
+            };
+
+            var formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'link', 'image'];
             return _react2.default.createElement(
                 "form",
                 { className: "newForm", style: { width: '100vw', textAlign: 'center' } },
@@ -64,10 +69,7 @@ var NewBlog = function (_Reflux$Component) {
                         width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
                         border: '2px solid white', color: 'white'
                     }, onChange: _this.udpateBlog.bind(_this, "blogTLDR"), value: _this.state.blogTLDR }),
-                _react2.default.createElement("textarea", { placeholder: "Content", style: {
-                        width: '86vw', height: '80vh', backgroundColor: 'rgba(0,0,0,0)',
-                        border: '2px solid white', color: 'white'
-                    }, onChange: _this.udpateBlog.bind(_this, "blogContent"), value: _this.state.blogContent })
+                _react2.default.createElement(_reactQuill2.default, { value: "test!!!", theme: "snow", modules: modules, formats: formats, style: { minHeight: '500px' } })
             );
         };
 
@@ -119,15 +121,11 @@ var NewBlog = function (_Reflux$Component) {
     _createClass(NewBlog, [{
         key: "render",
         value: function render() {
-            var modules = {
-                toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline', 'strike', 'blockquote'], [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }], ['link', 'image'], ['clean']]
-            };
 
-            var formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'link', 'image'];
             return _react2.default.createElement(
                 "div",
-                null,
-                _react2.default.createElement(_reactQuill2.default, { value: "test!!!", theme: "snow", modules: modules, formats: formats, style: { minHeight: '500px' } }),
+                { className: "item newDiv", style: { textAlign: 'center' } },
+                this.state.isEditable ? this.getEditView() : this.getBlogPreview(),
                 _react2.default.createElement("input", { type: "button", className: "button pbutton", defaultValue: this.state.isEditable ? "Preview" : "Edit", onClick: this.changeEditable }),
                 _react2.default.createElement("input", { type: "button", className: "button sbutton", defaultValue: "Save", onClick: this.saveNewBlog }),
                 _react2.default.createElement("input", { type: "button", className: "button bbutton", defaultValue: "Back", onClick: this.props.goBack })

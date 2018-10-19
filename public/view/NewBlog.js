@@ -30,6 +30,10 @@ var _marked = require("marked");
 
 var _marked2 = _interopRequireDefault(_marked);
 
+var _reactQuill = require("react-quill");
+
+var _reactQuill2 = _interopRequireDefault(_reactQuill);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -49,20 +53,32 @@ var NewBlog = function (_Reflux$Component) {
         var _this = _possibleConstructorReturn(this, (NewBlog.__proto__ || Object.getPrototypeOf(NewBlog)).call(this, props));
 
         _this.getEditView = function () {
+            var modules = {
+                toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline', 'strike', 'blockquote'], [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }], ['link', 'image'], ['clean']]
+            };
+
+            var formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'link', 'image'];
             return _react2.default.createElement(
                 "form",
                 { className: "newForm", style: { width: '100vw', textAlign: 'center' } },
-                _react2.default.createElement("textarea", { placeholder: "Title", style: { width: '80vw', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
-                        border: '2px solid white', color: 'white' }, onChange: _this.udpateBlog.bind(_this, "blogTitle"), value: _this.state.blogTitle }),
-                _react2.default.createElement("textarea", { placeholder: "TL;DR", style: { width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
-                        border: '2px solid white', color: 'white' }, onChange: _this.udpateBlog.bind(_this, "blogTLDR"), value: _this.state.blogTLDR }),
-                _react2.default.createElement("textarea", { placeholder: "Content", style: { width: '86vw', height: '80vh', backgroundColor: 'rgba(0,0,0,0)',
-                        border: '2px solid white', color: 'white' }, onChange: _this.udpateBlog.bind(_this, "blogContent"), value: _this.state.blogContent })
+                _react2.default.createElement("textarea", { placeholder: "Title", style: {
+                        width: '80vw', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
+                        border: '2px solid white', color: 'white'
+                    }, onChange: _this.udpateBlog.bind(_this, "blogTitle"), value: _this.state.blogTitle }),
+                _react2.default.createElement("textarea", { placeholder: "TL;DR", style: {
+                        width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
+                        border: '2px solid white', color: 'white'
+                    }, onChange: _this.udpateBlog.bind(_this, "blogTLDR"), value: _this.state.blogTLDR }),
+                _react2.default.createElement(_reactQuill2.default, { value: _this.state.blogContent, theme: "snow", onChange: _this.handleChangeBlogContent, modules: modules, formats: formats, style: { minHeight: '500px' } })
             );
         };
 
         _this.udpateBlog = function (field, event) {
             _this.setState(_defineProperty({}, field, event.target.value));
+        };
+
+        _this.handleChangeBlogContent = function (content) {
+            _this.setState({ "blogContent": content });
         };
 
         _this.saveNewBlog = function () {
@@ -109,9 +125,10 @@ var NewBlog = function (_Reflux$Component) {
     _createClass(NewBlog, [{
         key: "render",
         value: function render() {
+
             return _react2.default.createElement(
                 "div",
-                { className: "item newDiv" },
+                { className: "item newDiv", style: { textAlign: 'center' } },
                 this.state.isEditable ? this.getEditView() : this.getBlogPreview(),
                 _react2.default.createElement("input", { type: "button", className: "button pbutton", defaultValue: this.state.isEditable ? "Preview" : "Edit", onClick: this.changeEditable }),
                 _react2.default.createElement("input", { type: "button", className: "button sbutton", defaultValue: "Save", onClick: this.saveNewBlog }),

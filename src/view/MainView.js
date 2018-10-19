@@ -67,7 +67,7 @@ class MainView extends Reflux.Component {
         if (event.keyCode == 13) {
             let variable = this.refs.ps.value;
             this.refs.ps.value = "";
-            DlogsActions.unlock(variable);
+            DlogsActions.unlock();
         }
     }
 

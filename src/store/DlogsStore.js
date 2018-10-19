@@ -52,14 +52,14 @@ class DlogsStore extends Reflux.Store {
                 })
                 blogs = [...blogs, ...tempBlogs];
                 count = count + 1;
-                if (count == helper.length) {
+                // if (count == helper.length) {
                     this.setState({ blogs: blogs });
-                }
+                // }
             }).catch((e) =>{
                 count = count + 1;
-                if (count == helper.length) {
+                // if (count == helper.length) {
                     this.setState({ blogs: blogs });
-                }
+                // }
             } )
 
         }, blogs);

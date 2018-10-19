@@ -51,14 +51,14 @@ var DlogsStore = function (_Reflux$Store) {
                     });
                     blogs = [].concat(_toConsumableArray(blogs), _toConsumableArray(tempBlogs));
                     count = count + 1;
-                    if (count == helper.length) {
-                        _this.setState({ blogs: blogs });
-                    }
+                    // if (count == helper.length) {
+                    _this.setState({ blogs: blogs });
+                    // }
                 }).catch(function (e) {
                     count = count + 1;
-                    if (count == helper.length) {
-                        _this.setState({ blogs: blogs });
-                    }
+                    // if (count == helper.length) {
+                    _this.setState({ blogs: blogs });
+                    // }
                 });
             }, blogs);
         };

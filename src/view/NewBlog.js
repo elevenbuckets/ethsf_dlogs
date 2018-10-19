@@ -55,7 +55,7 @@ class NewBlog extends Reflux.Component {
                 width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
                 border: '2px solid white', color: 'white'
             }} onChange={this.udpateBlog.bind(this, "blogTLDR")} value={this.state.blogTLDR}></textarea>
-            <ReactQuill value="test!!!" theme='snow' modules={modules} formats={formats} style={{ minHeight: '500px' }} />
+            <ReactQuill value={this.state.blogContent} theme='snow' onChange={this.handleChangeBlogContent} modules={modules} formats={formats} style={{ minHeight: '500px' }} />
         </form>
 
     }
@@ -64,6 +64,9 @@ class NewBlog extends Reflux.Component {
         this.setState({ [field]: event.target.value })
     }
 
+    handleChangeBlogContent = content =>{
+        this.setState({ "blogContent": content })
+    }
 
     saveNewBlog = () => {
         this.props.saveNewBlog(this.state.blogTitle, this.state.blogTLDR, this.state.blogContent);

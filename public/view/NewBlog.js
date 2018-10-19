@@ -69,12 +69,16 @@ var NewBlog = function (_Reflux$Component) {
                         width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
                         border: '2px solid white', color: 'white'
                     }, onChange: _this.udpateBlog.bind(_this, "blogTLDR"), value: _this.state.blogTLDR }),
-                _react2.default.createElement(_reactQuill2.default, { value: "test!!!", theme: "snow", modules: modules, formats: formats, style: { minHeight: '500px' } })
+                _react2.default.createElement(_reactQuill2.default, { value: _this.state.blogContent, theme: "snow", onChange: _this.handleChangeBlogContent, modules: modules, formats: formats, style: { minHeight: '500px' } })
             );
         };
 
         _this.udpateBlog = function (field, event) {
             _this.setState(_defineProperty({}, field, event.target.value));
+        };
+
+        _this.handleChangeBlogContent = function (content) {
+            _this.setState({ "blogContent": content });
         };
 
         _this.saveNewBlog = function () {

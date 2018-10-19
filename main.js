@@ -28,7 +28,7 @@ const __master_init = () => {
 	return dlogs.client.request('fully_initialize', cfgObjs)
 	.then((rc) => {
 		if (!rc.result[0] || !rc.result[1])  throw "Server setup failed ...";
-		return dlogs;
+		return dlogs.init().then((rc) => { return dlogs});
 	})
 }
 

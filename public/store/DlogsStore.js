@@ -55,19 +55,6 @@ var DlogsStore = function (_Reflux$Store) {
                             _this.setState({ blogs: blogs });
                         }
                     });
-<<<<<<< HEAD
-                    blogs = [].concat(_toConsumableArray(blogs), _toConsumableArray(tempBlogs));
-                    count = count + 1;
-                    // if (count == helper.length) {
-                    _this.setState({ blogs: blogs });
-                    // }
-                }).catch(function (e) {
-                    count = count + 1;
-                    // if (count == helper.length) {
-                    _this.setState({ blogs: blogs });
-                    // }
-=======
->>>>>>> master
                 });
             });
         };
@@ -174,14 +161,7 @@ var DlogsStore = function (_Reflux$Store) {
 
         _this.listenables = _DlogsActions2.default;
         var remote = require('electron').remote;
-<<<<<<< HEAD
-        _this.ipfs = remote.getGlobal('ipfs');
-        var DLogsAPI = require('../../DLogsAPI.js');
-
-        _this.dlogs = new DLogsAPI('.local/config.json');
-=======
         _this.dlogs = remote.getGlobal('dlogs');
->>>>>>> master
 
         _this.dlogs.ipfsId().then(function (o) {
             console.log(JSON.stringify(o, 0, 2));

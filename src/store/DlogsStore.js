@@ -11,20 +11,9 @@ class DlogsStore extends Reflux.Store {
         const remote = require('electron').remote;
         this.dlogs = remote.getGlobal('dlogs');
 
-<<<<<<< HEAD
-        this.dlogs = new DLogsAPI('.local/config.json');
-
-        this.ipfs.ipfsAPI.id()
-            .then((o) => { console.log(JSON.stringify(o, 0, 2)) })
-            .then(() => { return this.dlogs.connect() })
-            .then(() => { return this.dlogs.init(this.ipfs) })
-            .then((r) => {
-                if (r) console.log(this.dlogs.web3.eth.blockNumber);
-=======
         this.dlogs.ipfsId()
             .then((o) => { 
 		console.log(JSON.stringify(o, 0, 2)) 
->>>>>>> master
                 this.initializeState();
             });
 
@@ -55,30 +44,17 @@ class DlogsStore extends Reflux.Store {
                     })
                     blogs = [...blogs, ...tempBlogs];
                     count = count + 1;
-                    if (count == helper.length) {
+                    // if (count == helper.length) {
                         this.setState({ blogs: blogs });
-                    }
-                })
-<<<<<<< HEAD
-                blogs = [...blogs, ...tempBlogs];
-                count = count + 1;
-                // if (count == helper.length) {
-                    this.setState({ blogs: blogs });
-                // }
-            }).catch((e) =>{
-                count = count + 1;
-                // if (count == helper.length) {
-                    this.setState({ blogs: blogs });
-                // }
-            } )
-
-        }, blogs);
-
-
-=======
+                    // }
+                }).catch((e) =>{
+                    count = count + 1;
+                    // if (count == helper.length) {
+                        this.setState({ blogs: blogs });
+                    // }
+                } )
             });
 	})
->>>>>>> master
     }
 
     getBlogOnlyShowForBloger = () => {

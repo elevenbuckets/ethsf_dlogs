@@ -33,91 +33,6 @@ const ASCII_Art = (word) => {
         return new Promise(_aa);
 }
 
-<<<<<<< HEAD
-// extending classes for REPL
-class IPFS_REPL extends IPFS_Base {
-	constructor(cfpath) {
-		super(cfpath);
-
-		// local IPNS cache
-		this.localCache = {};
-		this.resolveTimer;
-
-		// Class methods in constructor to skip babel class transform
-		this.pullFile = (ipfshash, outpath) => {
-			return this.read(ipfshash).then((r) => {
-				fs.writeFileSync(outpath, r);
-				return true;
-			})
-		}
-
-		this.reload = (ipfs) => {
-			this.ready = false;
-  			return this.stop().then(() => {
-	  			console.log("Reset IPFS ...");
-
-	  			return ipfs.start().then(() => { this.ready = true; return true; });
-  			})
-		}
-
-		this.ping = (nodehash) => { return this.ipfsAPI.ping(nodehash, {count: 3}).then((r) => { return {cmd: r[0].text, count: 3, results: r[4]}}) }
-		this.getConfigs = () => { return this.ipfsAPI.config.get().then((b) => { return JSON.parse(b.toString())}); }
-		this.setConfigs = (entry, value) => { 
-			return this.ipfsAPI.config.set(entry, value).then( () => { 
-				return this.ipfsAPI.config.get(entry).then((r) => { return { [entry]: r } });
-			}); 
-		}
-
-		this.resolve = (ipnsHash) => {
-                      /*
-			const __resolve_background = (resolve, reject) => {
-				try {
-					let result = this.ipfsAPI.name.resolve(ipnsHash);
-					this.localCache[ipnsHash] = {seen: Date.now(), result};
-					resolve();
-				} catch (err) {
-					reject(err);
-				}
-			}
-		      */
-
-		        const __resolve_background = () => {
-				return setTimeout(() => {
-					let result = this.ipfsAPI.name.resolve(ipnsHash);
-					this.localCache[ipnsHash] = {seen: Date.now(), result};
-				});
-			}
-
-			if (ipnsHash in this.localCache) {
-				console.log(`DEBUG: using cache`);
-				if (Date.now() - this.localCache[ipnsHash].seen >= 30000) {
-					console.log(`DEBUG: cache will be refreshed`);
-					this.resolveTimer = __resolve_background();
-				}
-				return this.localCache[ipnsHash].result;
-			} else {
-				console.log(`DEBUG: initalizing new query ...`);
-				let result = this.ipfsAPI.name.resolve(ipnsHash);
-				this.localCache[ipnsHash] = {seen: Date.now(), result};
-				return result;
-			}
-		}
-
-		this.bootnodes = () => { return this.ipfsAPI.bootstrap.list(); }
-		this.pullIPNS = (ipnsHash) => {
-			return this.resolve(ipnsHash)
-				.then((ipfshash) => { return this.readPath(ipfshash) })
-				.then((r) => { return JSON.parse(r.toString()); });
-		}
-		this.myid = () => { return this.ipfsAPI.id() }
-	}
-}
-
-// Class instances
-const ipfs  = new IPFS_REPL('.local/ipfsserv.json');
-
-=======
->>>>>>> master
 // electron window global object
 let win;
 
@@ -186,12 +101,6 @@ if (process.argv[2] === '--gui' || '__GUI__' in process.env) {
 		})
 	}
 } else if (process.argv[2] === '--cli') {
-<<<<<<< HEAD
-	const DLogsAPI = require('./DLogsAPI.js');
-	const dlogs = new DLogsAPI('.local/config.json');
-
-=======
->>>>>>> master
 	// Handling promises in REPL (for node < 10.x)
 	const replEvalPromise = (cmd,ctx,filename,cb) => {
 	  let result=eval(cmd);

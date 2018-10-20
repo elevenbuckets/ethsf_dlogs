@@ -36,6 +36,7 @@ class NewBlog extends Reflux.Component {
                 ['bold', 'italic', 'underline', 'strike', 'blockquote'],
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 ['link', 'image'],
+                [{'align': []}],
                 ['clean']
             ],
         };
@@ -44,7 +45,7 @@ class NewBlog extends Reflux.Component {
             'header',
             'bold', 'italic', 'underline', 'strike', 'blockquote',
             'list', 'bullet', 'indent',
-            'link', 'image'
+            'link', 'image', 'align'
         ];
         return <form className="newForm" style={{ width: '100vw', textAlign: 'center' }}>
             <textarea placeholder="Title" style={{

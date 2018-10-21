@@ -32,7 +32,7 @@ class DlogsStore extends Reflux.Store {
     }
 
     initializeState = () => {
-        let Max = 10;
+        let Max = 0;
         let blogs = [];
         let count = 0;
         this.dlogs.browse(0, Max).then((helper) => {
@@ -77,8 +77,8 @@ class DlogsStore extends Reflux.Store {
     }
 
     onSaveNewBlog = (title, TLDR, content) => {
-        let tempFile = ".tempBlog";
-        let tempIPNSFile = ".ipns.json";
+        let tempFile = "/tmp/.tempBlog";
+        let tempIPNSFile = "/tmp/.ipns.json";
 
         fs.writeFileSync(tempFile, content, 'utf8');
         this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
@@ -100,7 +100,7 @@ class DlogsStore extends Reflux.Store {
     }
 
     onDeleteBlog = (ipfsHash) => {
-        let tempIPNSFile = ".ipns.json";
+        let tempIPNSFile = "/tmp/.ipns.json";
         this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
             this.dlogs.pullIPNS(ipns).then(metaJSON => {
                 let newJSON = { ...metaJSON };
@@ -119,12 +119,13 @@ class DlogsStore extends Reflux.Store {
 
 
     onEditBlog = (title, TLDR, content, ipfsHash) => {
-        let tempFile = ".tempBlog";
-        let tempIPNSFile = ".ipns.json";
+        let tempFile = "/tmp/.tempBlog";
+        let tempIPNSFile = "/tmp/.ipns.json";
 
         fs.writeFileSync(tempFile, content, 'utf8');
         this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
             this.dlogs.ipfsPut(tempFile).then(r => {
+		console.log(r);
                 this.dlogs.pullIPNS(ipns).then(metaJSON => {
                     let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
                     let newJSON = { ...metaJSON };
@@ -144,13 +145,16 @@ class DlogsStore extends Reflux.Store {
 	})
     }
 
-    onUnlock = () => {
-	this.dlogs.allAccounts().then((addr) => {
-        	this.dlogs.linkAccount(addr[0]).then(r => {
-            		if (r) {
-                		this.setState({ login: true, account: this.dlogs.getAccount() })
-            		}
-        	})
+    onUnlock = (pw) => {
+	this.dlogs.client.request('unlock', [pw]).then((rc) => {
+		if (!rc.result) return false;
+		this.dlogs.allAccounts().then((addr) => {
+	        	this.dlogs.linkAccount(addr[0]).then(r => {
+	            		if (r) {
+	                		this.setState({ login: true, account: this.dlogs.getAccount() })
+	            		}
+	        	})
+		})
 	})
     }
 

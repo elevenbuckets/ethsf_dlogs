@@ -39,7 +39,7 @@ var DlogsStore = function (_Reflux$Store) {
         var _this = _possibleConstructorReturn(this, (DlogsStore.__proto__ || Object.getPrototypeOf(DlogsStore)).call(this));
 
         _this.initializeState = function () {
-            var Max = 10;
+            var Max = 0;
             var blogs = [];
             var count = 0;
             _this.dlogs.browse(0, Max).then(function (helper) {
@@ -78,8 +78,8 @@ var DlogsStore = function (_Reflux$Store) {
         };
 
         _this.onSaveNewBlog = function (title, TLDR, content) {
-            var tempFile = ".tempBlog";
-            var tempIPNSFile = ".ipns.json";
+            var tempFile = "/tmp/.tempBlog";
+            var tempIPNSFile = "/tmp/.ipns.json";
 
             fs.writeFileSync(tempFile, content, 'utf8');
             _this.dlogs.lookUpByAddr(_this.dlogs.getAccount()).then(function (ipns) {
@@ -101,7 +101,7 @@ var DlogsStore = function (_Reflux$Store) {
         };
 
         _this.onDeleteBlog = function (ipfsHash) {
-            var tempIPNSFile = ".ipns.json";
+            var tempIPNSFile = "/tmp/.ipns.json";
             _this.dlogs.lookUpByAddr(_this.dlogs.getAccount()).then(function (ipns) {
                 _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
                     var newJSON = _extends({}, metaJSON);
@@ -119,12 +119,13 @@ var DlogsStore = function (_Reflux$Store) {
         };
 
         _this.onEditBlog = function (title, TLDR, content, ipfsHash) {
-            var tempFile = ".tempBlog";
-            var tempIPNSFile = ".ipns.json";
+            var tempFile = "/tmp/.tempBlog";
+            var tempIPNSFile = "/tmp/.ipns.json";
 
             fs.writeFileSync(tempFile, content, 'utf8');
             _this.dlogs.lookUpByAddr(_this.dlogs.getAccount()).then(function (ipns) {
                 _this.dlogs.ipfsPut(tempFile).then(function (r) {
+                    console.log(r);
                     _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
                         var newArticle = { title: title, author: _this.dlogs.getAccount(), timestamp: Date.now(), TLDR: TLDR };
                         var newJSON = _extends({}, metaJSON);
@@ -144,12 +145,15 @@ var DlogsStore = function (_Reflux$Store) {
             });
         };
 
-        _this.onUnlock = function () {
-            _this.dlogs.allAccounts().then(function (addr) {
-                _this.dlogs.linkAccount(addr).then(function (r) {
-                    if (r) {
-                        _this.setState({ login: true, account: _this.dlogs.getAccount() });
-                    }
+        _this.onUnlock = function (pw) {
+            _this.dlogs.client.request('unlock', [pw]).then(function (rc) {
+                if (!rc.result) return false;
+                _this.dlogs.allAccounts().then(function (addr) {
+                    _this.dlogs.linkAccount(addr[0]).then(function (r) {
+                        if (r) {
+                            _this.setState({ login: true, account: _this.dlogs.getAccount() });
+                        }
+                    });
                 });
             });
         };

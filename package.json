@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/babel  src --out-dir public",
-    "gui": "node ./main.js --gui",
-    "cli": "node ./main.js --cli"
+    "gui": "./node_modules/.bin/electron .",
+    "cli": "node ./console.js"
   },
   "babel": {
     "plugins": [

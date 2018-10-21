@@ -67,7 +67,7 @@ class MainView extends Reflux.Component {
         if (event.keyCode == 13) {
             let variable = this.refs.ps.value;
             this.refs.ps.value = "";
-            DlogsActions.unlock();
+            DlogsActions.unlock(variable);
         }
     }
 
@@ -76,17 +76,14 @@ class MainView extends Reflux.Component {
     }
 
     render() {
-        return (this.state.login ? <div className="item contentxt">
+        return ( <div className="item contentxt">
             {this.state.view === "List" ? this.state.blogs.length == 0 ? <div className="item" style={{width: '100vw', height: '80vh'}}><div className='item loader'></div></div>: this.getBlogList() :
                 this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goEdit={this.goToEditBlog} goBack={this.goBackToList} />
                     : <NewBlog saveNewBlog={this.saveNewBlog} currentBlog={this.state.currentBlog}
                     currentBlogContent={this.state.currentBlogContent} goBack={this.goBackToList} />}
             {this.state.view === "List" ? <div className="item mainctr"><input type="button" className="button" defaultValue="New" onClick={this.goToNewBlog} />
                 <input type="button" className="button" defaultValue="Refresh" onClick={this.refresh} /></div> : ""}
-        </div> : <div className="item contentxt">
-            <div className="item login"> <label style={{margin: '10px', alignSelf: "flex-end"}}>Password: </label>
-                <input autoFocus style={{alignSelf: 'flex-start'}} type="password" ref="ps" onKeyUp={this.unlock} />
-            </div></div>);
+        </div> );
 
     }
 

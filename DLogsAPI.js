@@ -7,14 +7,19 @@ const path = require('path');
 const BladeIronClient = require('./BladeAPI.js');
 
 class DLogsAPI extends BladeIronClient {
-	constructor(options) {
-		super(options);
+	constructor(rpcport, rpchost, options) {
+		super(rpcport, rpchost, options);
 
 		this.ctrName = 'DLogs'; // there's only one smart contract in this app, so we can just define it here.
 		this.bindAddr = '0x';
 		
-		this.linkAccount = (address) => { this.bindAddr = address; return this.client.request('setAccount', [address]) };
-		this.getAccount = () => { return this.bindAddr };
+		this.linkAccount = (address) => 
+		{ 
+			return this.client.request('setAccount', [address])
+				   .then(() => { this.bindAddr = address; return {result: true}; });
+		}
+
+		this.getAccount = () => { return this.bindAddr } // synchronous
 
 		// mapping rest of original functions
 		this.register = (ipnsHash) => 

@@ -105,7 +105,7 @@ var MainView = function (_Reflux$Component) {
             if (event.keyCode == 13) {
                 var variable = _this.refs.ps.value;
                 _this.refs.ps.value = "";
-                _DlogsActions2.default.unlock();
+                _DlogsActions2.default.unlock(variable);
             }
         };
 
@@ -150,7 +150,7 @@ var MainView = function (_Reflux$Component) {
                     _react2.default.createElement(
                         "label",
                         { style: { margin: '10px', alignSelf: "flex-end" } },
-                        "Password: "
+                        "Master Password: "
                     ),
                     _react2.default.createElement("input", { autoFocus: true, style: { alignSelf: 'flex-start' }, type: "password", ref: "ps", onKeyUp: this.unlock })
                 )

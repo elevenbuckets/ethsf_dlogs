@@ -22,6 +22,7 @@ cfgObjs.geth = require('/home/jasonlin/.rinkeby/config.json');
 cfgObjs.ipfs = require('/home/jasonlin/.rinkeby/ipfsserv.json');
 dlogs.connectRPC();
 
+/*
 const __master_init = (masterpass) => {
         return dlogs.client.request('fully_initialize', cfgObjs)
         .then((rc) => {
@@ -44,6 +45,7 @@ const __master_init = (masterpass) => {
                 return dlogs;
         })
 }
+*/
 
 // ASCII Art!!!
 const ASCII_Art = (word) => {
@@ -68,7 +70,7 @@ const replEvalPromise = (cmd,ctx,filename,cb) => {
 
 // REPL main function
 const terminal = (slogan = 'ElevenBuckets :  BladeIron') => {
-  return __master_init(masterpass).then((dlogs) => {
+  return dlogs.init().then(() => {
 		 return ASCII_Art(slogan)
 	})
         .then((art) => {

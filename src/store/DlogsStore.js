@@ -35,25 +35,33 @@ class DlogsStore extends Reflux.Store {
         let Max = 0;
         let blogs = [];
         let count = 0;
-        this.dlogs.browse(0, Max).then((helper) => {
-            helper.map((value, index) => {
-                let ipns = value.ipnsHash;
-                this.dlogs.pullIPNS(ipns).then(metaJSON => {
-                    let tempBlogs = Object.keys(metaJSON.Articles).map(hash => {
-                        return { ...metaJSON.Articles[hash], ipfsHash: hash }
-                    })
-                    blogs = [...blogs, ...tempBlogs];
-                    count = count + 1;
-                    // if (count == helper.length) {
-                        this.setState({ blogs: blogs });
-                    // }
-                }).catch((e) =>{
-                    count = count + 1;
-                    // if (count == helper.length) {
-                        this.setState({ blogs: blogs });
-                    // }
-                } )
-            });
+	this.dlogs.allAccounts().then((addr) => {
+        	return this.dlogs.linkAccount(addr[0]).then(r => {
+            		if (r) {
+                		this.setState({ login: true, account: this.dlogs.getAccount() })
+            		}
+        	})
+	}).then(() => {
+	        this.dlogs.browse(0, Max).then((helper) => {
+	            helper.map((value, index) => {
+	                let ipns = value.ipnsHash;
+	                this.dlogs.pullIPNS(ipns).then(metaJSON => {
+	                    let tempBlogs = Object.keys(metaJSON.Articles).map(hash => {
+	                        return { ...metaJSON.Articles[hash], ipfsHash: hash }
+	                    })
+	                    blogs = [...blogs, ...tempBlogs];
+	                    count = count + 1;
+	                    // if (count == helper.length) {
+	                        this.setState({ blogs: blogs });
+	                    // }
+	                }).catch((e) =>{
+	                    count = count + 1;
+	                    // if (count == helper.length) {
+	                        this.setState({ blogs: blogs });
+	                    // }
+	                } )
+	            });
+		})
 	})
     }
 

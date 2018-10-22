@@ -2,16 +2,19 @@
 
 const path = require('path');
 const repl = require('repl');
-const figlet = require('figlet');
 const DLogsAPI = require('./DLogsAPI.js');
 const {app, BrowserWindow, ipcMain} = require('electron');
 const url = require('url');
 
-const dlogs = new DLogsAPI(3000, '127.0.0.1',
+const rpcport = process.env.rpcport || 3000;
+const rpchost = process.env.rpchost || '127.0.0.1';
+const confdir = process.env.configDir;
+
+const dlogs = new DLogsAPI(rpcport, rpchost,
     {
        "appName": "DLogs",
-       "artifactDir": "/home/jasonlin/Proj/Playground/dlogs/build/contracts",
-       "conditionDir": "/home/jasonlin/Proj/Playground/ethsf_dlogs/conditions",
+       "artifactDir": path.join(__dirname, "dlogs", "build", "contracts"),
+       "conditionDir": path.join(__dirname, "conditions"),
        "contracts": [{ "ctrName": "DLogs", "conditions": ["Sanity"] }],
        "networkID": 4,
        "version": "1.0"	
@@ -20,36 +23,16 @@ const dlogs = new DLogsAPI(3000, '127.0.0.1',
 
 // Temporary solution before UI is migrated...
 const cfgObjs = {};
-cfgObjs.geth = require('/home/jasonlin/.rinkeby/config.json');
-cfgObjs.ipfs = require('/home/jasonlin/.rinkeby/ipfsserv.json');
+cfgObjs.geth = require(path.join(confdir, 'config.json'));
+cfgObjs.ipfs = require(path.join(confdir, 'ipfsserv.json'));
 dlogs.connectRPC();
-
-const __master_init = () => {
-	return dlogs.client.request('fully_initialize', cfgObjs)
-	.then((rc) => {
-		if (!rc.result[0] || !rc.result[1])  throw "Server setup failed ...";
-		return dlogs.init().then((rc) => { return dlogs});
-	})
-}
-
-// ASCII Art!!!
-const ASCII_Art = (word) => {
-        const _aa = (resolve, reject) => {
-                figlet(word, {font: 'Big'}, (err, data) => {
-                        if (err) return reject(err);
-                        resolve(data);
-                })
-        }
-
-        return new Promise(_aa);
-}
 
 // electron window global object
 let win;
 
 const createWindow = () => {
 	  // Create the browser window.
-	  __master_init().then((dlogs) => {
+	  dlogs.init().then(() => {
 	    win = new BrowserWindow({minWidth: 1280, minHeight: 960, resizable: true, icon: path.join(__dirname, 'public', 'assets', 'icon', '11be_logo.png')});
 	    win.setMenu(null);
 	

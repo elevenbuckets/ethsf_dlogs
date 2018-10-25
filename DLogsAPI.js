@@ -4,39 +4,32 @@ const fs   = require('fs');
 const path = require('path');
 
 // 11BE BladeIron Client API
-const BladeIronClient = require('./BladeAPI.js');
+const BladeIronClient = require('bladeiron_api');
 
 class DLogsAPI extends BladeIronClient {
 	constructor(rpcport, rpchost, options) {
 		super(rpcport, rpchost, options);
 
 		this.ctrName = 'DLogs'; // there's only one smart contract in this app, so we can just define it here.
-		this.bindAddr = '0x';
 		
-		this.linkAccount = (address) => 
-		{ 
-			return this.client.request('setAccount', [address])
-				   .then(() => { this.bindAddr = address; return {result: true}; });
-		}
-
-		this.getAccount = () => { return this.bindAddr } // synchronous
+		this.getAccount = () => { return this.userWallet } // synchronous
 
 		// mapping rest of original functions
 		this.register = (ipnsHash) => 
 		{ 
-			if (this.bindAddr == '0x') {
+			if (this.userWallet == '0x') {
 				return Promise.reject(false); 
 			} else {
-				return this.sendTk(this.ctrName)('register')(this.bindAddr, ipnsHash)();
+				return this.sendTk(this.ctrName)('register')(this.userWallet, ipnsHash)();
 			}
 		}
 
 		this.unregister = () => 
 		{
-			if (this.bindAddr == '0x') {
+			if (this.userWallet == '0x') {
 				return Promise.reject(false); 
 			} else {
-				return this.sendTk(this.ctrName)('unregister')(this.bindAddr)();
+				return this.sendTk(this.ctrName)('unregister')(this.userWallet)();
 			}
 		}
 

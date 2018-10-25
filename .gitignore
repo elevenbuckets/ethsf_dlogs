@@ -62,7 +62,6 @@ typings/
 .env
 .next
 
-BladeAPI.js
 public/view/
 public/store/
 public/action/

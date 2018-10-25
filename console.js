@@ -22,31 +22,6 @@ cfgObjs.geth = require('/home/jasonlin/.rinkeby/config.json');
 cfgObjs.ipfs = require('/home/jasonlin/.rinkeby/ipfsserv.json');
 dlogs.connectRPC();
 
-/*
-const __master_init = (masterpass) => {
-        return dlogs.client.request('fully_initialize', cfgObjs)
-        .then((rc) => {
-                if (!rc.result[0] || !rc.result[1])  throw "Server setup failed ...";
-                return dlogs.client.request('hasPass', []);
-        })
-        .then((rc) => {
-                //console.log("DEBUG after hasPass "); console.log(rc);
-                if (!rc.result) return dlogs.client.request('unlock', [masterpass]);
-                //console.log('server awaken');
-                return {result: true};
-        })
-        .then((rc) => {
-                //console.log("DEBUG after unlock "); console.log(rc);
-                if (!rc.result) throw "Server awaken failed ...";
-                return dlogs.init();
-        })
-        .then((rc) => {
-                //console.log("DEBUG after dapp init "); console.log(rc);
-                return dlogs;
-        })
-}
-*/
-
 // ASCII Art!!!
 const ASCII_Art = (word) => {
         const _aa = (resolve, reject) => {
@@ -76,7 +51,7 @@ const terminal = (slogan = 'ElevenBuckets :  BladeIron') => {
         .then((art) => {
           console.log(art + "\n");
 
-          let r = repl.start({ prompt: '[-= ElevenBuckets@Web3_Summit_2018 =-]$ ', eval: replEvalPromise });
+          let r = repl.start({ prompt: '[-= ElevenBuckets@DevCon4 =-]$ ', eval: replEvalPromise });
           r.context = {dlogs};
 
           r.on('exit', () => {

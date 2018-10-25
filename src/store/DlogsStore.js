@@ -37,7 +37,7 @@ class DlogsStore extends Reflux.Store {
         let count = 0;
 	this.dlogs.allAccounts().then((addr) => {
         	return this.dlogs.linkAccount(addr[0]).then(r => {
-            		if (r) {
+            		if (r.result) {
                 		this.setState({ login: true, account: this.dlogs.getAccount() })
             		}
         	})

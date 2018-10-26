@@ -44,7 +44,7 @@ var DlogsStore = function (_Reflux$Store) {
             var count = 0;
             _this.dlogs.allAccounts().then(function (addr) {
                 return _this.dlogs.linkAccount(addr[0]).then(function (r) {
-                    if (r) {
+                    if (r.result) {
                         _this.setState({ login: true, account: _this.dlogs.getAccount() });
                     }
                 });

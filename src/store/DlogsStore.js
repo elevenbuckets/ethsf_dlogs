@@ -32,7 +32,7 @@ class DlogsStore extends Reflux.Store {
     }
 
     initializeState = () => {
-        let Max = 0;
+        let Max = 10;
         let blogs = [];
         let count = 0;
 	this.dlogs.allAccounts().then((addr) => {

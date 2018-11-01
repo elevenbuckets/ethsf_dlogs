@@ -39,7 +39,7 @@ var DlogsStore = function (_Reflux$Store) {
         var _this = _possibleConstructorReturn(this, (DlogsStore.__proto__ || Object.getPrototypeOf(DlogsStore)).call(this));
 
         _this.initializeState = function () {
-            var Max = 0;
+            var Max = 10;
             var blogs = [];
             var count = 0;
             _this.dlogs.allAccounts().then(function (addr) {

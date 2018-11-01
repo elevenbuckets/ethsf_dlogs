@@ -37,6 +37,7 @@ class NewBlog extends Reflux.Component {
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 ['link', 'image'],
                 [{'align': []}],
+                ['code-block'],
                 ['clean']
             ],
         };
@@ -45,18 +46,18 @@ class NewBlog extends Reflux.Component {
             'header',
             'bold', 'italic', 'underline', 'strike', 'blockquote',
             'list', 'bullet', 'indent',
-            'link', 'image', 'align'
+            'link', 'image', 'align', 'code-block'
         ];
-        return <form className="newForm" style={{ width: '100vw', textAlign: 'center' }}>
+        return <form className="newForm" style={{ width: '96vw', height: '85vh', textAlign: 'center' }}>
             <textarea placeholder="Title" style={{
-                width: '80vw', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
+                width: '100%', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
                 border: '2px solid white', color: 'white'
             }} onChange={this.udpateBlog.bind(this, "blogTitle")} value={this.state.blogTitle}></textarea>
             <textarea placeholder="TL;DR" style={{
-                width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
+                width: '100%', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
                 border: '2px solid white', color: 'white'
             }} onChange={this.udpateBlog.bind(this, "blogTLDR")} value={this.state.blogTLDR}></textarea>
-            <ReactQuill value={this.state.blogContent} theme='snow' onChange={this.handleChangeBlogContent} modules={modules} formats={formats} style={{ minHeight: '500px' }} />
+            <ReactQuill value={this.state.blogContent} theme='snow' onChange={this.handleChangeBlogContent} modules={modules} formats={formats} style={{width: "100%", height: '90%'}}/>
         </form>
 
     }
@@ -89,7 +90,7 @@ class NewBlog extends Reflux.Component {
 
         return (
 
-            <div className="item newDiv" style={{ textAlign: 'center' }}>
+            <div className="item newDiv" >
                 {this.state.isEditable ? this.getEditView() : this.getBlogPreview()}
 
                 <input type="button" className="button pbutton" defaultValue={this.state.isEditable ? "Preview" : "Edit"} onClick={this.changeEditable} />

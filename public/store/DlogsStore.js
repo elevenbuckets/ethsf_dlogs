@@ -39,21 +39,34 @@ var DlogsStore = function (_Reflux$Store) {
         var _this = _possibleConstructorReturn(this, (DlogsStore.__proto__ || Object.getPrototypeOf(DlogsStore)).call(this));
 
         _this.initializeState = function () {
-            var Max = 0;
+            var Max = 10;
             var blogs = [];
             var count = 0;
-            _this.dlogs.browse(0, Max).then(function (helper) {
-                helper.map(function (value, index) {
-                    var ipns = value.ipnsHash;
-                    _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
-                        var tempBlogs = Object.keys(metaJSON.Articles).map(function (hash) {
-                            return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
-                        });
-                        blogs = [].concat(_toConsumableArray(blogs), _toConsumableArray(tempBlogs));
-                        count = count + 1;
-                        if (count == helper.length) {
+            _this.dlogs.allAccounts().then(function (addr) {
+                return _this.dlogs.linkAccount(addr[0]).then(function (r) {
+                    if (r.result) {
+                        _this.setState({ login: true, account: _this.dlogs.getAccount() });
+                    }
+                });
+            }).then(function () {
+                _this.dlogs.browse(0, Max).then(function (helper) {
+                    helper.map(function (value, index) {
+                        var ipns = value.ipnsHash;
+                        _this.dlogs.pullIPNS(ipns).then(function (metaJSON) {
+                            var tempBlogs = Object.keys(metaJSON.Articles).map(function (hash) {
+                                return _extends({}, metaJSON.Articles[hash], { ipfsHash: hash });
+                            });
+                            blogs = [].concat(_toConsumableArray(blogs), _toConsumableArray(tempBlogs));
+                            count = count + 1;
+                            // if (count == helper.length) {
                             _this.setState({ blogs: blogs });
-                        }
+                            // }
+                        }).catch(function (e) {
+                            count = count + 1;
+                            // if (count == helper.length) {
+                            _this.setState({ blogs: blogs });
+                            // }
+                        });
                     });
                 });
             });

@@ -1,0 +1,23 @@
+{
+  "name": "dlogs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "CastIron_CLI": "git+https://github.com/elevenbuckets/CastIron_CLI.git",
+    "LimeCasks": "git+https://github.com/elevenbuckets/LimeCasks.git",
+    "electron": "^3.0.2",
+    "go-ipfs-dep": "^0.4.17",
+    "ipfs_base": "git+https://github.com/elevenbuckets/ipfs_base.git",
+    "truffle-default-builder": "^2.0.0"
+  }
+}

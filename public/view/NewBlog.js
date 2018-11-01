@@ -54,22 +54,22 @@ var NewBlog = function (_Reflux$Component) {
 
         _this.getEditView = function () {
             var modules = {
-                toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline', 'strike', 'blockquote'], [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }], ['link', 'image'], ['clean']]
+                toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline', 'strike', 'blockquote'], [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }], ['link', 'image'], [{ 'align': [] }], ['code-block'], ['clean']]
             };
 
-            var formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'link', 'image'];
+            var formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'link', 'image', 'align', 'code-block'];
             return _react2.default.createElement(
                 "form",
-                { className: "newForm", style: { width: '100vw', textAlign: 'center' } },
+                { className: "newForm", style: { width: '96vw', height: '85vh', textAlign: 'center' } },
                 _react2.default.createElement("textarea", { placeholder: "Title", style: {
-                        width: '80vw', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
+                        width: '100%', height: '30px', backgroundColor: 'rgba(0,0,0,0)',
                         border: '2px solid white', color: 'white'
                     }, onChange: _this.udpateBlog.bind(_this, "blogTitle"), value: _this.state.blogTitle }),
                 _react2.default.createElement("textarea", { placeholder: "TL;DR", style: {
-                        width: '86vw', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
+                        width: '100%', height: '5vh', backgroundColor: 'rgba(0,0,0,0)',
                         border: '2px solid white', color: 'white'
                     }, onChange: _this.udpateBlog.bind(_this, "blogTLDR"), value: _this.state.blogTLDR }),
-                _react2.default.createElement(_reactQuill2.default, { value: _this.state.blogContent, theme: "snow", onChange: _this.handleChangeBlogContent, modules: modules, formats: formats, style: { minHeight: '500px' } })
+                _react2.default.createElement(_reactQuill2.default, { value: _this.state.blogContent, theme: "snow", onChange: _this.handleChangeBlogContent, modules: modules, formats: formats, style: { width: "100%", height: '90%' } })
             );
         };
 
@@ -128,7 +128,7 @@ var NewBlog = function (_Reflux$Component) {
 
             return _react2.default.createElement(
                 "div",
-                { className: "item newDiv", style: { textAlign: 'center' } },
+                { className: "item newDiv" },
                 this.state.isEditable ? this.getEditView() : this.getBlogPreview(),
                 _react2.default.createElement("input", { type: "button", className: "button pbutton", defaultValue: this.state.isEditable ? "Preview" : "Edit", onClick: this.changeEditable }),
                 _react2.default.createElement("input", { type: "button", className: "button sbutton", defaultValue: "Save", onClick: this.saveNewBlog }),

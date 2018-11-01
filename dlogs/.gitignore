@@ -29,6 +29,7 @@ bower_components
 # node-waf configuration
 .lock-wscript
 
+# Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
 # Dependency directories
@@ -38,7 +39,6 @@ src/playground/
 public/bundle.js
 .local/
 public/bundle.js
-data/
 
 # Typescript v1 declaration files
 typings/
@@ -60,10 +60,5 @@ typings/
 
 # dotenv environment variables file
 .env
-.next
 
-public/view/
-public/store/
-public/action/
-public/assets/
-public/app.js
+package-lock.json

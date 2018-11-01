@@ -125,7 +125,7 @@ var MainView = function (_Reflux$Component) {
     _createClass(MainView, [{
         key: "render",
         value: function render() {
-            return this.state.login ? _react2.default.createElement(
+            return _react2.default.createElement(
                 "div",
                 { className: "item contentxt" },
                 this.state.view === "List" ? this.state.blogs.length == 0 ? _react2.default.createElement(
@@ -140,20 +140,6 @@ var MainView = function (_Reflux$Component) {
                     _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "New", onClick: this.goToNewBlog }),
                     _react2.default.createElement("input", { type: "button", className: "button", defaultValue: "Refresh", onClick: this.refresh })
                 ) : ""
-            ) : _react2.default.createElement(
-                "div",
-                { className: "item contentxt" },
-                _react2.default.createElement(
-                    "div",
-                    { className: "item login" },
-                    " ",
-                    _react2.default.createElement(
-                        "label",
-                        { style: { margin: '10px', alignSelf: "flex-end" } },
-                        "Master Password: "
-                    ),
-                    _react2.default.createElement("input", { autoFocus: true, style: { alignSelf: 'flex-start' }, type: "password", ref: "ps", onKeyUp: this.unlock })
-                )
             );
         }
     }]);

@@ -120,6 +120,11 @@ body {
     overflow: hidden;
 }
 
+.articles {
+    overflow-y: scroll;
+    max-height: calc(100vh - 100px);
+}
+
 .rpicDiv {
    cursor: pointer;
    width: 100vw;

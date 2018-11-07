@@ -132,7 +132,13 @@ var MainView = function (_Reflux$Component) {
                     "div",
                     { className: "item", style: { width: '100vw', height: '80vh' } },
                     _react2.default.createElement("div", { className: "item loader" })
-                ) : this.getBlogList() : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goEdit: this.goToEditBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, currentBlog: this.state.currentBlog,
+                ) : _react2.default.createElement(
+                    "div",
+                    { className: "articles" },
+                    " ",
+                    this.getBlogList(),
+                    " "
+                ) : this.state.view === "Content" ? _react2.default.createElement(_BlogView2.default, { blog: this.state.currentBlog, goEdit: this.goToEditBlog, goBack: this.goBackToList }) : _react2.default.createElement(_NewBlog2.default, { saveNewBlog: this.saveNewBlog, currentBlog: this.state.currentBlog,
                     currentBlogContent: this.state.currentBlogContent, goBack: this.goBackToList }),
                 this.state.view === "List" ? _react2.default.createElement(
                     "div",

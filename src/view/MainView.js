@@ -77,7 +77,7 @@ class MainView extends Reflux.Component {
 
     render() {
         return ( <div className="item contentxt">
-            {this.state.view === "List" ? this.state.blogs.length == 0 ? <div className="item" style={{width: '100vw', height: '80vh'}}><div className='item loader'></div></div>: this.getBlogList() :
+            {this.state.view === "List" ? this.state.blogs.length == 0 ? <div className="item" style={{width: '100vw', height: '80vh'}}><div className='item loader'></div></div>: <div className="articles"> {this.getBlogList()} </div> :
                 this.state.view === "Content" ? <BlogView blog={this.state.currentBlog} goEdit={this.goToEditBlog} goBack={this.goBackToList} />
                     : <NewBlog saveNewBlog={this.saveNewBlog} currentBlog={this.state.currentBlog}
                     currentBlogContent={this.state.currentBlogContent} goBack={this.goBackToList} />}

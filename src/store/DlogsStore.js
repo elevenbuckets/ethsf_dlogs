@@ -1,6 +1,7 @@
 import Reflux from "reflux";
 import DlogsActions from "../action/DlogsActions";
 import { METHODS } from "http";
+import Dlogs from "../client/DLogsAPI"
 
 const fs = require('fs')
 
@@ -9,11 +10,21 @@ class DlogsStore extends Reflux.Store {
         super();
         this.listenables = DlogsActions;
         const remote = require('electron').remote;
-        this.dlogs = remote.getGlobal('dlogs');
+
+        this.dlogs = new DLogsAPI(rpcport, rpchost,
+            {
+                "appName": "DLogs",
+                "artifactDir": path.join(__dirname, "dlogs", "build", "contracts"),
+                "conditionDir": path.join(__dirname, "conditions"),
+                "contracts": [{ "ctrName": "DLogs", "conditions": ["Sanity"] }],
+                "networkID": 4,
+                "version": "1.0"
+            }
+        );
 
         this.dlogs.ipfsId()
-            .then((o) => { 
-		console.log(JSON.stringify(o, 0, 2)) 
+            .then((o) => {
+                console.log(JSON.stringify(o, 0, 2))
                 this.initializeState();
             });
 
@@ -35,34 +46,34 @@ class DlogsStore extends Reflux.Store {
         let Max = 10;
         let blogs = [];
         let count = 0;
-	this.dlogs.allAccounts().then((addr) => {
-        	return this.dlogs.linkAccount(addr[0]).then(r => {
-            		if (r.result) {
-                		this.setState({ login: true, account: this.dlogs.getAccount() })
-            		}
-        	})
-	}).then(() => {
-	        this.dlogs.browse(0, Max).then((helper) => {
-	            helper.map((value, index) => {
-	                let ipns = value.ipnsHash;
-	                this.dlogs.pullIPNS(ipns).then(metaJSON => {
-	                    let tempBlogs = Object.keys(metaJSON.Articles).map(hash => {
-	                        return { ...metaJSON.Articles[hash], ipfsHash: hash }
-	                    })
-	                    blogs = [...blogs, ...tempBlogs];
-	                    count = count + 1;
-	                    // if (count == helper.length) {
-	                        this.setState({ blogs: blogs });
-	                    // }
-	                }).catch((e) =>{
-	                    count = count + 1;
-	                    // if (count == helper.length) {
-	                        this.setState({ blogs: blogs });
-	                    // }
-	                } )
-	            });
-		})
-	})
+        this.dlogs.allAccounts().then((addr) => {
+            return this.dlogs.linkAccount(addr[0]).then(r => {
+                if (r.result) {
+                    this.setState({ login: true, account: this.dlogs.getAccount() })
+                }
+            })
+        }).then(() => {
+            this.dlogs.browse(0, Max).then((helper) => {
+                helper.map((value, index) => {
+                    let ipns = value.ipnsHash;
+                    this.dlogs.pullIPNS(ipns).then(metaJSON => {
+                        let tempBlogs = Object.keys(metaJSON.Articles).map(hash => {
+                            return { ...metaJSON.Articles[hash], ipfsHash: hash }
+                        })
+                        blogs = [...blogs, ...tempBlogs];
+                        count = count + 1;
+                        // if (count == helper.length) {
+                        this.setState({ blogs: blogs });
+                        // }
+                    }).catch((e) => {
+                        count = count + 1;
+                        // if (count == helper.length) {
+                        this.setState({ blogs: blogs });
+                        // }
+                    })
+                });
+            })
+        })
     }
 
     getBlogOnlyShowForBloger = () => {
@@ -73,7 +84,7 @@ class DlogsStore extends Reflux.Store {
                 })
                 this.setState({ blogs: blogs })
             })
-	})
+        })
     }
 
 
@@ -98,13 +109,13 @@ class DlogsStore extends Reflux.Store {
                     fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
                     this.dlogs.ipfsPut(tempIPNSFile).then(r => {
                         this.dlogs.ipnsPublish(r[0].hash).then((rc) => {
-                        	fs.unlinkSync(tempFile);
-                        	fs.unlinkSync(tempIPNSFile);
-			})
+                            fs.unlinkSync(tempFile);
+                            fs.unlinkSync(tempIPNSFile);
+                        })
                     })
                 })
             })
-	})
+        })
     }
 
     onDeleteBlog = (ipfsHash) => {
@@ -118,11 +129,11 @@ class DlogsStore extends Reflux.Store {
                 fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
                 this.dlogs.ipfsPut(tempIPNSFile).then(r => {
                     this.dlogs.ipnsPublish(r[0].hash).then((rc) => {
-                    	fs.unlinkSync(tempIPNSFile);
-		    })
+                        fs.unlinkSync(tempIPNSFile);
+                    })
                 })
             })
-	})
+        })
     }
 
 
@@ -133,7 +144,7 @@ class DlogsStore extends Reflux.Store {
         fs.writeFileSync(tempFile, content, 'utf8');
         this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
             this.dlogs.ipfsPut(tempFile).then(r => {
-		console.log(r);
+                console.log(r);
                 this.dlogs.pullIPNS(ipns).then(metaJSON => {
                     let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
                     let newJSON = { ...metaJSON };
@@ -144,26 +155,26 @@ class DlogsStore extends Reflux.Store {
                     fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
                     this.dlogs.ipfsPut(tempIPNSFile).then(r => {
                         this.dlogs.ipnsPublish(r[0].hash).then((rc) => {
-                        	fs.unlinkSync(tempFile);
-                        	fs.unlinkSync(tempIPNSFile);
-			})
+                            fs.unlinkSync(tempFile);
+                            fs.unlinkSync(tempIPNSFile);
+                        })
                     })
                 })
             })
-	})
+        })
     }
 
     onUnlock = (pw) => {
-	this.dlogs.client.request('unlock', [pw]).then((rc) => {
-		if (!rc.result) return false;
-		this.dlogs.allAccounts().then((addr) => {
-	        	this.dlogs.linkAccount(addr[0]).then(r => {
-	            		if (r) {
-	                		this.setState({ login: true, account: this.dlogs.getAccount() })
-	            		}
-	        	})
-		})
-	})
+        this.dlogs.client.request('unlock', [pw]).then((rc) => {
+            if (!rc.result) return false;
+            this.dlogs.allAccounts().then((addr) => {
+                this.dlogs.linkAccount(addr[0]).then(r => {
+                    if (r) {
+                        this.setState({ login: true, account: this.dlogs.getAccount() })
+                    }
+                })
+            })
+        })
     }
 
     onRefresh = () => {

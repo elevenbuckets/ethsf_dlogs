@@ -1,10 +1,8 @@
 'use strict';
 
-const fs   = require('fs');
-const path = require('path');
 
 // 11BE BladeIron Client API
-const BladeIronClient = require('bladeiron_api');
+const BladeIronClient = null;
 
 class DLogsAPI extends BladeIronClient {
 	constructor(rpcport, rpchost, options) {

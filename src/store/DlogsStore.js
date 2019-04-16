@@ -1,15 +1,14 @@
 import Reflux from "reflux";
 import DlogsActions from "../action/DlogsActions";
-import { METHODS } from "http";
-import Dlogs from "../client/DLogsAPI"
+import DLogsAPI from "../client/DLogsAPI"
 
-const fs = require('fs')
+const fs = null
 
 class DlogsStore extends Reflux.Store {
     constructor() {
         super();
         this.listenables = DlogsActions;
-        const remote = require('electron').remote;
+        const remote = null;
 
         this.dlogs = new DLogsAPI(rpcport, rpchost,
             {

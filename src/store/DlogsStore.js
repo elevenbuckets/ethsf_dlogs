@@ -10,22 +10,22 @@ class DlogsStore extends Reflux.Store {
         this.listenables = DlogsActions;
         const remote = null;
 
-        this.dlogs = new DLogsAPI(rpcport, rpchost,
+        this.dlogs = new DLogsAPI(null, null,
             {
                 "appName": "DLogs",
-                "artifactDir": path.join(__dirname, "dlogs", "build", "contracts"),
-                "conditionDir": path.join(__dirname, "conditions"),
+                "artifactDir": null,
+                "conditionDir": null,
                 "contracts": [{ "ctrName": "DLogs", "conditions": ["Sanity"] }],
                 "networkID": 4,
                 "version": "1.0"
             }
         );
 
-        this.dlogs.ipfsId()
-            .then((o) => {
-                console.log(JSON.stringify(o, 0, 2))
-                this.initializeState();
-            });
+        // this.dlogs.ipfsId()
+        //     .then((o) => {
+        //         console.log(JSON.stringify(o, 0, 2))
+        //         this.initializeState();
+        //     });
 
         this.state = {
             blogs: [

@@ -1,6 +1,7 @@
 import Reflux from "reflux";
 import DlogsActions from "../action/DlogsActions";
 import DLogsAPI from "../client/DLogsAPI"
+import FileService from "../service/FileService";
 
 const fs = null
 
@@ -8,7 +9,8 @@ class DlogsStore extends Reflux.Store {
     constructor() {
         super();
         this.listenables = DlogsActions;
-        const remote = null;
+        this.ipfs = FileService.ipfs;
+        
 
         this.dlogs = new DLogsAPI(null, null,
             {
@@ -28,6 +30,7 @@ class DlogsStore extends Reflux.Store {
         //     });
 
         this.state = {
+            originalHashes:["QmfNaysDYn5ZCGcCSiGRDL4qxSHNWz5AXL7jw3MBj4e3qB"],
             blogs: [
             ],
             following: [],
@@ -73,6 +76,8 @@ class DlogsStore extends Reflux.Store {
                 });
             })
         })
+       
+
     }
 
     getBlogOnlyShowForBloger = () => {
@@ -95,25 +100,36 @@ class DlogsStore extends Reflux.Store {
     }
 
     onSaveNewBlog = (title, TLDR, content) => {
-        let tempFile = "/tmp/.tempBlog";
-        let tempIPNSFile = "/tmp/.ipns.json";
+        // let tempFile = "/tmp/.tempBlog";
+        // let tempIPNSFile = "/tmp/.ipns.json";
 
-        fs.writeFileSync(tempFile, content, 'utf8');
-        this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
-            this.dlogs.ipfsPut(tempFile).then(r => {
-                this.dlogs.pullIPNS(ipns).then(metaJSON => {
-                    let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
-                    let newJSON = { ...metaJSON };
-                    newJSON.Articles = { ...newJSON.Articles, [r[0].hash]: newArticle };
-                    fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
-                    this.dlogs.ipfsPut(tempIPNSFile).then(r => {
-                        this.dlogs.ipnsPublish(r[0].hash).then((rc) => {
-                            fs.unlinkSync(tempFile);
-                            fs.unlinkSync(tempIPNSFile);
-                        })
-                    })
-                })
-            })
+        // fs.writeFileSync(tempFile, content, 'utf8');
+        // this.dlogs.lookUpByAddr(this.dlogs.getAccount()).then((ipns) => {
+        //     this.dlogs.ipfsPut(tempFile).then(r => {
+        //         this.dlogs.pullIPNS(ipns).then(metaJSON => {
+        //             let newArticle = { title, author: this.dlogs.getAccount(), timestamp: Date.now(), TLDR, };
+        //             let newJSON = { ...metaJSON };
+        //             newJSON.Articles = { ...newJSON.Articles, [r[0].hash]: newArticle };
+        //             fs.writeFileSync(tempIPNSFile, JSON.stringify(newJSON), 'utf8');
+        //             this.dlogs.ipfsPut(tempIPNSFile).then(r => {
+        //                 this.dlogs.ipnsPublish(r[0].hash).then((rc) => {
+        //                     fs.unlinkSync(tempFile);
+        //                     fs.unlinkSync(tempIPNSFile);
+        //                 })
+        //             })
+        //         })
+        //     })
+        // })
+
+        this.ipfs.add([Buffer.from(content)], (err, filesAdded) => {
+            if (err) { throw err }
+    
+            const hash = filesAdded[0].hash
+            this.setState({ added_file_hash: hash })
+            this.ipfs.cat(hash, (err, data) => {
+                if (err) { throw err }
+                this.setState({ added_file_contents: data.toString() })
+              })
         })
     }
 

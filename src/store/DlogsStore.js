@@ -32,6 +32,7 @@ class DlogsStore extends Reflux.Store {
         this.state = {
             originalHashes:["QmfNaysDYn5ZCGcCSiGRDL4qxSHNWz5AXL7jw3MBj4e3qB"],
             blogs: [
+                {title: "test", TLDR: "<p>This is TLDR</p>"}
             ],
             following: [],
             displayBlogs: [],
@@ -48,34 +49,34 @@ class DlogsStore extends Reflux.Store {
         let Max = 10;
         let blogs = [];
         let count = 0;
-        this.dlogs.allAccounts().then((addr) => {
-            return this.dlogs.linkAccount(addr[0]).then(r => {
-                if (r.result) {
-                    this.setState({ login: true, account: this.dlogs.getAccount() })
-                }
-            })
-        }).then(() => {
-            this.dlogs.browse(0, Max).then((helper) => {
-                helper.map((value, index) => {
-                    let ipns = value.ipnsHash;
-                    this.dlogs.pullIPNS(ipns).then(metaJSON => {
-                        let tempBlogs = Object.keys(metaJSON.Articles).map(hash => {
-                            return { ...metaJSON.Articles[hash], ipfsHash: hash }
-                        })
-                        blogs = [...blogs, ...tempBlogs];
-                        count = count + 1;
-                        // if (count == helper.length) {
-                        this.setState({ blogs: blogs });
-                        // }
-                    }).catch((e) => {
-                        count = count + 1;
-                        // if (count == helper.length) {
-                        this.setState({ blogs: blogs });
-                        // }
-                    })
-                });
-            })
-        })
+        // this.dlogs.allAccounts().then((addr) => {
+        //     return this.dlogs.linkAccount(addr[0]).then(r => {
+        //         if (r.result) {
+        //             this.setState({ login: true, account: this.dlogs.getAccount() })
+        //         }
+        //     })
+        // }).then(() => {
+        //     this.dlogs.browse(0, Max).then((helper) => {
+        //         helper.map((value, index) => {
+        //             let ipns = value.ipnsHash;
+        //             this.dlogs.pullIPNS(ipns).then(metaJSON => {
+        //                 let tempBlogs = Object.keys(metaJSON.Articles).map(hash => {
+        //                     return { ...metaJSON.Articles[hash], ipfsHash: hash }
+        //                 })
+        //                 blogs = [...blogs, ...tempBlogs];
+        //                 count = count + 1;
+        //                 // if (count == helper.length) {
+        //                 this.setState({ blogs: blogs });
+        //                 // }
+        //             }).catch((e) => {
+        //                 count = count + 1;
+        //                 // if (count == helper.length) {
+        //                 this.setState({ blogs: blogs });
+        //                 // }
+        //             })
+        //         });
+        //     })
+        // })
        
 
     }
@@ -128,7 +129,11 @@ class DlogsStore extends Reflux.Store {
             this.setState({ added_file_hash: hash })
             this.ipfs.cat(hash, (err, data) => {
                 if (err) { throw err }
-                this.setState({ added_file_contents: data.toString() })
+                let title = "This is blog " + this.state.blogs.length;
+                let TLDR = data.toString()
+                let blog = {title, TLDR }
+                let blogs = [...this.state.blogs, blog]
+                this.setState({ added_file_contents: data.toString(), blogs : blogs})
               })
         })
     }

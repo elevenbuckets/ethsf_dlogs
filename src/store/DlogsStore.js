@@ -10,6 +10,7 @@ class DlogsStore extends Reflux.Store {
         super();
         this.listenables = DlogsActions;
         this.ipfs = FileService.ipfs;
+        this.ipfsClient = FileService.ipfsClient;
         
 
         this.dlogs = new DLogsAPI(null, null,
@@ -122,7 +123,7 @@ class DlogsStore extends Reflux.Store {
         //     })
         // })
 
-        this.ipfs.add([Buffer.from(content)], (err, filesAdded) => {
+        this.ipfsClient.add([Buffer.from(content)], (err, filesAdded) => {
             if (err) { throw err }
     
             const hash = filesAdded[0].hash
